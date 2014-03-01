@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="graphics.c" />
+    <ClCompile Include="images.c" />
+    <ClCompile Include="old.cpp" />
     <ClCompile Include="test.c" />
   </ItemGroup>
   <ItemGroup>
@@ -18,6 +21,9 @@
     <None Include="Debug.bat" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="graphics.h" />
+    <ClInclude Include="images.h" />
+    <ClInclude Include="standard.h" />
     <ClInclude Include="test.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
