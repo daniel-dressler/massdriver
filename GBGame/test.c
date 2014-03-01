@@ -24,8 +24,8 @@
  */
 
 #include <gb/gb.h>
-
 #include "test.h"
+#include "sound.h"
 
 const unsigned char std_data[] = {
 
@@ -517,95 +517,9 @@ void place_sprite()
 }	
 
 
-
-typedef enum
-{
-	CHANNEL_1,
-	CHANNEL_2,
-	CHANNEL_3,
-	CHANNEL_4
-} Channel;
-
-
-typedef struct
-{
-	UINT16 nr10;
-	UINT16 nr11;
-	UINT16 nr12;
-	UINT16 nr13;
-	UINT16 nr14;
-} DataChannel0;
-
-
-typedef struct
-{
-	UINT16 nr21;
-	UINT16 nr22;
-	UINT16 nr23;
-	UINT16 nr24;
-} DataChannel1;
-
-
-typedef struct
-{
-	UINT16 nr30;
-	UINT16 nr31;
-	UINT16 nr32;
-	UINT16 nr33;
-	UINT16 nr34;
-} DataChannel2;
-
-
-typedef struct
-{
-	UINT16 nr41;
-	UINT16 nr42;
-	UINT16 nr43;
-	UINT16 nr44;
-} DataChannel3;
-
-
-typedef struct
-{
-	UINT8 soundLength; //number of frames before repetition can occur
-	Channel channel;
-	union
-	{
-		DataChannel0 chan0;
-		DataChannel1 chan1;
-		DataChannel2 chan2;
-		DataChannel3 chan3;
-	} data;
-} SoundData;
-
-// Being explicit since these are used as indices and this is probably some old ass compiler with quirks
-typedef enum
-{
-	SOUND_SHOOTING = 0,
-	SOUND_EXPLOSION = 1,
-	SOUND_IMPACT = 2,
-	SOUND_WIN = 3,
-	SOUND_LOSE = 4,
-	SOUND_END = 5
-} SoundID;
-
-SoundData gSounds[SOUND_END];
-
-// In progression
-void init_sounds()
-{
-	gSounds[SOUND_SHOOTING].channel;
-}
-
-void play_sound( SoundID sound )
-{
-
-}
-
 void main()
 {
 	UBYTE i, j;
-
 	disable_interrupts();
 	DISPLAY_OFF;
 	LCDC_REG = 0x67;
@@ -681,6 +595,7 @@ void main()
 	sspy.w  = 0x0040;
 	tile_sprite();
 	place_sprite();
+	init_sounds();
 
 	DISPLAY_ON;
 	enable_interrupts();
@@ -702,10 +617,13 @@ void main()
 		door();
 		scroll();
 		animate_sprite();
+		tick_sound();
+
 		i = joypad();
 
 		if(i & J_B) 
 		{
+			play_sound( SOUND_LOSE );
 			if(i & J_UP)
 				bspy.w -= 0x0040;
 			if(i & J_DOWN)
@@ -717,6 +635,7 @@ void main()
 		} 
 		else if(i & J_A) 
 		{
+			play_sound( SOUND_EXPLOSION );
 			if(i & J_UP)
 				wspy.w -= 0x0010;
 			if(i & J_DOWN)
@@ -745,11 +664,13 @@ void main()
 
 			if(i & J_UP)
 			{
+				play_sound( SOUND_SHOOTING );
 				sspy.w = -MOVEMENT_SPEED_Y;
 			}
       
 			if(i & J_DOWN)
 			{
+				play_sound( SOUND_ENEMY_SHOOTING );
 				sspy.w = MOVEMENT_SPEED_Y;
 			}
       
