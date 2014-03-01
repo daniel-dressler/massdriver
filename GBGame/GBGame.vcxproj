@@ -17,6 +17,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="old.cpp" />
     <ClCompile Include="sound.c" />
+    <ClCompile Include="state.c" />
     <ClCompile Include="test.c" />
   </ItemGroup>
   <ItemGroup>
@@ -29,6 +30,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="standard.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="state.h" />
     <ClInclude Include="test.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -1,5 +1,6 @@
 #include <gb/gb.h>
 
+#include "state.h"
 #include "images.h"
 #include "graphics.h"
 #include "sound.h"
@@ -11,6 +12,7 @@ void main()
 	LCDC_REG = 0x63;
 	BGP_REG = OBP0_REG = OBP1_REG = 0xE4U;
 
+	init_state();
 	init_graphics();
 	init_sounds();
 
@@ -21,8 +23,8 @@ void main()
 	{
 		wait_vbl_done();
 
+		tick_state();
+		tick_graphics();
 		tick_sound();
-
-		SCY_REG--;
 	}
 }

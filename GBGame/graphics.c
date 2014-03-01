@@ -1,13 +1,10 @@
 #include "graphics.h"
 #include "images.h"
-
-#define WIN_START_X 7
-#define WIN_START_Y (8*13-1)
+#include "state.h"
 
 void init_graphics()
 {
 	int i, j, x, y;
-
 
 	set_bkg_data( 0, Test_tile_count, Test_tile_data );	
 
@@ -22,8 +19,8 @@ void init_graphics()
 	set_sprite_tile( 2, Test2_map_data[2] );
 	set_sprite_tile( 3, Test2_map_data[3] );
 
-	x = 50;
-	y = 50;
+	x = GetState()->plyr_x;
+	y = GetState()->plyr_y;
 	move_sprite( 0, 0 + x, 0 + y );
 	move_sprite( 1, 8 + x, 0 + y );
 	move_sprite( 2, 0 + x, 8 + y );
@@ -35,5 +32,13 @@ void init_graphics()
 
 void tick_graphics()
 {
+	int x, y;
+	x = GetState()->plyr_x;
+	y = GetState()->plyr_y;
+	move_sprite( 0, 0 + x, 0 + y );
+	move_sprite( 1, 8 + x, 0 + y );
+	move_sprite( 2, 0 + x, 8 + y );
+	move_sprite( 3, 8 + x, 8 + y );
+
 	SCY_REG--;
 }
