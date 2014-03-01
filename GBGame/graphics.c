@@ -13,7 +13,7 @@ void init_graphics()
 		for(j = 0; j < 32; j+=Test_tile_map_height)
 		{
 			if( j!= 16 && i!= 12 )
-			set_bkg_tiles(i, j, Test_tile_map_width, Test_tile_map_height, Test_map_data);
+				set_bkg_tiles(i, j, Test_tile_map_width, Test_tile_map_height, Test_map_data);
 		}
 	}
 

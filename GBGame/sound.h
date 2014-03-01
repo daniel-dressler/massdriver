@@ -71,6 +71,15 @@ typedef struct
 		DataChannel3 chan3;
 		DataChannel4 chan4;
 	} data;
+
+	UINT8 speed_haxor1;
+	UINT8 speed_haxor2;
+	UINT8 speed_haxor3;
+	UINT8 speed_haxor4;
+	UINT8 speed_haxor5;
+	UINT8 speed_haxor6;
+	UINT8 speed_haxor7;
+
 } SoundData;
 
 

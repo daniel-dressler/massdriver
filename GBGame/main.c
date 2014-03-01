@@ -9,6 +9,7 @@
 
 void main()
 {
+	int sz;
 	disable_interrupts();
 	DISPLAY_OFF;
 	LCDC_REG = 0x67;
@@ -23,10 +24,12 @@ void main()
 
 	while( 1 )
 	{
-//		wait_vbl_done();
 		tick_state();
 		tick_graphics();
 		tick_sound();
 		handle_input();
+
+//		sz = sizeof(SoundData);
+//		printf( "%d\n", sz );
 	}
 }
