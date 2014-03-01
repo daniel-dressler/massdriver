@@ -19,8 +19,8 @@ void init_graphics()
 	set_sprite_tile( 2, Test2_map_data[2] );
 	set_sprite_tile( 3, Test2_map_data[3] );
 
-	x = GetState()->plyr_x;
-	y = GetState()->plyr_y;
+	x = GetState()->player1.pos.x;
+	y = GetState()->player1.pos.y;
 	move_sprite( 0, 0 + x, 0 + y );
 	move_sprite( 1, 8 + x, 0 + y );
 	move_sprite( 2, 0 + x, 8 + y );
@@ -33,8 +33,8 @@ void init_graphics()
 void tick_graphics()
 {
 	int x, y;
-	x = GetState()->plyr_x;
-	y = GetState()->plyr_y;
+	x = GetState()->player1.pos.x;
+	y = GetState()->player1.pos.y;
 	move_sprite( 0, 0 + x, 0 + y );
 	move_sprite( 1, 8 + x, 0 + y );
 	move_sprite( 2, 0 + x, 8 + y );
