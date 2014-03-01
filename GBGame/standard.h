@@ -2,5 +2,6 @@
 #define __STANDARD_H__
 
 #include <gb/gb.h>
+#include <stdio.h>
 
 #endif

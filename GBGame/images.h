@@ -17,4 +17,11 @@ extern int Test2_tile_count;
 extern unsigned char Test2_map_data[];
 extern unsigned char Test2_tile_data[];
 
+extern int bullet_tile_map_size;
+extern int bullet_tile_map_width;
+extern int bullet_tile_map_height;
+extern int bullet_tile_count;
+extern unsigned char bullet_map_data[];
+extern unsigned char bullet_tile_data[];
+
 #endif

@@ -4,7 +4,7 @@
 #include "standard.h"
 
 #define MAX_ENEMIES		15
-#define MAX_BULLETS		50
+#define MAX_BULLETS		32
 
 typedef struct
 {
@@ -15,6 +15,7 @@ typedef struct
 typedef struct
 {
 	POINT	pos;
+	POINT	size;
 
 } PLAYER;
 
@@ -23,6 +24,7 @@ typedef struct
 	UINT8	active;
 	UINT8	type;
 	POINT	pos;
+	POINT	size;
 
 } ENEMY;
 
@@ -31,6 +33,8 @@ typedef struct
 	UINT8	active;
 	UINT8	friendly;
 	POINT	pos;
+	POINT	size;
+	UINT8	spr_index;
 
 } BULLET;
 

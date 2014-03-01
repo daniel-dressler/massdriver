@@ -23,9 +23,9 @@ void init_sounds()
 	gSounds[SOUND_SHOOTING].data.chan1.nr14 = 0x87;
 
 	// Pew pew laser sounds
-	gSounds[SOUND_ENEMY_SHOOTING].playTime			= 20;
-	gSounds[SOUND_ENEMY_SHOOTING].soundLevelLeft	= 1;
-	gSounds[SOUND_ENEMY_SHOOTING].soundLevelRight	= 1;
+	gSounds[SOUND_ENEMY_SHOOTING].playTime			= 10;
+	gSounds[SOUND_ENEMY_SHOOTING].soundLevelLeft	= 3;
+	gSounds[SOUND_ENEMY_SHOOTING].soundLevelRight	= 3;
 	gSounds[SOUND_ENEMY_SHOOTING].channel			= CHANNEL_2;
 
 	gSounds[SOUND_ENEMY_SHOOTING].data.chan2.nr21 = 0xCE;

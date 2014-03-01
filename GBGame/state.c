@@ -20,7 +20,7 @@ void init_state()
 		g_state.enemies[i].active = 0;
 
 	for( i = 0; i < MAX_BULLETS; i++ )
-		g_state.bullets[i].active = 0;
+		g_state.bullets[i].active = 1;
 }
 
 void tick_state()
