@@ -1,5 +1,6 @@
 #include "input.h"
 #include "sound.h"
+#include "state.h"
 #include <gb\gb.h>
 
 
@@ -50,19 +51,21 @@ void handle_input()
 
 	if( i & J_UP )
 	{
+		GetState()->player1.pos.y--;
 	}
       
 	if( i & J_DOWN )
 	{
+		GetState()->player1.pos.y++;
 	}
       
 	if( i & J_LEFT )
 	{
-
+		GetState()->player1.pos.x--;
 	}
 
 	if( i & J_RIGHT )
 	{
-
+		GetState()->player1.pos.x++;
 	}
 }

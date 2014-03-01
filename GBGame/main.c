@@ -28,7 +28,5 @@ void main()
 		tick_graphics();
 		tick_sound();
 		handle_input();
-
-		SCY_REG--;
 	}
 }
