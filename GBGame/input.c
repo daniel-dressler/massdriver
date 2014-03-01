@@ -4,12 +4,6 @@
 #include <gb\gb.h>
 
 
-#define REPEAT_RATE_A 20
-#define REPEAT_RATE_B 20
-#define REPEAT_RATE_START 20
-#define REPEAT_RATE_SELECT 20
-
-
 UINT8 gCountDownA = 0, gCountDownB = 0, gCountDownStart = 0, gCountDownSelect = 0;
 
 void tick_input()
