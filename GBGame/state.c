@@ -2,15 +2,10 @@
 
 State g_state;
 
-State* GetState()
-{
-	return &g_state;
-}
-
 void init_state()
 {
 	int i;
-
+	
 	g_state.time = 0;
 
 	g_state.player1.pos.x = 80;

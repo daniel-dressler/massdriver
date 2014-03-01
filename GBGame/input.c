@@ -45,29 +45,29 @@ void handle_input()
 
 	if( i & J_UP )
 	{
-		GetState()->player1.pos.y-=2;
-		if( GetState()->player1.pos.y < 15 )
-			GetState()->player1.pos.y = 15;
+		g_state.player1.pos.y-=2;
+		if( g_state.player1.pos.y < 15 )
+			g_state.player1.pos.y = 15;
 	}
       
 	if( i & J_DOWN )
 	{
-		GetState()->player1.pos.y+=2;
-		if( GetState()->player1.pos.y > 148 )
-			GetState()->player1.pos.y = 148;
+		g_state.player1.pos.y+=2;
+		if( g_state.player1.pos.y > 148 )
+			g_state.player1.pos.y = 148;
 	}
       
 	if( i & J_LEFT )
 	{
-		GetState()->player1.pos.x-=2;
-		if( GetState()->player1.pos.x < 5 )
-			GetState()->player1.pos.x = 5;
+		g_state.player1.pos.x-=2;
+		if( g_state.player1.pos.x < 5 )
+			g_state.player1.pos.x = 5;
 	}
 
 	if( i & J_RIGHT )
 	{
-		GetState()->player1.pos.x+=2;
-		if( GetState()->player1.pos.x > 155 )
-			GetState()->player1.pos.x = 155;
+		g_state.player1.pos.x+=2;
+		if( g_state.player1.pos.x > 155 )
+			g_state.player1.pos.x = 155;
 	}
 }

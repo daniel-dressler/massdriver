@@ -24,4 +24,11 @@ extern int bullet_tile_count;
 extern unsigned char bullet_map_data[];
 extern unsigned char bullet_tile_data[];
 
+extern int enemy_tile_map_size;
+extern int enemy_tile_map_width;
+extern int enemy_tile_map_height;
+extern int enemy_tile_count;
+extern unsigned char enemy_map_data[];
+extern unsigned char enemy_tile_data[];
+
 #endif

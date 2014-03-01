@@ -4,7 +4,7 @@
 
 void init_graphics()
 {
-	int i, j, x, y, t, t_count, m_count;
+	UINT8 i, j, t_count, m_count;
 
 	set_bkg_data( 0, Test_tile_count, Test_tile_data );	
 
@@ -28,6 +28,11 @@ void init_graphics()
 	set_sprite_data( t_count, bullet_tile_count, bullet_tile_data );
 	t_count += bullet_tile_count;
 
+	for( i = 0; i < enemy_tile_map_size; i++ )
+		enemy_map_data[i] += t_count;
+
+	set_sprite_data( t_count, enemy_tile_count, enemy_tile_data );
+	t_count += enemy_tile_count;
 
 	m_count = 0;
 	set_sprite_tile( m_count++, Test2_map_data[0] );
@@ -35,20 +40,20 @@ void init_graphics()
 
 	for( i = 0; i < 16; i++ )
 	{
-		GetState()->bullets[i].spr_index = m_count;
-		GetState()->bullets[i].pos.x = 15 + (UINT8)i * 8;
-		GetState()->bullets[i].pos.y = 15 + (UINT8)i * 8;
+		g_state.bullets[i].spr_index = m_count;
+		g_state.bullets[i].pos.x = 16 + i * 8;
+		g_state.bullets[i].pos.y = 16 + i * 8;
 		set_sprite_tile( m_count, bullet_map_data[0] );
-		move_sprite( m_count, GetState()->bullets[i].pos.x, GetState()->bullets[i].pos.y );
+		move_sprite( m_count, g_state.bullets[i].pos.x, g_state.bullets[i].pos.y );
 		m_count++;
 	}
-	for( i = 0; i < 16; i++ )
+	for( i = 0; i < 10; i++ )
 	{
-		GetState()->bullets[i+16].spr_index = m_count;
-		GetState()->bullets[i+16].pos.x = 30 + (UINT8)i * 8;
-		GetState()->bullets[i+16].pos.y = 15 + (UINT8)i * 8;
-		set_sprite_tile( m_count, bullet_map_data[0] );
-		move_sprite( m_count, GetState()->bullets[i+16].pos.x, GetState()->bullets[i+16].pos.y );
+		g_state.enemies[i].spr_index = m_count;
+		g_state.enemies[i].pos.x = 32 + i * 8;
+		g_state.enemies[i].pos.y = 16 + i * 8;
+		set_sprite_tile( m_count, enemy_map_data[0] );
+		move_sprite( m_count, g_state.enemies[i].pos.x, g_state.enemies[i].pos.y );
 		m_count++;
 	}
 
@@ -58,28 +63,30 @@ void init_graphics()
 
 void tick_graphics()
 {
-	int x, y, i;
-	x = GetState()->player1.pos.x;
-	y = GetState()->player1.pos.y;
+	UINT8 x, y, i, t;
+	x = g_state.player1.pos.x;
+	y = g_state.player1.pos.y;
 
-	move_sprite( 0, 0 + x, 0 + y );
-	move_sprite( 1, 8 + x, 0 + y );
+	move_sprite( 0, x, y );
+	move_sprite( 1, 8 + x, y );
 	
-	for( i = 0; i < 32; i++ )
+	for( i = 0; i < 16; i++ )
 	{
-		if( GetState()->bullets[i].active )
-		{
-			move_sprite( GetState()->bullets[i].spr_index, 
-						 GetState()->bullets[i].pos.x, 
-					     GetState()->bullets[i].pos.y );
-		}
-		else
-		{
-			move_sprite( GetState()->bullets[i].spr_index,
-							0,
-							0 );
-		}
+		t = g_state.bullets[i].spr_index;
+		x = g_state.bullets[i].pos.x;
+		y = g_state.bullets[i].pos.y;
+		move_sprite( t, x, y );
+	}
+	
+	for( i = 0; i < 10; i++ )
+	{
+		t = g_state.enemies[i].spr_index;
+		x = g_state.enemies[i].pos.x;
+		y = g_state.enemies[i].pos.y;
+		move_sprite( t, x, y );
 	}
 	
 	SCY_REG--;
+
+//	wait_vbl_done();
 }

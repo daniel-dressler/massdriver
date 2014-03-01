@@ -3,8 +3,8 @@
 
 #include "standard.h"
 
-#define MAX_ENEMIES		15
-#define MAX_BULLETS		32
+#define MAX_ENEMIES		20
+#define MAX_BULLETS		25
 
 typedef struct
 {
@@ -25,6 +25,8 @@ typedef struct
 	UINT8	type;
 	POINT	pos;
 	POINT	size;
+	UINT8	spr_index;
+	UINT8	reserved;
 
 } ENEMY;
 
@@ -35,21 +37,22 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 	UINT8	spr_index;
+	UINT8	reserved;
 
 } BULLET;
 
 typedef struct
 {
 	UINT32	time;
-	PLAYER	player1;
-	ENEMY	enemies[MAX_ENEMIES];
-	BULLET	bullets[MAX_BULLETS];
+	PLAYER	player1; // 8
+	ENEMY	enemies[MAX_ENEMIES];  // 6 * 15 = 90
+	BULLET	bullets[MAX_BULLETS];  // 8 * 48 = 336
 
 } State;
 
-State* GetState();
-
 void init_state();
 void tick_state();
+
+extern State g_state;
 
 #endif
