@@ -1,4 +1,5 @@
 #include "sound.h"
+#include "input.h"
 #include <gb\gb.h>
 
 SoundData gSounds[SOUND_END];
@@ -11,7 +12,7 @@ void init_sounds()
 
 	// Explosion
 	
-	gSounds[SOUND_SHOOTING].playTime		= 20;
+	gSounds[SOUND_SHOOTING].playTime		= REPEAT_RATE_A;
 	gSounds[SOUND_SHOOTING].soundLevelLeft	= 3;
 	gSounds[SOUND_SHOOTING].soundLevelRight	= 3;
 	gSounds[SOUND_SHOOTING].channel			= CHANNEL_1;
@@ -23,7 +24,7 @@ void init_sounds()
 	gSounds[SOUND_SHOOTING].data.chan1.nr14 = 0x87;
 
 	// Pew pew laser sounds
-	gSounds[SOUND_ENEMY_SHOOTING].playTime			= 20;
+	gSounds[SOUND_ENEMY_SHOOTING].playTime			= REPEAT_RATE_B;
 	gSounds[SOUND_ENEMY_SHOOTING].soundLevelLeft	= 1;
 	gSounds[SOUND_ENEMY_SHOOTING].soundLevelRight	= 1;
 	gSounds[SOUND_ENEMY_SHOOTING].channel			= CHANNEL_2;
@@ -35,7 +36,7 @@ void init_sounds()
 
 
 	// Ship death
-	gSounds[SOUND_EXPLOSION].playTime			= 20;
+	gSounds[SOUND_EXPLOSION].playTime			= REPEAT_RATE_START;
 	gSounds[SOUND_EXPLOSION].soundLevelLeft		= 2;
 	gSounds[SOUND_EXPLOSION].soundLevelRight	= 2;
 	gSounds[SOUND_EXPLOSION].channel			= CHANNEL_4;
@@ -46,7 +47,7 @@ void init_sounds()
 	gSounds[SOUND_EXPLOSION].data.chan4.nr44 = 0x80; 
 
 	// Fail, player ship explosion
-	gSounds[SOUND_LOSE].playTime		= 15;
+	gSounds[SOUND_LOSE].playTime		= REPEAT_RATE_SELECT;
 	gSounds[SOUND_LOSE].soundLevelLeft	= 7;
 	gSounds[SOUND_LOSE].soundLevelRight	= 7;
 	gSounds[SOUND_LOSE].channel			= CHANNEL_4;

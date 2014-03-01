@@ -4,12 +4,6 @@
 #include <gb\gb.h>
 
 
-#define REPEAT_RATE_A 20
-#define REPEAT_RATE_B 20
-#define REPEAT_RATE_START 20
-#define REPEAT_RATE_SELECT 20
-
-
 UINT8 gCountDownA = 0, gCountDownB = 0, gCountDownStart = 0, gCountDownSelect = 0;
 
 void tick_input()
@@ -51,21 +45,21 @@ void handle_input()
 
 	if( i & J_UP )
 	{
-		GetState()->player1.pos.y--;
+		GetState()->player1.pos.y -= 2;
 	}
       
 	if( i & J_DOWN )
 	{
-		GetState()->player1.pos.y++;
+		GetState()->player1.pos.y += 2;
 	}
       
 	if( i & J_LEFT )
 	{
-		GetState()->player1.pos.x--;
+		GetState()->player1.pos.x -= 2;
 	}
 
 	if( i & J_RIGHT )
 	{
-		GetState()->player1.pos.x++;
+		GetState()->player1.pos.x += 2;
 	}
 }
