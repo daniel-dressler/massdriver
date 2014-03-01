@@ -10,3 +10,6 @@ gbdk/*
 *.sym
 *.asm
 *.swp
+GBGame/GBGame.log
+GBGame/GBGame.vcxproj.filters
+GBGame.v11.suo

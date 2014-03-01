@@ -1,0 +1,1 @@
+C:\Libraries\gbdk\bin\bgb test.gb
