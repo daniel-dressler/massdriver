@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClCompile Include="graphics.c" />
     <ClCompile Include="images.c" />
+    <ClCompile Include="input.c" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="old.cpp" />
     <ClCompile Include="sound.c" />
     <ClCompile Include="test.c" />
@@ -24,6 +26,7 @@
   <ItemGroup>
     <ClInclude Include="graphics.h" />
     <ClInclude Include="images.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="standard.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="test.h" />

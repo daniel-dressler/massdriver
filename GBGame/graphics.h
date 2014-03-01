@@ -3,6 +3,7 @@
 
 #include "standard.h"
 
-void gfx_init();
+void init_graphics();
+void tick_graphics();
 
 #endif

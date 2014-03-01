@@ -1,1 +1,1 @@
-C:\Libraries\gbdk\bin\bgb test.gb
+C:\Libraries\gbdk\bin\bgb shmup.gb

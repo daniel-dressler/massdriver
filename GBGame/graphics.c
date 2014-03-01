@@ -4,29 +4,36 @@
 #define WIN_START_X 7
 #define WIN_START_Y (8*13-1)
 
-void gfx_init()
+void init_graphics()
 {
-	int i, j;
+	int i, j, x, y;
 
-	disable_interrupts();
-	DISPLAY_OFF;
-	LCDC_REG = 0x67;
-	BGP_REG = OBP0_REG = OBP1_REG = 0xE4U;
 
-	set_bkg_data( 0, Test_tile_count, Test_map_data );	
-	set_bkg_tiles( 0, 0, Test_tile_map_width, Test_tile_map_height, Test_tile_data );
-  
-	DISPLAY_ON;
-	enable_interrupts();
+	set_bkg_data( 0, Test_tile_count, Test_tile_data );	
+
+ 	for(i = 0; i < 32; i+=Test_tile_map_width)
+		for(j = 0; j < 32; j+=Test_tile_map_height)
+			set_bkg_tiles(i, j, Test_tile_map_width, Test_tile_map_height, Test_map_data);
+
+
+	set_sprite_data(0, Test_tile_count, Test2_tile_data);
+	set_sprite_tile( 0, Test2_map_data[0] );
+	set_sprite_tile( 1, Test2_map_data[1] );
+	set_sprite_tile( 2, Test2_map_data[2] );
+	set_sprite_tile( 3, Test2_map_data[3] );
+
+	x = 50;
+	y = 50;
+	move_sprite( 0, 0 + x, 0 + y );
+	move_sprite( 1, 8 + x, 0 + y );
+	move_sprite( 2, 0 + x, 8 + y );
+	move_sprite( 3, 8 + x, 8 + y );
 
 	WX_REG = 1000;
 	WY_REG = 1000;
+}
 
-
-	while( 1 )
-	{
-		wait_vbl_done();
-//		SCX_REG++;
-//		SCY_REG++;
-	}
+void tick_graphics()
+{
+	SCY_REG--;
 }
