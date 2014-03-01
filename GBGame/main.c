@@ -3,6 +3,7 @@
 #include "images.h"
 #include "graphics.h"
 #include "sound.h"
+#include "input.h"
 
 void main()
 {
@@ -22,6 +23,7 @@ void main()
 		wait_vbl_done();
 
 		tick_sound();
+		handle_input();
 
 		SCY_REG--;
 	}
