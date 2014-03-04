@@ -20,5 +20,5 @@ void init_state()
 
 void tick_state()
 {
-	g_state.time++;
+	g_state.time = g_state.time;
 }

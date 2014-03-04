@@ -1,6 +1,6 @@
 #include "sound.h"
 #include "input.h"
-#include <gb\gb.h>
+#include <gb/gb.h>
 
 SoundData gSounds[SOUND_END];
 UINT8 gC1Playtime, gC2Playtime, gC3Playtime, gC4Playtime;
@@ -167,3 +167,4 @@ void play_sound( SoundID sound )
 		break;
 	};
 }
+

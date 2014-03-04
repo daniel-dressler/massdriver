@@ -1,7 +1,7 @@
 #include "input.h"
 #include "sound.h"
 #include "state.h"
-#include <gb\gb.h>
+#include <gb/gb.h>
 
 
 UINT8 gCountDownA = 0, gCountDownB = 0, gCountDownStart = 0, gCountDownSelect = 0;
@@ -71,3 +71,4 @@ void handle_input()
 			g_state.player1.pos.x = 155;
 	}
 }
+

@@ -1,7 +1,7 @@
 ifeq ($(OS),Windows_NT)
 	CC = C:\Libraries\bin\lcc
 else
-	CC = ../gbdk/bin/lcc 
+	CC = ../gbdk/bin/lcc -I../gbdk/include/
 endif
 
 all:
