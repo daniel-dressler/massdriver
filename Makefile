@@ -1,4 +1,9 @@
-CC	= ./gbdk/bin/lcc -Wa-l -Wl-m -Wl-j
+ifeq ($(OS),Windows_NT)
+	CC = C:\Libraries\bin\lcc -Wa-l -Wl-m Wl-j
+else
+	CC = ./gbdk/bin/lcc -Wa-l -Wl-m -Wl-j
+endif
+
 
 BINS	= main.gb
 
