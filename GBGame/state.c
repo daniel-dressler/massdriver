@@ -20,5 +20,7 @@ void init_state()
 
 void tick_state()
 {
-	g_state.time = g_state.time;
+	UINT32 new_time = g_state.time;
+	new_time++;
+	g_state.time = new_time;
 }
