@@ -313,7 +313,8 @@ void main()
 {
 	UBYTE i, j;
 
-	gfx_init();
+	//gfx_init();
+	init_graphics();
 
 	disable_interrupts();
 	DISPLAY_OFF;
