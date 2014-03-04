@@ -26,35 +26,7 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 	UINT8	spr_index;
-	UINT8	speed_haxors;
-	
-	UINT8	speed_haxors2;
-	UINT8	speed_haxors3;
-	UINT8	speed_haxors4;
-	UINT8	speed_haxors5;
-	UINT8	speed_haxors6;
-	UINT8	speed_haxors7;
-	UINT8	speed_haxors8;
-	UINT8	speed_haxors9;
-	
-	UINT8	speed_haxors21;
-	UINT8	speed_haxors31;
-	UINT8	speed_haxors41;
-	UINT8	speed_haxors51;
-	UINT8	speed_haxors61;
-	UINT8	speed_haxors71;
-	UINT8	speed_haxors81;
-	UINT8	speed_haxors91;
-	
-	UINT8	speed_haxors22;
-	UINT8	speed_haxors32;
-	UINT8	speed_haxors42;
-	UINT8	speed_haxors52;
-	UINT8	speed_haxors62;
-	UINT8	speed_haxors72;
-	UINT8	speed_haxors82;
-	UINT8	speed_haxors92;
-	
+	UINT8	speed_haxor[1 + 8 + 8 + 8];
 } ENEMY;
 
 typedef struct
@@ -64,7 +36,7 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 	UINT8	spr_index;
-	UINT8	speed_haxors;
+	UINT8	speed_haxors[1];
 
 } BULLET;
 
