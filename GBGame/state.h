@@ -3,8 +3,8 @@
 
 #include "standard.h"
 
-#define MAX_ENEMIES		20
-#define MAX_BULLETS		25
+#define MAX_ENEMIES		4
+#define MAX_BULLETS		15
 
 typedef struct
 {
@@ -22,20 +22,20 @@ typedef struct
 typedef struct
 {
 	UINT8	active;
+	UINT8	spr_index;
 	UINT8	type;
 	POINT	pos;
 	POINT	size;
-	UINT8	spr_index;
 	UINT8   time_alive;
 } ENEMY;
 
 typedef struct
 {
 	UINT8	active;
+	UINT8	spr_index;
 	UINT8	friendly;
 	POINT	pos;
 	POINT	size;
-	UINT8	spr_index;
 } BULLET;
 
 enum mode_t {

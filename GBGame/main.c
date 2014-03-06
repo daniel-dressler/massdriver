@@ -26,9 +26,9 @@ void main()
 	while( 1 )
 	{
 		tick_state();
-		tick_graphics();
-		tick_sound();
 		handle_input();
 		tick_gameai();
+		tick_sound();
+		tick_graphics();
 	}
 }

@@ -48,29 +48,30 @@ void init_graphics()
 	set_sprite_tile( m_count++, Test2_map_data[2] );
 
 	bullet_walker = &(g_state.bullets);
-	for( i = 0; i < 16; i++, bullet_walker++, m_count++ )
+	for( i = 0; i < MAX_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		bullet_walker->spr_index = m_count;
 		bullet_walker->pos.x = 16 + i * 8;
 		bullet_walker->pos.y = 16 + i * 8;
 		set_sprite_tile( m_count, bullet_map_data[0] );
-		move_sprite( m_count, bullet_walker->pos.x, bullet_walker->pos.y );
+		//move_sprite( m_count, bullet_walker->pos.x, bullet_walker->pos.y );
 	}
 
 	enemy_walker = &(g_state.enemies);
-	for( i = 0; i < 10; i++, enemy_walker++, m_count++ )
+	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
 	{
 		enemy_walker->spr_index = m_count;
 		enemy_walker->pos.x = 32 + i * 8;
 		enemy_walker->pos.y = 16 + i * 8;
 		set_sprite_tile( m_count, enemy_map_data[0] );
-		move_sprite( m_count, enemy_walker->pos.x, enemy_walker->pos.y );
+		//move_sprite( m_count, enemy_walker->pos.x, enemy_walker->pos.y );
 	}
 
 	WX_REG = 1000;
 	WY_REG = 1000;
 }
 
+#define PLAYER_SPRITES (2)
 void tick_graphics()
 {
 	UINT8 x, y, i, t;
@@ -84,24 +85,30 @@ void tick_graphics()
 	move_sprite( 1, 8 + x, y );
 	
 	bullet_walker = &(g_state.bullets);
-	for( i = 0; i < 16; i++, bullet_walker++ )
+	for( i = 0; i < MAX_BULLETS; i++, bullet_walker++ )
 	{
-		t = bullet_walker->spr_index;
+		//t = bullet_walker->spr_index;
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
-		move_sprite( t, x, y );
+		if (bullet_walker->active == 0) {
+			x = y = 0;
+		}
+		move_sprite( PLAYER_SPRITES + i, x, y );
 	}
 	
 	enemy_walker = &(g_state.enemies);
-	for( i = 0; i < 10; i++, enemy_walker++ )
+	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++ )
 	{
-		t = enemy_walker->spr_index;
+		//t = enemy_walker->spr_index;
 		x = enemy_walker->pos.x;
 		y = enemy_walker->pos.y;
-		move_sprite( t, x, y );
+		if (enemy_walker->active == 0) {
+			x = y = 0;
+		}
+		move_sprite( PLAYER_SPRITES + MAX_BULLETS + i, x, y );
 	}
 	
 	SCY_REG--;
 
-//	wait_vbl_done();
+	wait_vbl_done();
 }
