@@ -27,7 +27,6 @@ typedef struct
 	POINT	size;
 	UINT8	spr_index;
 	UINT8   time_alive;
-	UINT8	speed_haxor[1 + 8 + 8 + 8];
 } ENEMY;
 
 typedef struct
@@ -37,8 +36,6 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 	UINT8	spr_index;
-	UINT8	speed_haxors[1];
-
 } BULLET;
 
 enum mode_t {
