@@ -6,6 +6,7 @@
 #include "graphics.h"
 #include "sound.h"
 #include "input.h"
+#include "gameai.h"
 
 void main()
 {
@@ -15,6 +16,7 @@ void main()
 	BGP_REG = OBP0_REG = OBP1_REG = 0xE4U;
 
 	init_state();
+	init_gameai();
 	init_graphics();
 	init_sounds();
 
@@ -27,5 +29,6 @@ void main()
 		tick_graphics();
 		tick_sound();
 		handle_input();
+		tick_gameai();
 	}
 }

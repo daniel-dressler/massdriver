@@ -23,4 +23,5 @@ void tick_state()
 	UINT32 new_time = g_state.time;
 	new_time++;
 	g_state.time = new_time;
+	g_state.entropy_pool += (char)new_time;
 }

@@ -18,57 +18,61 @@ void tick_input()
 
 void handle_input()
 {
-	UINT8 i = joypad();
+	UINT8 pad = joypad();
 
 	tick_input();
 
-	if( i & J_A && gCountDownA == 0) 
+	if( pad & J_A && gCountDownA == 0) 
 	{
 		play_sound( SOUND_SHOOTING );
 		gCountDownA = REPEAT_RATE_A;
 	}
 
-	if( i & J_B && gCountDownB == 0 ) 
+	if( pad & J_B && gCountDownB == 0 ) 
 	{
 		play_sound( SOUND_ENEMY_SHOOTING );
 	}
 
-	if( i & J_SELECT && gCountDownSelect == 0)
+	if( pad & J_SELECT && gCountDownSelect == 0)
 	{
 		play_sound( SOUND_LOSE );
 	}
 
-	if( i & J_START && gCountDownStart == 0 )
+	if( pad & J_START && gCountDownStart == 0 )
 	{
 		play_sound( SOUND_EXPLOSION );
 	}
 
-	if( i & J_UP )
+	if( pad & J_UP )
 	{
 		g_state.player1.pos.y-=2;
 		if( g_state.player1.pos.y < 15 )
 			g_state.player1.pos.y = 15;
 	}
       
-	if( i & J_DOWN )
+	if( pad & J_DOWN )
 	{
 		g_state.player1.pos.y+=2;
 		if( g_state.player1.pos.y > 148 )
 			g_state.player1.pos.y = 148;
 	}
       
-	if( i & J_LEFT )
+	if( pad & J_LEFT )
 	{
 		g_state.player1.pos.x-=2;
 		if( g_state.player1.pos.x < 5 )
 			g_state.player1.pos.x = 5;
 	}
 
-	if( i & J_RIGHT )
+	if( pad & J_RIGHT )
 	{
 		g_state.player1.pos.x+=2;
 		if( g_state.player1.pos.x > 155 )
 			g_state.player1.pos.x = 155;
 	}
+
+	// The gameboy only has time and
+	// input for entropy sources
+	g_state.entropy_pool += pad;
 }
 

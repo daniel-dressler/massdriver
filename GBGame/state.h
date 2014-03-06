@@ -26,6 +26,7 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 	UINT8	spr_index;
+	UINT8   time_alive;
 	UINT8	speed_haxor[1 + 8 + 8 + 8];
 } ENEMY;
 
@@ -40,9 +41,21 @@ typedef struct
 
 } BULLET;
 
+enum mode_t {
+	MODE_MENU = 1,
+	MODE_GAME = 2,
+	MODE_SCORE = 3
+};
+
 typedef struct
 {
+	UINT8   mode;
 	UINT32	time;
+
+	// We have to gather our own entropy,
+	// On PC the OS will do this
+	UINT8   entropy_pool;
+
 	PLAYER	player1; // 8
 	ENEMY	enemies[MAX_ENEMIES];  // 6 * 15 = 90
 	BULLET	bullets[MAX_BULLETS];  // 8 * 48 = 336
