@@ -22,6 +22,7 @@ typedef struct
 typedef struct
 {
 	UINT8	active;
+	UINT8   age;
 	UINT8	spr_index;
 	UINT8	type;
 	POINT	pos;
