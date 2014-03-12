@@ -43,7 +43,7 @@ void gen_table(struct point pts[], int pts_size, int scale)
 	}
 
 	printf("	{%d, 100}\n};\n", (i -= scale) / scale );
-	printf("UINT8 qrt_circle_%d_size = %d;\n\n", i, size);
+	printf("UINT8 qrt_circle_%d_size = %d;\n\n", i / scale, size);
 	return;
 }
 
@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
 	gen_table(pts, i, 2);
 	gen_table(pts, i, 4);
 	gen_table(pts, i, 8);
+	gen_table(pts, i, 16);
 
 	return 0;
 }
