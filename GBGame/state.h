@@ -5,7 +5,7 @@
 
 #define MAX_ENEMIES		4
 #define MAX_BULLETS		5
-#define MAX_PLAYER_BULLETS	15	
+#define MAX_PLAYER_BULLETS 10	
 
 typedef struct
 {

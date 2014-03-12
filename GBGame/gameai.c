@@ -116,7 +116,7 @@ void tick_gameai()
 		
 		// Move Player Bullets & Check Hits
 		bullet_walker = g_state.player_bullets;
-		for (i = 0; i < MAX_BULLETS; i++, bullet_walker++) {
+		for (i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++) {
 			ENEMY *enemy_walker = g_state.enemies;
 			UINT8 k;
 			bullet_walker->pos.y -= 1;
@@ -204,7 +204,7 @@ ENDHITCHECK:
 	}
 
 	sub_tick += 1;
-	if (sub_tick > SCREENWIDTH) {
+	if (sub_tick > SCREENWIDTH + 5) {
 		sub_tick = 0;
 	}
 }
