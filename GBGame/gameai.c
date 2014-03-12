@@ -6,6 +6,7 @@
 void init_gameai()
 {
 	ENEMY *enemy_walker = g_state.enemies;
+	BULLET *bullet_walker;
 	UINT8 i;
 
 	for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
@@ -16,6 +17,10 @@ void init_gameai()
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 8;
 		enemy_walker->age = 0;
+	}
+
+	bullet_walker = g_state.player_bullets;
+	for (i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++) {
 	}
 
 	g_state.mode = MODE_MENU;
@@ -70,6 +75,7 @@ void tick_gameai()
 
 	if (g_state.mode & MODE_GAME) {
 		static ENEMY *next_free_enemy = NULL;
+		static BULLET *next_free_player_bullet = NULL;
 		UINT8 i;
 		BULLET *bullet_walker;
 
@@ -78,9 +84,6 @@ void tick_gameai()
 			next_free_enemy->age = 0;
 			next_free_enemy->active = 1;
 			next_free_enemy = NULL;
-			g_state.player_bullets[0].pos.x = 30;
-			g_state.player_bullets[0].pos.y = sub_tick / 1;
-			g_state.player_bullets[0].active = 1;
 		}
 
 		// Move Enemy
@@ -117,6 +120,13 @@ void tick_gameai()
 			ENEMY *enemy_walker = g_state.enemies;
 			UINT8 k;
 			bullet_walker->pos.y -= 1;
+			if (bullet_walker->pos.y < 16) {
+				bullet_walker->active = 0;
+			}
+			if (bullet_walker->active == 0 &&
+				next_free_player_bullet == NULL) {
+				next_free_player_bullet = bullet_walker;
+			}
 			for (k = 0; k < MAX_ENEMIES; k++, enemy_walker++) {
 				UINT8 ex1 = enemy_walker->pos.x;
 				UINT8 ex2 = ex1 + enemy_walker->size.x;
@@ -138,10 +148,18 @@ void tick_gameai()
 				}
 			}
 ENDHITCHECK:
-			if (bullet_walker->pos.y < 16) {
-				bullet_walker->active = 0;
-			}
 		}
+
+		if (((sub_tick & 15) == 0) && (next_free_player_bullet != NULL)) {
+			BULLET *blt = next_free_player_bullet;
+			blt->active = 1;
+			blt->pos.x = g_state.player1.pos.x;
+			blt->pos.y = g_state.player1.pos.y;
+			blt->size.x = 8;
+			blt->size.y = 8;
+			next_free_player_bullet = NULL;
+		}
+
 
 		// Move Enemy Bullets & Check Hits
 		bullet_walker = g_state.enemy_bullets;
