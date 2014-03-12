@@ -16,8 +16,8 @@ void main()
 	BGP_REG = OBP0_REG = OBP1_REG = 0xE4U;
 
 	init_state();
-	init_gameai();
 	init_graphics();
+	init_gameai();
 	init_sounds();
 
 	DISPLAY_ON;

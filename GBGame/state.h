@@ -4,7 +4,7 @@
 #include "standard.h"
 
 #define MAX_ENEMIES		4
-#define MAX_BULLETS		15
+#define MAX_BULLETS		5
 
 typedef struct
 {
@@ -22,19 +22,15 @@ typedef struct
 typedef struct
 {
 	UINT8	active;
-	UINT8   age;
-	UINT8	spr_index;
 	UINT8	type;
 	POINT	pos;
 	POINT	size;
-	UINT8   time_alive;
+	UINT8   age;
 } ENEMY;
 
 typedef struct
 {
-	UINT8	active;
-	UINT8	spr_index;
-	UINT8	friendly;
+	UINT8   active;
 	POINT	pos;
 	POINT	size;
 } BULLET;
@@ -49,14 +45,16 @@ typedef struct
 {
 	UINT8   mode;
 	UINT32	time;
+	UINT16  score;
 
 	// We have to gather our own entropy,
-	// On PC the OS will do this
+	// while on PC the kernel will do this
 	UINT8   entropy_pool;
 
-	PLAYER	player1; // 8
-	ENEMY	enemies[MAX_ENEMIES];  // 6 * 15 = 90
-	BULLET	bullets[MAX_BULLETS];  // 8 * 48 = 336
+	PLAYER	player1; // 4
+	ENEMY	enemies[MAX_ENEMIES];
+	BULLET	enemy_bullets[MAX_BULLETS];
+	BULLET  player_bullets[MAX_BULLETS];
 
 } State;
 

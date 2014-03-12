@@ -10,12 +10,6 @@ void init_state()
 
 	g_state.player1.pos.x = 80;
 	g_state.player1.pos.y = 120;
-
-	for( i = 0; i < MAX_ENEMIES; i++ )
-		g_state.enemies[i].active = 1;
-
-	for( i = 0; i < MAX_BULLETS; i++ )
-		g_state.bullets[i].active = 1;
 }
 
 void tick_state()
