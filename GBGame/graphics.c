@@ -92,7 +92,7 @@ void tick_graphics()
 		x = y = 0;
 	}
 	move_sprite( 0, x, y );
-	move_sprite( 1, x, y );
+	move_sprite( 1, 8 + x, y );
 
 	// Enemy bullets
 	bullet_walker = &(g_state.enemy_bullets);
