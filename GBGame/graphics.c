@@ -88,16 +88,20 @@ void tick_graphics()
 	x = g_state.player1.pos.x;
 	y = g_state.player1.pos.y;
 
+	if (!(g_state.mode & MODE_GAME)) {
+		x = y = 0;
+	}
 	move_sprite( 0, x, y );
-	move_sprite( 1, 8 + x, y );
-	
+	move_sprite( 1, x, y );
+
 	// Enemy bullets
 	bullet_walker = &(g_state.enemy_bullets);
 	for( i = 0; i < MAX_BULLETS; i++, bullet_walker++ )
 	{
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
-		if (bullet_walker->active == 0) {
+		if (bullet_walker->active == 0 ||
+			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
 		move_sprite( PLAYER_SPRITES + i, x, y );
@@ -109,7 +113,8 @@ void tick_graphics()
 	{
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
-		if (bullet_walker->active == 0) {
+		if (bullet_walker->active == 0 ||
+			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
 		move_sprite( PLAYER_SPRITES + MAX_BULLETS + i, x, y );
@@ -120,7 +125,8 @@ void tick_graphics()
 	{
 		x = enemy_walker->pos.x;
 		y = enemy_walker->pos.y;
-		if (enemy_walker->active == 0) {
+		if (enemy_walker->active == 0 ||
+			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
 		move_sprite( PLAYER_SPRITES + MAX_BULLETS + MAX_PLAYER_BULLETS + i, x, y );

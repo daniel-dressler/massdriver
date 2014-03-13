@@ -1,7 +1,7 @@
 #include <gb/gb.h>
 
 #include "state.h"
-#include "input.h"
+#include "sound.h"
 
 void init_gameai()
 {
@@ -64,10 +64,13 @@ UINT8 score_by_type[] = {
 	300
 };
 
+#define PLAYERSPEED  (1)
+#define BULLETSPEED (2)
 void tick_gameai()
 {
 	static pattern_func get_new_pos = pattern_basic;
 	static UINT8 sub_tick = 0;
+	UINT8 pad = joypad();
 
 	if (g_state.mode & MODE_MENU) {
 		g_state.mode = MODE_GAME;
@@ -78,6 +81,39 @@ void tick_gameai()
 		static BULLET *next_free_player_bullet = NULL;
 		UINT8 i;
 		BULLET *bullet_walker;
+
+		// Move player
+		if( pad & J_UP ) {
+			UINT8 y = g_state.player1.pos.y -= PLAYERSPEED;
+			if( y < 16 )
+				g_state.player1.pos.y = 16;
+			if( y > 148 )
+				g_state.player1.pos.y = 148;
+		}
+	      
+		if( pad & J_DOWN ) {
+			UINT8 y = g_state.player1.pos.y += PLAYERSPEED;
+			if( y > 148 )
+				g_state.player1.pos.y = 148;
+			if( y < 16 )
+				g_state.player1.pos.y = 16;
+		}
+	      
+		if( pad & J_LEFT ) {
+			UINT8 x = g_state.player1.pos.x -= PLAYERSPEED;
+			if( x < 8 )
+				g_state.player1.pos.x = 8;
+			if( x > 155 )
+				g_state.player1.pos.x = 155;
+		}
+	
+		if( pad & J_RIGHT ) {
+			UINT8 x = g_state.player1.pos.x += PLAYERSPEED;
+			if( x > 155 )
+				g_state.player1.pos.x = 155;
+			if( x < 8 )
+				g_state.player1.pos.x = 8;
+		}
 
 		// Spawn Enemies?
 		if (((sub_tick & 31) == 0) && (next_free_enemy != NULL)) {
@@ -119,7 +155,7 @@ void tick_gameai()
 		for (i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++) {
 			ENEMY *enemy_walker = g_state.enemies;
 			UINT8 k;
-			bullet_walker->pos.y -= 1;
+			bullet_walker->pos.y -= BULLETSPEED;
 			if (bullet_walker->pos.y < 16) {
 				bullet_walker->active = 0;
 			}
@@ -143,6 +179,7 @@ void tick_gameai()
 					bullet_walker->active = 0;
 					enemy_walker->active = 0;
 					g_state.score += score_by_type[enemy_walker->type];
+					play_sound( SOUND_EXPLOSION );
 					// TODO: Position an explosion
 					goto ENDHITCHECK;
 				}
@@ -150,7 +187,10 @@ void tick_gameai()
 ENDHITCHECK:
 		}
 
-		if (((sub_tick & 15) == 0) && (next_free_player_bullet != NULL)) {
+		// Fire player bullets
+		if ((pad & J_A) && 
+				((sub_tick & 15) == 0) &&
+				(next_free_player_bullet != NULL)) {
 			BULLET *blt = next_free_player_bullet;
 			blt->active = 1;
 			blt->pos.x = g_state.player1.pos.x;
@@ -158,6 +198,7 @@ ENDHITCHECK:
 			blt->size.x = 8;
 			blt->size.y = 8;
 			next_free_player_bullet = NULL;
+			play_sound( SOUND_SHOOTING );
 		}
 
 
@@ -175,7 +216,7 @@ ENDHITCHECK:
 			UINT8 by1 = bullet_walker->pos.y;
 			UINT8 by2 = by1 + bullet_walker->size.y;
 
-			bullet_walker->pos.y += sub_tick;
+			bullet_walker->pos.y += BULLETSPEED;
 
 			if (ex1 < bx2 && ex2 > bx1 &&
 				ey1 < by2 && ey2 > by1) {
@@ -185,6 +226,7 @@ ENDHITCHECK:
 				} else {
 					g_state.score = 0;
 				}
+				play_sound( SOUND_EXPLOSION );
 				// TODO: Position an explosion
 			}
 			
@@ -207,5 +249,9 @@ ENDHITCHECK:
 	if (sub_tick > SCREENWIDTH + 5) {
 		sub_tick = 0;
 	}
+
+	// The gameboy has no realtime clock.
+	// input is our main entropy source
+	g_state.entropy_pool += pad;
 }
 

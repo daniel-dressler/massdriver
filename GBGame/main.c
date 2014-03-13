@@ -5,7 +5,6 @@
 #include "images.h"
 #include "graphics.h"
 #include "sound.h"
-#include "input.h"
 #include "gameai.h"
 
 void main()
@@ -26,7 +25,6 @@ void main()
 	while( 1 )
 	{
 		tick_state();
-		handle_input();
 		tick_gameai();
 		tick_sound();
 		tick_graphics();
