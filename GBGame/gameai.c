@@ -164,7 +164,7 @@ void tick_gameai()
 				next_free_player_bullet = bullet_walker;
 			}
 			if (bullet_walker->active == 0) {
-				continue;
+				//continue;
 			}
 			for (k = 0; k < MAX_ENEMIES; k++, enemy_walker++) {
 				UINT8 ex1 = enemy_walker->pos.x;
