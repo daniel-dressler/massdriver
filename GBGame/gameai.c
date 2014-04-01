@@ -106,6 +106,23 @@ void pattern_leftdownswing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 	*x_out = 255;
 }
 
+void pattern_rightdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
+{
+	if (time < qrt_circle_64_size) {
+		struct pattern_point_t *pt = qrt_circle_64 + time;
+		*x_out = 64 - pt->y + 8;
+		*y_out = pt->x;
+		return;
+	}
+	*y_out = 64;
+	*x_out = 64 + 8 + (time - qrt_circle_64_size);
+}
+
+void pattern_leftdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
+{
+	pattern_rightdownslip(time, y_out, x_out);
+}
+
 UINT8 score_by_type[] = {
 	100,
 	300
@@ -195,7 +212,7 @@ void tick_gameai()
 				UINT8 w = (enemy_walker->age)++;
 
 				if (enemy_walker->active != 0) {
-					pattern_leftdownswing(w, &x, &y);
+					pattern_leftdownslip(w, &x, &y);
 					if (x < (SCREENWIDTH + 8) && y < (SCREENHEIGHT + 8)) {
 						enemy_walker->pos.x = x;
 						enemy_walker->pos.y = 1 + y;
