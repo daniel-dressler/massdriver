@@ -24,6 +24,7 @@ void init_gameai()
 
 	bullet_walker = g_state.player_bullets;
 	for (i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++) {
+		bullet_walker->active = 0;
 	}
 
 	g_state.mode = MODE_MENU;
@@ -40,8 +41,9 @@ void pattern_basic(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 
 void pattern_sin(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
-	UINT8 x, slope;
-	slope = (time & (8 | 4 | 2 | 1));
+	UINT8 x = 50;
+	UINT8 slope;
+	slope = time & 15;
 	switch (((time >> 4)) & (2 | 1)) {
 	case 0:
 		x = 30 + slope;
@@ -135,13 +137,6 @@ void tick_gameai()
 				g_state.player1.pos.x = 8;
 		}
 
-		// Spawn Enemies?
-		if ((div7 && div5) && (next_free_enemy != NULL)) {
-			next_free_enemy->age = 0;
-			next_free_enemy->active = 1;
-			next_free_enemy = NULL;
-		}
-
 		// Move Enemy
 		if (1) {
 			ENEMY *enemy_walker = &(g_state.enemies);
@@ -162,11 +157,18 @@ void tick_gameai()
 				} else if (next_free_enemy == NULL) {
 					next_free_enemy = enemy_walker;
 					next_free_enemy->active = 0;
-					next_free_enemy->pos.y = 40;
-					next_free_enemy->pos.x = 40;
+					next_free_enemy->pos.y = 0;
+					next_free_enemy->pos.x = 0;
 				}
 			}
 
+		}
+
+		// Spawn Enemies?
+		if ((div7 && div5) && (next_free_enemy != NULL)) {
+			next_free_enemy->age = 0;
+			next_free_enemy->active = 1;
+			next_free_enemy = NULL;
 		}
 
 		
@@ -197,8 +199,9 @@ void tick_gameai()
 				UINT8 by1 = bullet_walker->pos.y;
 				UINT8 by2 = by1 + bullet_walker->size.y;
 
-				if (ex1 < bx2 && ex2 > bx1 &&
-					ey1 < by2 && ey2 > by1) {
+				if (bullet_walker->active != 0 &&
+						ex1 < bx2 && ex2 > bx1 &&
+						ey1 < by2 && ey2 > by1) {
 					bullet_walker->active = 0;
 					enemy_walker->active = 0;
 					g_state.score += score_by_type[enemy_walker->type];
