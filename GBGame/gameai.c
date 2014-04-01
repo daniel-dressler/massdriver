@@ -123,6 +123,8 @@ void pattern_leftdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 	pattern_rightdownslip(time, y_out, x_out);
 }
 
+#define NUMPATTERNS (8)
+
 UINT8 score_by_type[] = {
 	100,
 	300
@@ -134,6 +136,7 @@ void tick_gameai()
 {
 	static pattern_func get_new_pos = pattern_basic;
 	static UINT8 sub_tick = 0;
+	static UINT8 super_tick = 0;
 	UINT8 pad = joypad();
 
 	// You can press anything to exit menus
@@ -212,7 +215,35 @@ void tick_gameai()
 				UINT8 w = (enemy_walker->age)++;
 
 				if (enemy_walker->active != 0) {
-					pattern_leftdownslip(w, &x, &y);
+					switch (enemy_walker->pattern) {
+						case 0:
+							pattern_leftdownslip(w, &x, &y);
+							break;
+						case 1:
+							pattern_rightdownslip(w, &x, &y);
+							break;
+						case 2:
+							pattern_leftdownswing(w, &x, &y);
+							break;
+						case 3:
+							pattern_leftdownswing(w, &x, &y);
+							break;
+						case 4:
+							pattern_leftswing(w, &x, &y);
+							break;
+						case 5:
+							pattern_swing(w, &x, &y);
+							break;
+						case 6:
+							pattern_sin(w, &x, &y);
+							break;
+						case 7:
+							pattern_basic(w, &x, &y);
+							break;
+						default:
+							pattern_sin(w, &x, &y);
+							break;
+					}
 					if (x < (SCREENWIDTH + 8) && y < (SCREENHEIGHT + 8)) {
 						enemy_walker->pos.x = x;
 						enemy_walker->pos.y = 1 + y;
@@ -233,6 +264,7 @@ void tick_gameai()
 		if ((div7 && div5) && (next_free_enemy != NULL)) {
 			next_free_enemy->age = 0;
 			next_free_enemy->active = 1;
+			next_free_enemy->pattern = super_tick % NUMPATTERNS;
 			next_free_enemy = NULL;
 		}
 
@@ -348,6 +380,7 @@ ENDHITCHECK:
 	sub_tick += 1;
 	if (sub_tick >= (7 * 5 * 3 * 2)) {
 		sub_tick = 0;
+		super_tick = g_state.entropy_pool - sub_tick;
 	}
 
 	// The gameboy has no realtime clock.
