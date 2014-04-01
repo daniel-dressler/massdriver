@@ -20,7 +20,7 @@ void print_point(int x, int y)
 
 void gen_table(struct point pts[], int pts_size, int scale)
 {
-	puts("struct pattern_point_t qrt_circle_%d[] = { \n");
+	printf("struct pattern_point_t qrt_circle_%d[] = { \n", (pts_size - 1) / scale);
 
 	float y_dist = 0;
 	float y_old = pts[0].y / scale;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	}
 
 	puts("\
-		strut pattern_point_t {\
+		struct pattern_point_t {\
 			UINT8 x;\
 			UINT8 y;\
 		};\n");

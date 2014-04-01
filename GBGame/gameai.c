@@ -2,6 +2,7 @@
 
 #include "state.h"
 #include "sound.h"
+#include "assets/qrt_circle_precomp.h"
 
 void init_gameai()
 {
@@ -78,11 +79,11 @@ void tick_gameai()
 	UINT8 pad = joypad();
 
 	// You can press anything to exit menus
-	if ((g_state.mode & MODE_MENU) && (pad & J_A)) {
+	if (g_state.mode & MODE_MENU && pad) {
 		g_state.mode = MODE_GAME;
 	}
 
-	if ((g_state.mode & MODE_SCORE) && pad) {
+	if (g_state.mode & MODE_SCORE && pad) {
 		g_state.mode = MODE_MENU; // goto menu
 		//g_state.mode = MODE_GAME; // or goto game
 	}
