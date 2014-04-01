@@ -224,11 +224,11 @@ void tick_gameai()
 			ENEMY *enemy_walker = &(g_state.enemies);
 			UINT8 i;
 			for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
-				UINT8 x;
-				UINT8 y;
 				UINT8 w = (enemy_walker->age)++;
 
 				if (enemy_walker->active != 0) {
+					UINT8 x;
+					UINT8 y;
 					switch (enemy_walker->pattern) {
 						case 0:
 							pattern_leftdownslip(w, &x, &y);
@@ -270,11 +270,11 @@ void tick_gameai()
 					// Enemy to Player colisions
 					if (enemy_walker->active) {
 						UINT8 bx1 = enemy_walker->pos.x;
-						UINT8 bx2 = ex1 + enemy_walker->size.x;
+						UINT8 bx2 = bx1 + enemy_walker->size.x;
 						UINT8 by1 = enemy_walker->pos.y;
-						UINT8 by2 = ey1 + enemy_walker->size.y;
-						if ((ex1 > bx2 && ex2 < bx1) &&
-							(ey1 > by2 && ey2 < by1)) {
+						UINT8 by2 = by1 + enemy_walker->size.y;
+						if ((ex1 < bx2 && ex2 > bx1) &&
+							(ey1 < by2 && ey2 > by1)) {
 							enemy_walker->active = 0;
 							enemy_walker->pos.x = 0;
 							enemy_walker->pos.y = 0;
