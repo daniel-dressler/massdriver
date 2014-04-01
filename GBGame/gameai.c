@@ -129,7 +129,7 @@ UINT8 score_by_type[] = {
 };
 
 #define PLAYERSPEED  (1)
-#define BULLETSPEED (2)
+#define BULLETSPEED (3)
 void tick_gameai()
 {
 	static pattern_func get_new_pos = pattern_basic;
