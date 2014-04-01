@@ -4,10 +4,7 @@ State g_state;
 
 void init_state()
 {
-	int i;
-	
 	g_state.time = 0;
-
 	g_state.player1.pos.x = 80;
 	g_state.player1.pos.y = 120;
 }

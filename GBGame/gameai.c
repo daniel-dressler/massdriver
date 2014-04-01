@@ -77,10 +77,27 @@ void tick_gameai()
 	}
 
 	if (g_state.mode & MODE_GAME) {
+		// Enemy vars
 		static ENEMY *next_free_enemy = NULL;
+
+		// Player vars
 		static BULLET *next_free_player_bullet = NULL;
+
+		// Enemy Bullet vars
+		static BULLET *next_free_enemy_bullet = NULL;
+		UINT8 ex1 = g_state.player1.pos.x;
+		UINT8 ex2 = ex1 + g_state.player1.size.x;
+		UINT8 ey1 = g_state.player1.pos.y;
+		UINT8 ey2 = ey1 + g_state.player1.size.y;
+
+		// Loop control vars
 		UINT8 i;
 		BULLET *bullet_walker;
+		UINT8 div8 = (sub_tick & 7) == 0;
+		UINT8 div7 = (sub_tick % 7) == 0;
+		UINT8 div5 = (sub_tick % 5) == 0;
+		UINT8 div3 = (sub_tick % 3) == 0;
+		UINT8 div2 = !(sub_tick & 1);
 
 		// Move player
 		if( pad & J_UP ) {
@@ -116,14 +133,14 @@ void tick_gameai()
 		}
 
 		// Spawn Enemies?
-		if (((sub_tick & 31) == 0) && (next_free_enemy != NULL)) {
+		if ((div7 && div5) && (next_free_enemy != NULL)) {
 			next_free_enemy->age = 0;
 			next_free_enemy->active = 1;
 			next_free_enemy = NULL;
 		}
 
 		// Move Enemy
-		if ((sub_tick & 0) == 0) {
+		if (1) {
 			ENEMY *enemy_walker = &(g_state.enemies);
 			UINT8 i;
 			for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
@@ -192,7 +209,7 @@ ENDHITCHECK:
 
 		// Fire player bullets
 		if ((pad & J_A) && 
-				((sub_tick & 15) == 0) &&
+				(div5 && div3) &&
 				(next_free_player_bullet != NULL)) {
 			BULLET *blt = next_free_player_bullet;
 			blt->active = 1;
@@ -208,16 +225,16 @@ ENDHITCHECK:
 		// Move Enemy Bullets & Check Hits
 		bullet_walker = g_state.enemy_bullets;
 		for (i = 0; i < MAX_BULLETS; i++, bullet_walker++) {
-			ENEMY *enemy_walker = g_state.enemies;
-			UINT8 ex1 = g_state.player1.pos.x;
-			UINT8 ex2 = ex1 + g_state.player1.size.x;
-			UINT8 ey1 = g_state.player1.pos.y;
-			UINT8 ey2 = ey1 + g_state.player1.size.y;
 			
 			UINT8 bx1 = bullet_walker->pos.x;
 			UINT8 bx2 = bx1 + bullet_walker->size.x;
 			UINT8 by1 = bullet_walker->pos.y;
 			UINT8 by2 = by1 + bullet_walker->size.y;
+
+			if (bullet_walker->active == 0 &&
+				next_free_enemy_bullet == NULL) {
+				next_free_enemy_bullet = bullet_walker;
+			}
 
 			bullet_walker->pos.y += BULLETSPEED;
 
@@ -237,11 +254,22 @@ ENDHITCHECK:
 				bullet_walker->active = 0;
 			}
 		}
-		
 
-		// Fire player bullets
-		
-		// Fire Enemy bullest
+		// Fire an Enemy bullet
+		if ( div5 && div2 &&
+				(next_free_enemy_bullet != NULL)) {
+			BULLET *blt = next_free_enemy_bullet;
+			ENEMY *shooter = &(g_state.enemies[g_state.entropy_pool % MAX_ENEMIES]);
+			if (shooter->active == 1) {
+				blt->active = 1;
+				blt->pos.x = shooter->pos.x;
+				blt->pos.y = shooter->pos.y;
+				blt->size.x = 8;
+				blt->size.y = 8;
+				next_free_enemy_bullet = NULL;
+				play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
+			}
+		}
 	}
 
 	if (g_state.mode & MODE_SCORE) {
@@ -255,6 +283,7 @@ ENDHITCHECK:
 
 	// The gameboy has no realtime clock.
 	// input is our main entropy source
+	pad++;
 	g_state.entropy_pool += pad;
 }
 

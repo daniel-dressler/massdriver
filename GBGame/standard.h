@@ -20,6 +20,15 @@
 - sound and colors values are inverted
 - 'window' starts over entire screen
 
+- Software emulated multiplication only
+- Multiplying num by 1 masked bug
+- Cannot return struct by value
+
+Workarounds:
+- pointer arith instead of indexing
+- lookup table paths
+- entropy poll based on pad inputs
+
 */
 
 #endif
