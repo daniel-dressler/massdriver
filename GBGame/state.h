@@ -3,9 +3,9 @@
 
 #include "standard.h"
 
-#define MAX_ENEMIES		4
-#define MAX_BULLETS		5
-#define MAX_PLAYER_BULLETS 10	
+#define MAX_ENEMIES		5
+#define MAX_ENEMY_BULLETS 3
+#define MAX_PLAYER_BULLETS 3	
 
 typedef struct
 {
@@ -55,8 +55,8 @@ typedef struct
 
 	PLAYER	player1; // 4
 	ENEMY	enemies[MAX_ENEMIES];
-	BULLET	enemy_bullets[MAX_BULLETS];
-	BULLET  player_bullets[MAX_BULLETS];
+	BULLET	enemy_bullets[MAX_ENEMY_BULLETS];
+	BULLET  player_bullets[MAX_PLAYER_BULLETS];
 
 } State;
 

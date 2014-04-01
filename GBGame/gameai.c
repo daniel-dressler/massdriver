@@ -328,7 +328,7 @@ ENDHITCHECK:
 
 		// Move Enemy Bullets & Check Hits
 		bullet_walker = g_state.enemy_bullets;
-		for (i = 0; i < MAX_BULLETS; i++, bullet_walker++) {
+		for (i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++) {
 			
 			UINT8 bx1 = bullet_walker->pos.x;
 			UINT8 bx2 = bx1 + bullet_walker->size.x;

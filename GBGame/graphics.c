@@ -58,7 +58,7 @@ void init_graphics()
 
 	// Enemy Bullets
 	bullet_walker = &(g_state.enemy_bullets);
-	for( i = 0; i < MAX_BULLETS; i++, bullet_walker++, m_count++ )
+	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		bullet_walker->pos.x = 16 + i * 8;
 		bullet_walker->pos.y = 16 + i * 8;
@@ -110,7 +110,7 @@ void tick_graphics()
 
 	// Enemy bullets
 	bullet_walker = &(g_state.enemy_bullets);
-	for( i = 0; i < MAX_BULLETS; i++, bullet_walker++ )
+	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
 	{
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
@@ -118,7 +118,7 @@ void tick_graphics()
 			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
-		move_sprite( PLAYER_SPRITES + MAX_BULLETS + i, x, y );
+		move_sprite( PLAYER_SPRITES + MAX_ENEMIES + i, x, y );
 	}
 
 	// Player Bullets
@@ -131,7 +131,7 @@ void tick_graphics()
 			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
-		move_sprite( PLAYER_SPRITES + MAX_BULLETS + MAX_PLAYER_BULLETS + i, x, y );
+		move_sprite( PLAYER_SPRITES + MAX_ENEMIES + MAX_ENEMY_BULLETS + i, x, y );
 	}
 	
 
@@ -151,5 +151,5 @@ void tick_graphics()
 	
 	SCY_REG--;
 
-	//wait_vbl_done();
+	wait_vbl_done();
 }
