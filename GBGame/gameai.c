@@ -297,6 +297,7 @@ void tick_gameai()
 				UINT8 by2 = by1 + bullet_walker->size.y;
 
 				if (bullet_walker->active != 0 &&
+					enemy_walker->active != 0 &&
 						ex1 < bx2 && ex2 > bx1 &&
 						ey1 < by2 && ey2 > by1) {
 					bullet_walker->active = 0;
