@@ -73,6 +73,37 @@ void pattern_swing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 		*y_out = pt->y;
 		return;
 	}
+	*y_out = 255;
+	*x_out = 255;
+}
+
+void pattern_downswing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
+{
+	pattern_swing(time, y_out, x_out);
+}
+
+void pattern_leftswing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
+{
+	if (time < qrt_circle_64_size) {
+		struct pattern_point_t *pt = qrt_circle_64 + time;
+		*x_out = SCREENWIDTH - pt->x + 8;
+		*y_out = pt->y;
+		return;
+	}
+	*y_out = 255;
+	*x_out = 255;
+}
+
+void pattern_leftdownswing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
+{
+	if (time < qrt_circle_64_size) {
+		struct pattern_point_t *pt = qrt_circle_64 + time;
+		*x_out = SCREENWIDTH - pt->y + 8;
+		*y_out = pt->x;
+		return;
+	}
+	*y_out = 255;
+	*x_out = 255;
 }
 
 UINT8 score_by_type[] = {
@@ -164,10 +195,10 @@ void tick_gameai()
 				UINT8 w = (enemy_walker->age)++;
 
 				if (enemy_walker->active != 0) {
-					pattern_swing(w, &x, &y);
+					pattern_leftdownswing(w, &x, &y);
 					if (x < (SCREENWIDTH + 8) && y < (SCREENHEIGHT + 8)) {
-						enemy_walker->pos.x = x/1;
-						enemy_walker->pos.y = 16 + y/1;
+						enemy_walker->pos.x = x;
+						enemy_walker->pos.y = 1 + y;
 					} else {
 						enemy_walker->active = 0;
 					}
