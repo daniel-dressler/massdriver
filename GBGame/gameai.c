@@ -9,8 +9,11 @@ void init_gameai()
 	BULLET *bullet_walker;
 	UINT8 i;
 
+	g_state.player1.size.x = 32;
+	g_state.player1.size.y = 32;
+
 	for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
-		enemy_walker->active = 1;
+		enemy_walker->active = 0;
 		enemy_walker->type = 0;
 		enemy_walker->pos.y = 20;
 		enemy_walker->pos.x = 20;
@@ -241,6 +244,8 @@ ENDHITCHECK:
 			if (ex1 < bx2 && ex2 > bx1 &&
 				ey1 < by2 && ey2 > by1) {
 				bullet_walker->active = 0;
+				bullet_walker->pos.x = 0;
+				bullet_walker->pos.y = 0;
 				if (g_state.score > 1000) {
 					g_state.score -= 1000;
 				} else {
@@ -258,9 +263,9 @@ ENDHITCHECK:
 		// Fire an Enemy bullet
 		if ( div5 && div2 &&
 				(next_free_enemy_bullet != NULL)) {
-			BULLET *blt = next_free_enemy_bullet;
 			ENEMY *shooter = &(g_state.enemies[g_state.entropy_pool % MAX_ENEMIES]);
 			if (shooter->active == 1) {
+				BULLET *blt = next_free_enemy_bullet;
 				blt->active = 1;
 				blt->pos.x = shooter->pos.x;
 				blt->pos.y = shooter->pos.y;
