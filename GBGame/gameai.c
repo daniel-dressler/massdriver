@@ -77,8 +77,14 @@ void tick_gameai()
 	static UINT8 sub_tick = 0;
 	UINT8 pad = joypad();
 
-	if (g_state.mode & MODE_MENU) {
+	// You can press anything to exit menus
+	if ((g_state.mode & MODE_MENU) && (pad & J_A)) {
 		g_state.mode = MODE_GAME;
+	}
+
+	if ((g_state.mode & MODE_SCORE) && pad) {
+		g_state.mode = MODE_MENU; // goto menu
+		//g_state.mode = MODE_GAME; // or goto game
 	}
 
 	if (g_state.mode & MODE_GAME) {
@@ -278,10 +284,6 @@ ENDHITCHECK:
 				play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
 			}
 		}
-	}
-
-	if (g_state.mode & MODE_SCORE) {
-		// TODO: go back to menu
 	}
 
 	sub_tick += 1;

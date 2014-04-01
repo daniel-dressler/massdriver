@@ -88,6 +88,7 @@ void tick_graphics()
 	x = g_state.player1.pos.x;
 	y = g_state.player1.pos.y;
 
+	// Hide player during non game modes
 	if (!(g_state.mode & MODE_GAME)) {
 		x = y = 0;
 	}
@@ -130,6 +131,21 @@ void tick_graphics()
 			x = y = 0;
 		}
 		move_sprite( PLAYER_SPRITES + MAX_BULLETS + MAX_PLAYER_BULLETS + i, x, y );
+	}
+	
+
+	// @Phil: You should be able to draw menus here
+	// The bullest and enemies should be hidden in
+	// these modes
+	if (g_state.mode & MODE_MENU) {
+		// MENU!
+		// Any key will advance to the game
+	} else if (g_state.mode & MODE_SCORE) {
+		// SCORE!
+		// g_state.score is the score
+		// killing enemy is about 300
+		// getting hit right now costs 1000pts
+		// so high numbers right now
 	}
 	
 	SCY_REG--;

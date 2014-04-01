@@ -39,7 +39,7 @@ typedef struct
 enum mode_t {
 	MODE_MENU = 1,
 	MODE_GAME = 2,
-	MODE_SCORE = 3
+	MODE_SCORE = 4
 };
 
 typedef struct
