@@ -169,6 +169,7 @@ void tick_gameai()
 
 		// Player vars
 		static BULLET *next_free_player_bullet = NULL;
+		static UINT8 shoot_cooloff = 0;
 
 		// Enemy Bullet vars
 		static BULLET *next_free_enemy_bullet = NULL;
@@ -346,7 +347,7 @@ ENDHITCHECK:
 
 		// Fire player bullets
 		if ((pad & J_A) && 
-				(div5 && div3) &&
+				shoot_cooloff == 0 &&
 				(next_free_player_bullet != NULL)) {
 			BULLET *blt = next_free_player_bullet;
 			blt->active = 1;
@@ -358,7 +359,10 @@ ENDHITCHECK:
 			blt->pos.y = g_state.player1.pos.y;
 			next_free_player_bullet = NULL;
 			play_sound( SOUND_SHOOTING );
+			shoot_cooloff = 15;
 		}
+		if (shoot_cooloff > 0)
+			shoot_cooloff--;
 
 
 		// Move Enemy Bullets & Check Hits
