@@ -10,8 +10,8 @@ void init_gameai()
 	BULLET *bullet_walker;
 	UINT8 i;
 
-	g_state.player1.size.x = 32;
-	g_state.player1.size.y = 32;
+	g_state.player1.size.x = 16;
+	g_state.player1.size.y = 16;
 
 	for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = 0;
