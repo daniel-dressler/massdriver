@@ -134,11 +134,6 @@ void tick_gameai()
 {
 	static pattern_func get_new_pos = pattern_basic;
 	static UINT8 sub_tick = 0;
-	UINT8 div8 = (sub_tick & 7) == 0;
-	UINT8 div7 = (sub_tick % 7) == 0;
-	UINT8 div5 = (sub_tick % 5) == 0;
-	UINT8 div3 = (sub_tick % 3) == 0;
-	UINT8 div2 = !(sub_tick & 1);
 	UINT8 pad = joypad();
 
 	// You can press anything to exit menus
@@ -168,6 +163,11 @@ void tick_gameai()
 		// Loop control vars
 		UINT8 i;
 		BULLET *bullet_walker;
+		UINT8 div8 = (sub_tick & 7) == 0;
+		UINT8 div7 = (sub_tick % 7) == 0;
+		UINT8 div5 = (sub_tick % 5) == 0;
+		UINT8 div3 = (sub_tick % 3) == 0;
+		UINT8 div2 = !(sub_tick & 1);
 
 		// Move player
 		if( pad & J_UP ) {
@@ -345,10 +345,10 @@ ENDHITCHECK:
 		}
 	}
 
-	if (sub_tick && div7 && div5 && div3 && div2) {
+	sub_tick += 1;
+	if (sub_tick >= (7 * 5 * 3 * 2)) {
 		sub_tick = 0;
 	}
-	sub_tick += 1;
 
 	// The gameboy has no realtime clock.
 	// input is our main entropy source
