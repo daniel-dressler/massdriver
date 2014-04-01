@@ -16,8 +16,8 @@ void init_gameai()
 	for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = 0;
 		enemy_walker->type = 0;
-		enemy_walker->pos.y = 20;
-		enemy_walker->pos.x = 20;
+		enemy_walker->pos.y = 0;
+		enemy_walker->pos.x = 0;
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 8;
 		enemy_walker->age = 0;
@@ -129,6 +129,20 @@ UINT8 score_by_type[] = {
 	100,
 	300
 };
+
+void add_score(UINT16 x)
+{
+	g_state.score += x;
+}
+
+void deduct_score(UINT16 x)
+{
+	if (g_state.score > x) {
+		g_state.score -= x;
+	} else {
+		g_state.score = 0;
+	}
+}
 
 #define PLAYERSPEED  (1)
 #define BULLETSPEED (3)
@@ -249,12 +263,27 @@ void tick_gameai()
 						enemy_walker->pos.y = 1 + y;
 					} else {
 						enemy_walker->active = 0;
+						enemy_walker->pos.x = 0;
+						enemy_walker->pos.y = 0;
+					}
+
+					// Enemy to Player colisions
+					if (enemy_walker->active) {
+						UINT8 bx1 = enemy_walker->pos.x;
+						UINT8 bx2 = ex1 + enemy_walker->size.x;
+						UINT8 by1 = enemy_walker->pos.y;
+						UINT8 by2 = ey1 + enemy_walker->size.y;
+						if ((ex1 > bx2 && ex2 < bx1) &&
+							(ey1 > by2 && ey2 < by1)) {
+							enemy_walker->active = 0;
+							enemy_walker->pos.x = 0;
+							enemy_walker->pos.y = 0;
+							play_sound( SOUND_EXPLOSION );
+							deduct_score(1000);
+						}
 					}
 				} else if (next_free_enemy == NULL) {
 					next_free_enemy = enemy_walker;
-					next_free_enemy->active = 0;
-					next_free_enemy->pos.y = 0;
-					next_free_enemy->pos.x = 0;
 				}
 			}
 
@@ -300,9 +329,13 @@ void tick_gameai()
 					enemy_walker->active != 0 &&
 						ex1 < bx2 && ex2 > bx1 &&
 						ey1 < by2 && ey2 > by1) {
+					UINT16 scored = score_by_type[enemy_walker->type];
+					add_score(scored);
+
 					bullet_walker->active = 0;
 					enemy_walker->active = 0;
-					g_state.score += score_by_type[enemy_walker->type];
+					enemy_walker->pos.x = 0;
+					enemy_walker->pos.y = 0;
 					play_sound( SOUND_EXPLOSION );
 					// TODO: Position an explosion
 					goto ENDHITCHECK;
@@ -317,10 +350,12 @@ ENDHITCHECK:
 				(next_free_player_bullet != NULL)) {
 			BULLET *blt = next_free_player_bullet;
 			blt->active = 1;
-			blt->pos.x = g_state.player1.pos.x;
-			blt->pos.y = g_state.player1.pos.y;
 			blt->size.x = 8;
 			blt->size.y = 8;
+			blt->pos.x = g_state.player1.pos.x +
+ 			   (g_state.player1.size.x >> 1) - 
+ 			   (blt->size.x >> 1);
+			blt->pos.y = g_state.player1.pos.y;
 			next_free_player_bullet = NULL;
 			play_sound( SOUND_SHOOTING );
 		}
@@ -347,11 +382,7 @@ ENDHITCHECK:
 				bullet_walker->active = 0;
 				bullet_walker->pos.x = 0;
 				bullet_walker->pos.y = 0;
-				if (g_state.score > 1000) {
-					g_state.score -= 1000;
-				} else {
-					g_state.score = 0;
-				}
+				deduct_score(1000);
 				play_sound( SOUND_EXPLOSION );
 				// TODO: Position an explosion
 			}
@@ -368,10 +399,12 @@ ENDHITCHECK:
 			if (shooter->active == 1) {
 				BULLET *blt = next_free_enemy_bullet;
 				blt->active = 1;
-				blt->pos.x = shooter->pos.x;
-				blt->pos.y = shooter->pos.y;
 				blt->size.x = 8;
 				blt->size.y = 8;
+				blt->pos.x = shooter->pos.x +
+					(shooter->size.x >> 1) -
+					(blt->size.x >> 1);
+				blt->pos.y = shooter->pos.y;
 				next_free_enemy_bullet = NULL;
 				play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
 			}

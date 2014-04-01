@@ -51,8 +51,6 @@ void init_graphics()
 	enemy_walker = &(g_state.enemies);
 	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
 	{
-		enemy_walker->pos.x = 32 + i * 8;
-		enemy_walker->pos.y = 16 + i * 8;
 		set_sprite_tile( m_count, enemy_map_data[0] );
 	}
 
@@ -60,8 +58,6 @@ void init_graphics()
 	bullet_walker = &(g_state.enemy_bullets);
 	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
 	{
-		bullet_walker->pos.x = 16 + i * 8;
-		bullet_walker->pos.y = 16 + i * 8;
 		set_sprite_tile( m_count, bullet_map_data[0] );
 	}
 
@@ -69,8 +65,6 @@ void init_graphics()
 	bullet_walker = &(g_state.player_bullets);
 	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
 	{
-		bullet_walker->pos.x = 16 + i * 8;
-		bullet_walker->pos.y = 16 + i * 8;
 		set_sprite_tile( m_count, bullet_map_data[0] );
 	}
 
