@@ -39,6 +39,13 @@ extern int EnemyMed_tile_count;
 extern unsigned char EnemyMed_map_data[];
 extern unsigned char EnemyMed_tile_data[];
 
+extern int Boss_tile_map_size;
+extern int Boss_tile_map_width;
+extern int Boss_tile_map_height;
+extern int Boss_tile_count;
+extern unsigned char Boss_map_data[];
+extern unsigned char Boss_tile_data[];
+
 extern int Stars_tile_map_size;
 extern int Stars_tile_map_width;
 extern int Stars_tile_map_height;

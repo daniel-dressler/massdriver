@@ -8,8 +8,6 @@
 #define MAX_ENEMY_BULLETS	3
 #define MAX_PLAYER_BULLETS	3
 
-#define ET_
-
 typedef struct
 {
 	UINT8	x;
@@ -20,6 +18,8 @@ typedef struct
 {
 	POINT	pos;
 	POINT	size;
+
+	UINT8	gfx_ofs;
 
 } PLAYER;
 
@@ -50,7 +50,8 @@ typedef struct
 enum mode_t {
 	MODE_MENU = 1,
 	MODE_GAME = 2,
-	MODE_SCORE = 4
+	MODE_BOSS = 4,
+	MODE_SCORE = 8
 };
 
 typedef struct
@@ -66,6 +67,7 @@ typedef struct
 	UINT8	flash_screen;
 
 	PLAYER	player1; // 4
+	ENEMY	boss;
 	ENEMY	enemies[MAX_ENEMIES];
 	ENEMY	enemiesmed[MAX_MEDENEMIES];
 	BULLET	enemy_bullets[MAX_ENEMY_BULLETS];

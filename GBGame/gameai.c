@@ -107,6 +107,12 @@ void tick_gameai()
 			gameai_bullets();
 		}
 		break;
+	case MODE_BOSS:
+		{
+			gameai_player( pad );
+			gameai_bullets();
+		}
+		break;
 	}
 }
 
@@ -151,6 +157,8 @@ void gameai_player( UINT8 pad )
 	{
 		g_state.flash_screen = 1;
 		bomb_cooloff = 50;
+
+		g_state.mode = MODE_BOSS;
 	}
 
 	if (shoot_cooloff > 0)
@@ -281,35 +289,42 @@ void gameai_bullets()
 			//continue;
 		}
 
-		for( k = 0; k < MAX_ENEMIES; k++, enemy_walker++ )
+		if( g_state.mode == MODE_GAME )
 		{
-			ex1 = enemy_walker->pos.x;
-			ex2 = ex1 + enemy_walker->size.x;
-			ey1 = enemy_walker->pos.y;
-			ey2 = ey1 + enemy_walker->size.y;
-				
-			bx1 = bullet_walker->pos.x;
-			bx2 = bx1 + bullet_walker->size.x;
-			by1 = bullet_walker->pos.y;
-			by2 = by1 + bullet_walker->size.y;
-
-			if( bullet_walker->active != 0 &&
-				 enemy_walker->active != 0 &&
-					ex1 < bx2 && ex2 > bx1 &&
-					ey1 < by2 && ey2 > by1 ) 
+			for( k = 0; k < MAX_ENEMIES; k++, enemy_walker++ )
 			{
-				UINT16 scored = score_by_type[enemy_walker->type];
-				add_score(scored);
+				ex1 = enemy_walker->pos.x;
+				ex2 = ex1 + enemy_walker->size.x;
+				ey1 = enemy_walker->pos.y;
+				ey2 = ey1 + enemy_walker->size.y;
+				
+				bx1 = bullet_walker->pos.x;
+				bx2 = bx1 + bullet_walker->size.x;
+				by1 = bullet_walker->pos.y;
+				by2 = by1 + bullet_walker->size.y;
 
-				bullet_walker->active = 0;
-				enemy_walker->active = 0;
-				enemy_walker->pos.x = 0;
-				enemy_walker->pos.y = 0;
-				play_sound( SOUND_EXPLOSION );
-				// TODO: Position an explosion
+				if( bullet_walker->active != 0 &&
+					 enemy_walker->active != 0 &&
+						ex1 < bx2 && ex2 > bx1 &&
+						ey1 < by2 && ey2 > by1 ) 
+				{
+					UINT16 scored = score_by_type[enemy_walker->type];
+					add_score(scored);
 
-				break;
+					bullet_walker->active = 0;
+					enemy_walker->active = 0;
+					enemy_walker->pos.x = 0;
+					enemy_walker->pos.y = 0;
+					play_sound( SOUND_EXPLOSION );
+					// TODO: Position an explosion
+
+					break;
+				}
 			}
+		}
+		else
+		{
+			// COLLIDE AGAINST BOSS
 		}
 	}
 
