@@ -12,15 +12,13 @@ void init_graphics()
 	BULLET *bullet_walker;
 	ENEMY *enemy_walker;
 
-
-	set_bkg_data( 0, Stars_tile_count, Stars_tile_data );	
+	set_bkg_data( 0, Stars_tile_count, Stars_tile_data );
 
  	for( i = 0; i < 32; i += Stars_tile_map_width )
 	{
 		for( j = 0; j < 32; j += Stars_tile_map_height )
 		{
-//			if( j!= 16 && i!= 12 )
-				set_bkg_tiles(i, j, Stars_tile_map_width, Stars_tile_map_height, Stars_map_data);
+			set_bkg_tiles(i, j, Stars_tile_map_width, Stars_tile_map_height, Stars_map_data);
 		}
 	}
 
@@ -105,105 +103,126 @@ void init_graphics()
 #define PLAYER_SPRITES (2)
 void tick_graphics()
 {
-	UINT8 x, y, i;
-	BULLET *bullet_walker;
-	ENEMY *enemy_walker;
-
-	static UINT8 scroll = 0;
-	if( scroll++ & 0x01 )
-		SCY_REG--;
-
-	x = g_state.player1.pos.x;
-	y = g_state.player1.pos.y;
-
-	// Hide player during non game modes
-	if (!(g_state.mode & MODE_GAME)) {
-		x = y = 0;
-	}
-	move_sprite( 0, x, y );
-	move_sprite( 1, 8 + x, y );
-	
-	// Enemies
-	enemy_walker = g_state.enemies;
-	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++ )
+	if( g_state.flash_screen )
 	{
-		x = enemy_walker->pos.x;
-		y = enemy_walker->pos.y;
-		if (enemy_walker->active == 0 ||
-			!(g_state.mode & MODE_GAME)) {
-			x = y = 0;
-		}
-		if( enemy_walker->gfx_dirty )
+		if( g_state.flash_screen == 1 )
 		{
-			switch( enemy_walker->type )
-			{
-			case 2:
-				set_sprite_tile( enemy_walker->gfx_ofs, Enemy2_map_data[0] );
-				break;
-			default:
-				set_sprite_tile( enemy_walker->gfx_ofs, Enemy_map_data[0] );
-				break;
+			DISPLAY_OFF;
+			LCDC_REG = 0x66;
+			BGP_REG = 0x01U;
+			DISPLAY_ON;
+			g_state.flash_screen = 2;
+		}
+		else
+		{
+			DISPLAY_OFF;
+			LCDC_REG = 0x67;
+			BGP_REG = 0xE4U;
+			DISPLAY_ON;
+			g_state.flash_screen = 0;
+		}
+	}
+	else
+	{
+		UINT8 x, y, i;
+		BULLET *bullet_walker;
+		ENEMY *enemy_walker;
+
+		static UINT8 scroll = 0;
+		if( scroll++ & 0x01 )
+			SCY_REG--;
+
+		x = g_state.player1.pos.x;
+		y = g_state.player1.pos.y;
+
+		// Hide player during non game modes
+		if (!(g_state.mode & MODE_GAME)) {
+			x = y = 0;
+		}
+		move_sprite( 0, x, y );
+		move_sprite( 1, 8 + x, y );
+	
+		// Enemies
+		enemy_walker = g_state.enemies;
+		for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++ )
+		{
+			x = enemy_walker->pos.x;
+			y = enemy_walker->pos.y;
+			if (enemy_walker->active == 0 ||
+				!(g_state.mode & MODE_GAME)) {
+				x = y = 0;
 			}
-			enemy_walker->gfx_dirty = 0;
+			if( enemy_walker->gfx_dirty )
+			{
+				switch( enemy_walker->type )
+				{
+				case 2:
+					set_sprite_tile( enemy_walker->gfx_ofs, Enemy2_map_data[0] );
+					break;
+				default:
+					set_sprite_tile( enemy_walker->gfx_ofs, Enemy_map_data[0] );
+					break;
+				}
+				enemy_walker->gfx_dirty = 0;
+			}
+			move_sprite( enemy_walker->gfx_ofs, x, y );
 		}
-		move_sprite( enemy_walker->gfx_ofs, x, y );
-	}
 
-	// Medium Enemies
-	enemy_walker = g_state.enemiesmed;
-	for( i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++ )
-	{
-		x = enemy_walker->pos.x;
-		y = enemy_walker->pos.y;
-		if (enemy_walker->active == 0 ||
-			!(g_state.mode & MODE_GAME)) {
-			x = y = 0;
+		// Medium Enemies
+		enemy_walker = g_state.enemiesmed;
+		for( i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++ )
+		{
+			x = enemy_walker->pos.x;
+			y = enemy_walker->pos.y;
+			if (enemy_walker->active == 0 ||
+				!(g_state.mode & MODE_GAME)) {
+				x = y = 0;
+			}
+			move_sprite( enemy_walker->gfx_ofs, x, y );
+			move_sprite( enemy_walker->gfx_ofs+1, x+8, y );
+			move_sprite( enemy_walker->gfx_ofs+2, x+16, y );
 		}
-		move_sprite( enemy_walker->gfx_ofs, x, y );
-		move_sprite( enemy_walker->gfx_ofs+1, x+8, y );
-		move_sprite( enemy_walker->gfx_ofs+2, x+16, y );
-	}
 
-	// Enemy bullets
-	bullet_walker = g_state.enemy_bullets;
-	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
-	{
-		x = bullet_walker->pos.x;
-		y = bullet_walker->pos.y;
-		if (bullet_walker->active == 0 ||
-			!(g_state.mode & MODE_GAME)) {
-			x = y = 0;
+		// Enemy bullets
+		bullet_walker = g_state.enemy_bullets;
+		for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
+		{
+			x = bullet_walker->pos.x;
+			y = bullet_walker->pos.y;
+			if (bullet_walker->active == 0 ||
+				!(g_state.mode & MODE_GAME)) {
+				x = y = 0;
+			}
+			move_sprite( bullet_walker->gfx_ofs, x, y );
 		}
-		move_sprite( bullet_walker->gfx_ofs, x, y );
-	}
 
-	// Player Bullets
-	bullet_walker = g_state.player_bullets;
-	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
-	{
-		x = bullet_walker->pos.x;
-		y = bullet_walker->pos.y;
-		if (bullet_walker->active == 0 ||
-			!(g_state.mode & MODE_GAME)) {
-			x = y = 0;
+		// Player Bullets
+		bullet_walker = g_state.player_bullets;
+		for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
+		{
+			x = bullet_walker->pos.x;
+			y = bullet_walker->pos.y;
+			if (bullet_walker->active == 0 ||
+				!(g_state.mode & MODE_GAME)) {
+				x = y = 0;
+			}
+			move_sprite( bullet_walker->gfx_ofs, x, y );
 		}
-		move_sprite( bullet_walker->gfx_ofs, x, y );
-	}
 	
 
-	// @Phil: You should be able to draw menus here
-	// The bullest and enemies should be hidden in
-	// these modes
-	if (g_state.mode & MODE_MENU) {
-		// MENU!
-		// Any key will advance to the game
-	} else if (g_state.mode & MODE_SCORE) {
-		// SCORE!
-		// g_state.score is the score
-		// killing enemy is about 300
-		// getting hit right now costs 1000pts
-		// so high numbers right now
+		// @Phil: You should be able to draw menus here
+		// The bullest and enemies should be hidden in
+		// these modes
+		if (g_state.mode & MODE_MENU) {
+			// MENU!
+			// Any key will advance to the game
+		} else if (g_state.mode & MODE_SCORE) {
+			// SCORE!
+			// g_state.score is the score
+			// killing enemy is about 300
+			// getting hit right now costs 1000pts
+			// so high numbers right now
+		}
 	}
-	
 	wait_vbl_done();
 }

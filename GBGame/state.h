@@ -63,6 +63,8 @@ typedef struct
 	// while on PC the kernel will do this
 	UINT8   entropy_pool;
 
+	UINT8	flash_screen;
+
 	PLAYER	player1; // 4
 	ENEMY	enemies[MAX_ENEMIES];
 	ENEMY	enemiesmed[MAX_MEDENEMIES];

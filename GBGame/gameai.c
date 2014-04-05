@@ -75,6 +75,7 @@ void init_gameai()
 	}
 
 	g_state.mode = MODE_GAME;
+	g_state.flash_screen = 0;
 }
 
 void tick_gameai()
@@ -220,6 +221,8 @@ void gameai_enemies()
 		next_free_enemy->type = ( g_state.entropy_pool % 2 ) + 1;
 
 		next_free_enemy = NULL;
+
+		g_state.flash_screen = 1;
 	}
 
 	// Fire an Enemy bullet

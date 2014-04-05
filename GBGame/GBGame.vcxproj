@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="galaxy.c" />
     <ClCompile Include="gameai.c" />
     <ClCompile Include="graphics.c" />
     <ClCompile Include="images.c" />
