@@ -19,6 +19,7 @@ void  graphics_initenemyships();
 UINT8 graphics_flash();
 void  graphics_drawplayer();
 void  graphics_drawenemies();
+void  graphics_drawboss();
 void  graphics_drawbullets();
 
 void init_graphics()
@@ -60,35 +61,20 @@ void tick_graphics()
 		graphics_initenemyships();
 	}
 
-	if( g_state.flash_screen )
+	if( !graphics_flash() )
 	{
-		if( g_state.flash_screen == 1 )
+		if( g_state.mode == MODE_GAME )
 		{
-			DISPLAY_OFF;
-			LCDC_REG = 0x66;
-			BGP_REG = 0x01U;
-			DISPLAY_ON;
-			g_state.flash_screen = 2;
+			graphics_drawplayer();
+			graphics_drawenemies();
+			graphics_drawbullets();
 		}
-		else
+		else if( g_state.mode == MODE_BOSS )
 		{
-			DISPLAY_OFF;
-			LCDC_REG = 0x67;
-			BGP_REG = 0xE4U;
-			DISPLAY_ON;
-			g_state.flash_screen = 0;
+			graphics_drawplayer();
+			graphics_drawboss();
+			graphics_drawbullets();
 		}
-	}
-	else if( g_state.mode == MODE_GAME )
-	{
-		graphics_drawplayer();
-		graphics_drawenemies();
-		graphics_drawbullets();
-	}
-	else if( g_state.mode == MODE_BOSS )
-	{
-		graphics_drawplayer();
-		graphics_drawbullets();
 	}
 	wait_vbl_done();
 }
@@ -156,6 +142,9 @@ void graphics_initenemyships()
 	t_count = et_count;
 	m_count = em_count;
 
+	for( i = m_count; i < 40; i++ )
+		move_sprite( i, 0, 0 );
+
 	if( g_state.mode == MODE_BOSS )
 	{
 		// Set Boss Ship Data
@@ -168,12 +157,16 @@ void graphics_initenemyships()
 		}
 		
 		g_state.boss.gfx_ofs = m_count;
-		m_count += 24;
+		for( i = 0; i < 36; i+=2 )
+		{
+			set_sprite_tile( m_count, Boss_map_data[i] );
+			m_count++;
+		}
 
 		set_sprite_data( t_count, Boss_tile_count, Boss_tile_data );
 		t_count += Boss_tile_count;
 		
-		if( m_count >= 39 || blank )
+		if( m_count >= 39 || t_count >= 128 || blank )
 		{
 			DISPLAY_OFF;
 			LCDC_REG = 0x66;
@@ -313,6 +306,26 @@ void graphics_drawenemies()
 		move_sprite( enemy_walker->gfx_ofs, x, y );
 		move_sprite( enemy_walker->gfx_ofs+1, x+8, y );
 		move_sprite( enemy_walker->gfx_ofs+2, x+16, y );
+	}
+}
+
+void graphics_drawboss()
+{
+	UINT8 x, y, ofs;
+
+	y = g_state.boss.pos.y;
+	ofs = g_state.boss.gfx_ofs;
+
+	for( i = 0; i < 3; i++ )
+	{
+		x = g_state.boss.pos.x;
+		for( j = 0; j < 6; j++ )
+		{
+			move_sprite( ofs, x, y );
+			ofs++;
+			x += 8;
+		}
+		y += 16;
 	}
 }
 

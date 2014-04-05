@@ -48,6 +48,9 @@ void init_gameai()
 	g_state.player1.size.x = 16;
 	g_state.player1.size.y = 16;
 
+	g_state.boss.pos.x = 50;
+	g_state.boss.pos.y = 50;
+
 	for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = 0;
 		enemy_walker->type = 1;
@@ -158,7 +161,10 @@ void gameai_player( UINT8 pad )
 		g_state.flash_screen = 1;
 		bomb_cooloff = 50;
 
-//		g_state.mode = MODE_BOSS;
+		if( g_state.mode == MODE_GAME )
+			g_state.mode = MODE_BOSS;
+		else
+			g_state.mode = MODE_GAME;
 	}
 
 	if (shoot_cooloff > 0)

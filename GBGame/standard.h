@@ -24,6 +24,7 @@
 - Multiplying num by 1 masked bug
 - Cannot return struct by value
 - Limited function stack size
+- Declaring 'UINT8 i' in multiple functions broke (graphics)
 
 Workarounds:
 - pointer arith instead of indexing
