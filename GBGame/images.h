@@ -39,4 +39,10 @@ extern int enemy_tile_count;
 extern unsigned char enemy_map_data[];
 extern unsigned char enemy_tile_data[];
 
+extern int Stars_tile_map_width;
+extern int Stars_tile_map_height;
+extern int Stars_tile_count;
+extern unsigned char Stars_map_data[];
+extern unsigned char Stars_tile_data[];
+
 #endif

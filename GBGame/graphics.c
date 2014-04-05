@@ -13,39 +13,17 @@ void init_graphics()
 	ENEMY *enemy_walker;
 
 
-	set_bkg_data( 0, Test_tile_count, Test_tile_data );	
+	set_bkg_data( 0, Stars_tile_count, Stars_tile_data );	
 
- 	for(i = 0; i < 32; i+=Test_tile_map_width)
+ 	for( i = 0; i < 32; i += Stars_tile_map_width )
 	{
-		for(j = 0; j < 32; j+=Test_tile_map_height)
+		for( j = 0; j < 32; j += Stars_tile_map_height )
 		{
-			if( j!= 16 && i!= 12 )
-				set_bkg_tiles(i, j, Test_tile_map_width, Test_tile_map_height, Test_map_data);
+//			if( j!= 16 && i!= 12 )
+				set_bkg_tiles(i, j, Stars_tile_map_width, Stars_tile_map_height, Stars_map_data);
 		}
 	}
 
-	set_win_data( 16, Test_tile_count, Test_tile_data );	
-
- 	for(i = 0; i < 8; i+=Test_tile_map_width)
-	{
-		for(j = 0; j < 8; j+=Test_tile_map_height)
-		{
-			if( j!= 16 && i!= 12 )
-				set_win_tiles(i, j, Test_tile_map_width, Test_tile_map_height, Test_map_data);
-		}
-	}
-	/*
-	set_win_data( 16, Blank_tile_count, Blank_tile_data );	
-
- 	for(i = 0; i < 32; i+=Blank_tile_map_width)
-	{
-		for(j = 0; j < 32; j+=Blank_tile_map_height)
-		{
-			if( j!= 16 && i!= 12 )
-				set_win_tiles(i, j, Blank_tile_map_width, Blank_tile_map_height, Blank_map_data);
-		}
-	}
-	*/
 	t_count = 0;
 
 	set_sprite_data( t_count, Test_tile_count, Test2_tile_data );
@@ -101,8 +79,8 @@ void tick_graphics()
 	BULLET *bullet_walker;
 	ENEMY *enemy_walker;
 
-	static UINT8 move = 0;
-	if( move++ & 0x01 )
+	static UINT8 scroll = 0;
+	if( scroll++ & 0x01 )
 		SCY_REG--;
 
 	x = g_state.player1.pos.x;
