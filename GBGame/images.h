@@ -5,39 +5,32 @@
 
 // http://www.chrisantonellis.com/gameboy/gbtdg/
 
-extern int Blank_tile_map_width;
-extern int Blank_tile_map_height;
-extern int Blank_tile_count;
-extern unsigned char Blank_map_data[];
-extern unsigned char Blank_tile_data[];
+extern int Ship_tile_map_width;
+extern int Ship_tile_map_height;
+extern int Ship_tile_count;
+extern unsigned char Ship_map_data[];
+extern unsigned char Ship_tile_data[];
 
-extern int Test_tile_map_size;
-extern int Test_tile_map_width;
-extern int Test_tile_map_height;
-extern int Test_tile_count;
-extern unsigned char Test_map_data[];
-extern unsigned char Test_tile_data[];
+extern int Bullet_tile_map_size;
+extern int Bullet_tile_map_width;
+extern int Bullet_tile_map_height;
+extern int Bullet_tile_count;
+extern unsigned char Bullet_map_data[];
+extern unsigned char Bullet_tile_data[];
 
-extern int Test2_tile_map_size;
-extern int Test2_tile_map_width;
-extern int Test2_tile_map_height;
-extern int Test2_tile_count;
-extern unsigned char Test2_map_data[];
-extern unsigned char Test2_tile_data[];
+extern int Enemy_tile_map_size;
+extern int Enemy_tile_map_width;
+extern int Enemy_tile_map_height;
+extern int Enemy_tile_count;
+extern unsigned char Enemy_map_data[];
+extern unsigned char Enemy_tile_data[];
 
-extern int bullet_tile_map_size;
-extern int bullet_tile_map_width;
-extern int bullet_tile_map_height;
-extern int bullet_tile_count;
-extern unsigned char bullet_map_data[];
-extern unsigned char bullet_tile_data[];
-
-extern int enemy_tile_map_size;
-extern int enemy_tile_map_width;
-extern int enemy_tile_map_height;
-extern int enemy_tile_count;
-extern unsigned char enemy_map_data[];
-extern unsigned char enemy_tile_data[];
+extern int EnemyMed_tile_map_size;
+extern int EnemyMed_tile_map_width;
+extern int EnemyMed_tile_map_height;
+extern int EnemyMed_tile_count;
+extern unsigned char EnemyMed_map_data[];
+extern unsigned char EnemyMed_tile_data[];
 
 extern int Stars_tile_map_width;
 extern int Stars_tile_map_height;

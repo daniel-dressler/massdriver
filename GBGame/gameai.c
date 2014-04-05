@@ -57,6 +57,17 @@ void init_gameai()
 		enemy_walker->age = 0;
 	}
 
+	enemy_walker = g_state.enemiesmed;
+	for (i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++) {
+		enemy_walker->active = 1;
+		enemy_walker->type = 0;
+		enemy_walker->pos.y = 50;
+		enemy_walker->pos.x = 50;
+		enemy_walker->size.y = 16;
+		enemy_walker->size.x = 24;
+		enemy_walker->age = 0;
+	}
+
 	bullet_walker = g_state.player_bullets;
 	for (i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++) {
 		bullet_walker->active = 0;

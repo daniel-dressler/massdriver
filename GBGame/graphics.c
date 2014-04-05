@@ -8,7 +8,7 @@ void init_graphics()
 
 	// By walking the array we 
 	// avoid multiplication
-	unsigned char *map_data_walker;
+	UINT8 *map_data_walker;
 	BULLET *bullet_walker;
 	ENEMY *enemy_walker;
 
@@ -24,49 +24,71 @@ void init_graphics()
 		}
 	}
 
+	m_count = 0;
 	t_count = 0;
 
-	set_sprite_data( t_count, Test_tile_count, Test2_tile_data );
-	t_count += Test2_tile_count;
+	// Set Player Ship Data
+	set_sprite_tile( m_count++, Ship_map_data[0] );
+	set_sprite_tile( m_count++, Ship_map_data[2] );
+	set_sprite_data( t_count, Ship_tile_count, Ship_tile_data );
+	t_count += Ship_tile_count;
 
-	map_data_walker = &enemy_map_data;
-	for( i = 0; i < enemy_tile_map_size; i++, map_data_walker++ )
+	// Set Enemy Ship Data
+	map_data_walker = &Enemy_map_data;
+	for( i = 0; i < Enemy_tile_map_size; i++, map_data_walker++ )
 		*map_data_walker += t_count;
 
-	set_sprite_data( t_count, enemy_tile_count, enemy_tile_data );
-	t_count += enemy_tile_count;
-
-	map_data_walker = &bullet_map_data;
-	for( i = 0; i < bullet_tile_map_size; i++, map_data_walker++ )
-		*map_data_walker += t_count;
-
-	set_sprite_data( t_count, bullet_tile_count, bullet_tile_data );
-	t_count += bullet_tile_count;
-
-	m_count = 0;
-	set_sprite_tile( m_count++, Test2_map_data[0] );
-	set_sprite_tile( m_count++, Test2_map_data[2] );
-
-	// Enemies
 	enemy_walker = g_state.enemies;
 	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
 	{
-		set_sprite_tile( m_count, enemy_map_data[0] );
+		enemy_walker->gfx_ofs = m_count;
+		set_sprite_tile( m_count, Enemy_map_data[0] );
 	}
 
-	// Enemy Bullets
+	set_sprite_data( t_count, Enemy_tile_count, Enemy_tile_data );
+	t_count += Enemy_tile_count;
+
+	// Set Medium Enemy Ship Data
+	map_data_walker = &EnemyMed_map_data;
+	for( i = 0; i < EnemyMed_tile_map_size; i++, map_data_walker++ )
+		*map_data_walker += t_count;
+
+	enemy_walker = g_state.enemiesmed;
+	for( i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++ )
+	{
+		enemy_walker->gfx_ofs = m_count;
+		set_sprite_tile( m_count, EnemyMed_map_data[0] );
+		m_count++;
+		set_sprite_tile( m_count, EnemyMed_map_data[2] );
+		m_count++;
+		set_sprite_tile( m_count, EnemyMed_map_data[4] );
+		m_count++;
+	}
+
+	set_sprite_data( t_count, EnemyMed_tile_count, EnemyMed_tile_data );
+	t_count += EnemyMed_tile_count;
+
+	// Set Bullet Data
+	map_data_walker = &Bullet_map_data;
+	for( i = 0; i < Bullet_tile_map_size; i++, map_data_walker++ )
+		*map_data_walker += t_count;
+
 	bullet_walker = g_state.enemy_bullets;
 	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
 	{
-		set_sprite_tile( m_count, bullet_map_data[0] );
+		bullet_walker->gfx_ofs = m_count;
+		set_sprite_tile( m_count, Bullet_map_data[0] );
 	}
 
-	// Player Bullets
 	bullet_walker = g_state.player_bullets;
 	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
 	{
-		set_sprite_tile( m_count, bullet_map_data[0] );
+		bullet_walker->gfx_ofs = m_count;
+		set_sprite_tile( m_count, Bullet_map_data[0] );
 	}
+
+	set_sprite_data( t_count, Bullet_tile_count, Bullet_tile_data );
+	t_count += Bullet_tile_count;
 
 	WX_REG = 1000;
 	WY_REG = 1000;
@@ -103,7 +125,22 @@ void tick_graphics()
 			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
-		move_sprite( PLAYER_SPRITES + i, x, y );
+		move_sprite( enemy_walker->gfx_ofs, x, y );
+	}
+
+	// Medium Enemies
+	enemy_walker = g_state.enemiesmed;
+	for( i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++ )
+	{
+		x = enemy_walker->pos.x;
+		y = enemy_walker->pos.y;
+		if (enemy_walker->active == 0 ||
+			!(g_state.mode & MODE_GAME)) {
+			x = y = 0;
+		}
+		move_sprite( enemy_walker->gfx_ofs, x, y );
+		move_sprite( enemy_walker->gfx_ofs+1, x+8, y );
+		move_sprite( enemy_walker->gfx_ofs+2, x+16, y );
 	}
 
 	// Enemy bullets
@@ -116,7 +153,7 @@ void tick_graphics()
 			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
-		move_sprite( PLAYER_SPRITES + MAX_ENEMIES + i, x, y );
+		move_sprite( bullet_walker->gfx_ofs, x, y );
 	}
 
 	// Player Bullets
@@ -129,7 +166,7 @@ void tick_graphics()
 			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
 		}
-		move_sprite( PLAYER_SPRITES + MAX_ENEMIES + MAX_ENEMY_BULLETS + i, x, y );
+		move_sprite( bullet_walker->gfx_ofs, x, y );
 	}
 	
 

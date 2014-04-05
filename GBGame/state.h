@@ -4,6 +4,7 @@
 #include "standard.h"
 
 #define MAX_ENEMIES			5
+#define MAX_MEDENEMIES		2
 #define MAX_ENEMY_BULLETS	3
 #define MAX_PLAYER_BULLETS	3
 
@@ -30,6 +31,9 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 	UINT8   age;
+
+	UINT8	gfx_ofs;
+
 } ENEMY;
 
 typedef struct
@@ -37,6 +41,9 @@ typedef struct
 	UINT8   active;
 	POINT	pos;
 	POINT	size;
+
+	UINT8	gfx_ofs;
+
 } BULLET;
 
 enum mode_t {
@@ -57,6 +64,7 @@ typedef struct
 
 	PLAYER	player1; // 4
 	ENEMY	enemies[MAX_ENEMIES];
+	ENEMY	enemiesmed[MAX_MEDENEMIES];
 	BULLET	enemy_bullets[MAX_ENEMY_BULLETS];
 	BULLET  player_bullets[MAX_PLAYER_BULLETS];
 
