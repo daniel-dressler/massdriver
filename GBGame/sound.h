@@ -1,6 +1,8 @@
 #ifndef __GB_GAME_SOUND__
 #define __GB_GAME_SOUND__
 
+#define ENABLE_SOUND 1
+
 #include <types.h>
 // Being explicit since these are used as indices and this is probably some old ass compiler with quirks
 typedef enum

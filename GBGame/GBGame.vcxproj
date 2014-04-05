@@ -11,23 +11,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gameai.c" />
     <ClCompile Include="graphics.c" />
     <ClCompile Include="images.c" />
     <ClCompile Include="input.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="old.cpp" />
+    <ClCompile Include="patterns.c" />
     <ClCompile Include="sound.c" />
     <ClCompile Include="state.c" />
     <ClCompile Include="test.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="makefile" />
     <None Include="Debug.bat" />
+    <None Include="makefile" />
+    <None Include="makefile.win" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="gameai.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="images.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="patterns.h" />
     <ClInclude Include="standard.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="state.h" />
@@ -59,7 +64,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeBuildCommandLine>nmake</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>nmake /F makefile.win</NMakeBuildCommandLine>
     <NMakeOutput>
     </NMakeOutput>
     <NMakePreprocessorDefinitions>

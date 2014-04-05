@@ -1,4 +1,4 @@
-CC = ../gbdk/bin/lcc -I../gbdk/include/
+CC = C:\Libraries\gbdk\bin\lcc
 
 all:
 	$(CC) -Wa-l -c -o main.o main.c

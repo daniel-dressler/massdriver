@@ -97,6 +97,9 @@ void tick_sound()
 
 void play_sound( SoundID sound )
 {
+	if( !ENABLE_SOUND )
+		return;
+
 	switch( gSounds[sound].channel )
 	{
 	case CHANNEL_1:
