@@ -16,6 +16,48 @@
 // //             //
 // /////////////////
 
+int Blank_tile_map_width = 0x01;
+int Blank_tile_map_height = 0x01;
+int Blank_tile_count = 0x01;
+
+// ////////////////
+// //            //
+// //  Map Data  //
+// //            //
+// ////////////////
+
+unsigned char Blank_map_data[] ={
+  0x00
+};
+
+// /////////////////
+// //             //
+// //  Tile Data  //
+// //             //
+// /////////////////
+
+unsigned char Blank_tile_data[] ={
+//  0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA
+  0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
+//  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+};
+
+// ///////////////////////
+// //                   //
+// //  File Attributes  //
+// //                   //
+// ///////////////////////
+
+// Filename: Test.png
+// Pixel Width: 32px
+// Pixel Height: 32px
+
+// /////////////////
+// //             //
+// //  Constants  //
+// //             //
+// /////////////////
+
 int Test_tile_map_size = 0x10;
 int Test_tile_map_width = 0x04;
 int Test_tile_map_height = 0x04;

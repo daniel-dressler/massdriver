@@ -16,7 +16,7 @@
     <ClCompile Include="images.c" />
     <ClCompile Include="input.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="old.cpp" />
+    <ClCompile Include="old.c" />
     <ClCompile Include="patterns.c" />
     <ClCompile Include="sound.c" />
     <ClCompile Include="state.c" />
@@ -25,6 +25,7 @@
   <ItemGroup>
     <None Include="Debug.bat" />
     <None Include="makefile" />
+    <None Include="makefile.old" />
     <None Include="makefile.win" />
   </ItemGroup>
   <ItemGroup>

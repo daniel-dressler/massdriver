@@ -3,9 +3,11 @@
 
 #include "standard.h"
 
-#define MAX_ENEMIES		5
-#define MAX_ENEMY_BULLETS 3
-#define MAX_PLAYER_BULLETS 3	
+#define MAX_ENEMIES			5
+#define MAX_ENEMY_BULLETS	3
+#define MAX_PLAYER_BULLETS	3
+
+#define ET_
 
 typedef struct
 {

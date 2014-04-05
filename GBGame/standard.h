@@ -23,6 +23,7 @@
 - Software emulated multiplication only
 - Multiplying num by 1 masked bug
 - Cannot return struct by value
+- Limited function stack size
 
 Workarounds:
 - pointer arith instead of indexing

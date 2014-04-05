@@ -1,0 +1,9 @@
+CC = C:\Libraries\gbdk\bin\lcc
+
+all:
+	$(CC) -Wa-l -c -o galaxy.o galaxy.c
+	$(CC) -Wl-m -o shmup.gb galaxy.o
+
+
+clean:
+	rm -f *.o *.lst *.map *.gb *~ *.rel *.cdb *.ihx *.lnk *.sym *.asm

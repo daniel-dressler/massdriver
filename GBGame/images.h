@@ -3,6 +3,14 @@
 
 #include "standard.h"
 
+// http://www.chrisantonellis.com/gameboy/gbtdg/
+
+extern int Blank_tile_map_width;
+extern int Blank_tile_map_height;
+extern int Blank_tile_count;
+extern unsigned char Blank_map_data[];
+extern unsigned char Blank_tile_data[];
+
 extern int Test_tile_map_size;
 extern int Test_tile_map_width;
 extern int Test_tile_map_height;

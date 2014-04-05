@@ -1,7 +1,7 @@
 #include <gb/gb.h>
 
 #include "patterns.h"
-#include "assets\qrt_circle_precomp.h"
+#include "assets/qrt_circle_precomp.h"
 
 void pattern_basic(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {

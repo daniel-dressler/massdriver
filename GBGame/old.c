@@ -606,8 +606,6 @@ void main()
 {
 	UBYTE i, j;
 
-	gfx_init();
-
 	disable_interrupts();
 	DISPLAY_OFF;
 	LCDC_REG = 0x67;

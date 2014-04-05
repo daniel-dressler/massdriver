@@ -24,6 +24,28 @@ void init_graphics()
 		}
 	}
 
+	set_win_data( 16, Test_tile_count, Test_tile_data );	
+
+ 	for(i = 0; i < 8; i+=Test_tile_map_width)
+	{
+		for(j = 0; j < 8; j+=Test_tile_map_height)
+		{
+			if( j!= 16 && i!= 12 )
+				set_win_tiles(i, j, Test_tile_map_width, Test_tile_map_height, Test_map_data);
+		}
+	}
+	/*
+	set_win_data( 16, Blank_tile_count, Blank_tile_data );	
+
+ 	for(i = 0; i < 32; i+=Blank_tile_map_width)
+	{
+		for(j = 0; j < 32; j+=Blank_tile_map_height)
+		{
+			if( j!= 16 && i!= 12 )
+				set_win_tiles(i, j, Blank_tile_map_width, Blank_tile_map_height, Blank_map_data);
+		}
+	}
+	*/
 	t_count = 0;
 
 	set_sprite_data( t_count, Test_tile_count, Test2_tile_data );
@@ -48,21 +70,21 @@ void init_graphics()
 	set_sprite_tile( m_count++, Test2_map_data[2] );
 
 	// Enemies
-	enemy_walker = &(g_state.enemies);
+	enemy_walker = g_state.enemies;
 	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
 	{
 		set_sprite_tile( m_count, enemy_map_data[0] );
 	}
 
 	// Enemy Bullets
-	bullet_walker = &(g_state.enemy_bullets);
+	bullet_walker = g_state.enemy_bullets;
 	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		set_sprite_tile( m_count, bullet_map_data[0] );
 	}
 
 	// Player Bullets
-	bullet_walker = &(g_state.player_bullets);
+	bullet_walker = g_state.player_bullets;
 	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		set_sprite_tile( m_count, bullet_map_data[0] );
@@ -79,6 +101,10 @@ void tick_graphics()
 	BULLET *bullet_walker;
 	ENEMY *enemy_walker;
 
+	static UINT8 move = 0;
+	if( move++ & 0x01 )
+		SCY_REG--;
+
 	x = g_state.player1.pos.x;
 	y = g_state.player1.pos.y;
 
@@ -90,7 +116,7 @@ void tick_graphics()
 	move_sprite( 1, 8 + x, y );
 	
 	// Enemies
-	enemy_walker = &(g_state.enemies);
+	enemy_walker = g_state.enemies;
 	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++ )
 	{
 		x = enemy_walker->pos.x;
@@ -103,7 +129,7 @@ void tick_graphics()
 	}
 
 	// Enemy bullets
-	bullet_walker = &(g_state.enemy_bullets);
+	bullet_walker = g_state.enemy_bullets;
 	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
 	{
 		x = bullet_walker->pos.x;
@@ -116,7 +142,7 @@ void tick_graphics()
 	}
 
 	// Player Bullets
-	bullet_walker = &(g_state.player_bullets);
+	bullet_walker = g_state.player_bullets;
 	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
 	{
 		x = bullet_walker->pos.x;
@@ -143,7 +169,5 @@ void tick_graphics()
 		// so high numbers right now
 	}
 	
-	SCY_REG--;
-
 	wait_vbl_done();
 }
