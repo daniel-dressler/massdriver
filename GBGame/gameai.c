@@ -345,7 +345,7 @@ void gameai_bullets()
 			// TODO: Position an explosion
 		}
 			
-		if (bullet_walker->pos.y > SCREENHEIGHT) {
+		if (bullet_walker->pos.y > SCREENHEIGHT + 10) {
 			bullet_walker->active = 0;
 		}
 	}
