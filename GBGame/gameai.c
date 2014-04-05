@@ -112,6 +112,7 @@ void tick_gameai()
 void gameai_player( UINT8 pad )
 {
 	static UINT8 shoot_cooloff = 0;
+	static UINT8 bomb_cooloff = 0;
 
 	UINT8 x = g_state.player1.pos.x; 
 	UINT8 y = g_state.player1.pos.y;
@@ -144,8 +145,18 @@ void gameai_player( UINT8 pad )
 		shoot_cooloff = 15;
 	}
 
+	// Drop a bomb
+	if( pad & J_B && !bomb_cooloff )
+	{
+		g_state.flash_screen = 1;
+		bomb_cooloff = 50;
+	}
+
 	if (shoot_cooloff > 0)
 		shoot_cooloff--;
+
+	if (bomb_cooloff > 0)
+		bomb_cooloff--;
 }
 
 void gameai_enemies()
@@ -221,8 +232,6 @@ void gameai_enemies()
 		next_free_enemy->type = ( g_state.entropy_pool % 2 ) + 1;
 
 		next_free_enemy = NULL;
-
-		g_state.flash_screen = 1;
 	}
 
 	// Fire an Enemy bullet
