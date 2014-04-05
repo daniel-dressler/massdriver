@@ -48,6 +48,14 @@ void init_graphics()
 	set_sprite_data( t_count, Enemy_tile_count, Enemy_tile_data );
 	t_count += Enemy_tile_count;
 
+	// Set Enemy2 Ship Data
+	map_data_walker = &Enemy2_map_data;
+	for( i = 0; i < Enemy2_tile_map_size; i++, map_data_walker++ )
+		*map_data_walker += t_count;
+
+	set_sprite_data( t_count, Enemy2_tile_count, Enemy2_tile_data );
+	t_count += Enemy2_tile_count;
+
 	// Set Medium Enemy Ship Data
 	map_data_walker = &EnemyMed_map_data;
 	for( i = 0; i < EnemyMed_tile_map_size; i++, map_data_walker++ )
@@ -124,6 +132,19 @@ void tick_graphics()
 		if (enemy_walker->active == 0 ||
 			!(g_state.mode & MODE_GAME)) {
 			x = y = 0;
+		}
+		if( enemy_walker->gfx_dirty )
+		{
+			switch( enemy_walker->type )
+			{
+			case 2:
+				set_sprite_tile( enemy_walker->gfx_ofs, Enemy2_map_data[0] );
+				break;
+			default:
+				set_sprite_tile( enemy_walker->gfx_ofs, Enemy_map_data[0] );
+				break;
+			}
+			enemy_walker->gfx_dirty = 0;
 		}
 		move_sprite( enemy_walker->gfx_ofs, x, y );
 	}

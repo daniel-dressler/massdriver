@@ -140,6 +140,49 @@ unsigned char Enemy_tile_data[] ={
 // //                   //
 // ///////////////////////
 
+// Filename: Enemy2.png
+// Pixel Width: 8px
+// Pixel Height: 16px
+
+// /////////////////
+// //             //
+// //  Constants  //
+// //             //
+// /////////////////
+
+int Enemy2_tile_map_size = 0x02;
+int Enemy2_tile_map_width = 0x01;
+int Enemy2_tile_map_height = 0x02;
+
+int Enemy2_tile_data_size = 0x20;
+int Enemy2_tile_count = 0x02;
+
+// ////////////////
+// //            //
+// //  Map Data  //
+// //            //
+// ////////////////
+
+unsigned char Enemy2_map_data[] ={
+  0x00,0x01
+};
+
+// /////////////////
+// //             //
+// //  Tile Data  //
+// //             //
+// /////////////////
+
+unsigned char Enemy2_tile_data[] ={
+  0x00,0x00,0x00,0x00,0x3C,0x3C,0x42,0x7E,0x7E,0x5A,0x7E,0x5A,0xDB,0xA5,0xBD,0xC3,
+  0xDB,0xBD,0xC3,0xBD,0xDB,0xBD,0xC3,0xA5,0xC3,0xA5,0xA5,0xC3,0x66,0x66,0x00,0x00};
+
+// ///////////////////////
+// //                   //
+// //  File Attributes  //
+// //                   //
+// ///////////////////////
+
 // Filename: EnemyMed.png
 // Pixel Width: 24px
 // Pixel Height: 16px

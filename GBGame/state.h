@@ -32,6 +32,7 @@ typedef struct
 	POINT	size;
 	UINT8   age;
 
+	UINT8	gfx_dirty;
 	UINT8	gfx_ofs;
 
 } ENEMY;

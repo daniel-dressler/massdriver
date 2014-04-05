@@ -49,12 +49,13 @@ void init_gameai()
 
 	for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = 0;
-		enemy_walker->type = 0;
+		enemy_walker->type = 1;
 		enemy_walker->pos.y = 0;
 		enemy_walker->pos.x = 0;
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 8;
 		enemy_walker->age = 0;
+		enemy_walker->gfx_dirty = 0;
 	}
 
 	enemy_walker = g_state.enemiesmed;
@@ -214,6 +215,10 @@ void gameai_enemies()
 		next_free_enemy->pos.x = 255;
 		next_free_enemy->pos.y = 255;
 		next_free_enemy->pattern = super_tick % NUMPATTERNS;
+
+		next_free_enemy->gfx_dirty = 1;
+		next_free_enemy->type = ( g_state.entropy_pool % 2 ) + 1;
+
 		next_free_enemy = NULL;
 	}
 

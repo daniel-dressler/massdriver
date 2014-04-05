@@ -25,6 +25,13 @@ extern int Enemy_tile_count;
 extern unsigned char Enemy_map_data[];
 extern unsigned char Enemy_tile_data[];
 
+extern int Enemy2_tile_map_size;
+extern int Enemy2_tile_map_width;
+extern int Enemy2_tile_map_height;
+extern int Enemy2_tile_count;
+extern unsigned char Enemy2_map_data[];
+extern unsigned char Enemy2_tile_data[];
+
 extern int EnemyMed_tile_map_size;
 extern int EnemyMed_tile_map_width;
 extern int EnemyMed_tile_map_height;
