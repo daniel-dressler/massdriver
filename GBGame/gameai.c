@@ -158,7 +158,7 @@ void gameai_player( UINT8 pad )
 		g_state.flash_screen = 1;
 		bomb_cooloff = 50;
 
-		g_state.mode = MODE_BOSS;
+//		g_state.mode = MODE_BOSS;
 	}
 
 	if (shoot_cooloff > 0)
