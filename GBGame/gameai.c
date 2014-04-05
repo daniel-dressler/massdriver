@@ -5,8 +5,9 @@
 #include "sound.h"
 #include "patterns.h"
 
-#define PLAYERSPEED (1)
-#define BULLETSPEED (2)
+#define PLAYERSPEED			(1)
+#define PLAYERBULLETSPEED	(3)
+#define ENEMYBULLETSPEED	(2)
 
 UINT8  sub_tick = 0;
 UINT8  super_tick = 0;
@@ -268,7 +269,7 @@ void gameai_bullets()
 	{
 		ENEMY *enemy_walker = g_state.enemies;
 
-		bullet_walker->pos.y -= BULLETSPEED;
+		bullet_walker->pos.y -= PLAYERBULLETSPEED;
 		if (bullet_walker->pos.y < 16) {
 			bullet_walker->active = 0;
 		}
@@ -331,7 +332,7 @@ void gameai_bullets()
 			next_free_enemy_bullet = bullet_walker;
 		}
 
-		bullet_walker->pos.y += BULLETSPEED;
+		bullet_walker->pos.y += ENEMYBULLETSPEED;
 
 		if( ex1 < bx2 && ex2 > bx1 &&
 			ey1 < by2 && ey2 > by1 ) 
