@@ -18,26 +18,28 @@ ENEMY  *next_free_enemy = NULL;
 
 UINT16 score_by_type[] = {
 	1,
-	3
+	3,
+	20
 };
 
 void add_score(UINT16 x)
 {
-	UINT16 score = g_state.score + x;
+	UINT16 score = get_score();
+	score += x;
 	g_state.score = score;
 	g_state.score_dirty_gfx = 1;
 }
 
 void deduct_score(UINT16 x)
 {
-	UINT16 score;
+	UINT16 globalScore = get_score();
 
-	if (g_state.score > x) {
-		UINT16 score = g_state.score - x;
-		g_state.score = score;
+	if (globalScore > x) {
+		globalScore = globalScore - x;
 	} else {
-		g_state.score = 0;
+		globalScore = 0;
 	}
+	g_state.score = globalScore;
 	g_state.score_dirty_gfx = 1;
 }
 

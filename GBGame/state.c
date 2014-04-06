@@ -16,3 +16,13 @@ void tick_state()
 	g_state.time = new_time;
 	g_state.entropy_pool += (char)new_time;
 }
+
+void set_score( UINT16 score )
+{
+	g_state.score = score;
+}
+
+UINT16 get_score()
+{
+	return g_state.score;
+}

@@ -400,8 +400,7 @@ void graphics_drawscore()
 		number_walker = g_state.score_number;
 		number_walker += (MAX_SCORE_DIGITS - 1);
 	
-		score = g_state.score;
-		currentDigit = 0;
+		score = get_score();
 		for( i = MAX_SCORE_DIGITS; i > 0; i--, number_walker-- )
 		{
 			x = number_walker->pos.x;
@@ -412,7 +411,6 @@ void graphics_drawscore()
 
 			set_sprite_tile( number_walker->gfx_ofs, tileNumber );
 			move_sprite( number_walker->gfx_ofs, x, y );
-			currentDigit++;
 		}
 		g_state.score_dirty_gfx = 0;
 	}

@@ -96,4 +96,8 @@ void tick_state();
 
 extern State g_state;
 
+void set_score( UINT16 score );
+UINT16 get_score();
+
+
 #endif
