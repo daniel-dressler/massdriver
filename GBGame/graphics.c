@@ -386,100 +386,31 @@ void graphics_drawbullets()
 }
 
 
-// Essentially hard-coding for 3 digits now
+
 void  graphics_drawscore()
 {
 	UINT8 i, x, y, currentDigit, tileNumber;
 	UINT16 score;
 	NUMBER* number_walker;
-	char s[ MAX_SCORE_DIGITS + 1];
-	int digits[ MAX_SCORE_DIGITS];
 
-	score = g_state.score;
+	//if( g_state.score < 100 )
+		//return;
+
 	number_walker = g_state.score_number;
+	number_walker += (MAX_SCORE_DIGITS - 1);
+	
+	score = g_state.score;
+	currentDigit = 0;
+	for( i = MAX_SCORE_DIGITS; i > 0; i--, number_walker-- )
+	{
+		x = number_walker->pos.x;
+		y = number_walker->pos.y;
+		//currentDigit = score % 10;
+		//score = score / 10;
+		tileNumber = g_state.number_tile_start + (currentDigit << 1 );
 
-	//if( score >= 100 )
-	//{
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = s[0] - '0';
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	//set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	//move_sprite( number_walker->gfx_ofs, x, y );
-
-	//	number_walker++;
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = s[1] - '0';
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	//set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	//move_sprite( number_walker->gfx_ofs, x, y );
-
-	//	number_walker++;
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = s[2] - '0';
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	//set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	//move_sprite( number_walker->gfx_ofs, x, y );
-	//}
-	//else if( score >= 10 )
-	//{
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = 0;
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	move_sprite( number_walker->gfx_ofs, x, y );
-
-	//	number_walker++;
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = s[0] - '0';
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	move_sprite( number_walker->gfx_ofs, x, y );
-
-	//	number_walker++;
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = s[1] - '0';
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	move_sprite( number_walker->gfx_ofs, x, y );
-	//}
-	//else
-	//{
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = 0;
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	move_sprite( number_walker->gfx_ofs, x, y );
-
-	//	number_walker++;
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = 0;
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	move_sprite( number_walker->gfx_ofs, x, y );
-
-	//	number_walker++;
-	//	x = number_walker->pos.x;
-	//	y = number_walker->pos.y;
-	//	currentDigit = s[0] - '0';
-
-	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
-	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-	//	move_sprite( number_walker->gfx_ofs, x, y );
-	//}
+		set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+		move_sprite( number_walker->gfx_ofs, x, y );
+		currentDigit++;
+	}
 }
