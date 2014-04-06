@@ -8,8 +8,8 @@ UINT8 t_count = 0;
 UINT8 m_count = 0;
 UINT8 et_count = 0;
 UINT8 em_count = 0;
-UINT8 ee_init = 0;
-UINT8 eb_init = 0;
+UINT8 et1_pos = 0;
+UINT8 et2_pos = 0;
 
 void  graphics_initbackground();
 void  graphics_initplayership();
@@ -50,30 +50,43 @@ void init_graphics()
 
 void tick_graphics()
 {
-	static UINT8 lastmode = g_state.mode;
-	static UINT8 scroll = 0;
-	if( scroll++ & 0x01 )
-		SCY_REG--;
-
-	if( lastmode != g_state.mode )
+	if( g_state.mode == MODE_MENU )
 	{
-		lastmode = g_state.mode;
-		graphics_initenemyships();
+		SCY_REG = 0;
+		
 	}
-
-	if( !graphics_flash() )
+	else if( g_state.mode == MODE_SCORE )
 	{
-		if( g_state.mode == MODE_GAME )
+		SCY_REG = 0;
+
+	}
+	else if( g_state.mode == MODE_GAME || g_state.mode == MODE_BOSS )
+	{
+		static UINT8 lastmode = g_state.mode;
+		static UINT8 scroll = 0;
+		if( scroll++ & 0x01 )
+			SCY_REG--;
+
+		if( lastmode != g_state.mode )
 		{
-			graphics_drawplayer();
-			graphics_drawenemies();
-			graphics_drawbullets();
+			lastmode = g_state.mode;
+			graphics_initenemyships();
 		}
-		else if( g_state.mode == MODE_BOSS )
+
+		if( !graphics_flash() )
 		{
-			graphics_drawplayer();
-			graphics_drawboss();
-			graphics_drawbullets();
+			if( g_state.mode == MODE_GAME )
+			{
+				graphics_drawplayer();
+				graphics_drawenemies();
+				graphics_drawbullets();
+			}
+			else if( g_state.mode == MODE_BOSS )
+			{
+				graphics_drawplayer();
+				graphics_drawboss();
+				graphics_drawbullets();
+			}
 		}
 	}
 	wait_vbl_done();
@@ -81,14 +94,22 @@ void tick_graphics()
 
 void graphics_initbackground()
 {
-	set_bkg_data( 0, Stars_tile_count, Stars_tile_data );
-
- 	for( i = 0; i < 32; i += Stars_tile_map_width )
+	switch( g_state.mode )
 	{
-		for( j = 0; j < 32; j += Stars_tile_map_height )
+	case MODE_MENU:
+		break;
+	case MODE_SCORE:
+		break;
+	default:
+		set_bkg_data( 0, Stars_tile_count, Stars_tile_data );
+ 		for( i = 0; i < 32; i += Stars_tile_map_width )
 		{
-			set_bkg_tiles( i, j, Stars_tile_map_width, Stars_tile_map_height, Stars_map_data );
+			for( j = 0; j < 32; j += Stars_tile_map_height )
+			{
+				set_bkg_tiles( i, j, Stars_tile_map_width, Stars_tile_map_height, Stars_map_data );
+			}
 		}
+		break;
 	}
 }
 
@@ -96,9 +117,9 @@ void graphics_initplayership()
 {
 	// Set Player Ship Data
 	g_state.player1.gfx_ofs = m_count;
-	set_sprite_tile( m_count, Ship_map_data[0] );
+	set_sprite_tile( m_count, t_count );
 	m_count++;
-	set_sprite_tile( m_count, Ship_map_data[2] );
+	set_sprite_tile( m_count, t_count+2 );
 	m_count++;
 	set_sprite_data( t_count, Ship_tile_count, Ship_tile_data );
 	t_count += Ship_tile_count;
@@ -113,22 +134,18 @@ void graphics_initbullets()
 		blank = 1;
 
 	// Set Bullet Data
-	map_data_walker = &Bullet_map_data;
-	for( i = 0; i < Bullet_tile_map_size; i++, map_data_walker++ )
-		*map_data_walker += t_count;
-
 	bullet_walker = g_state.enemy_bullets;
 	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		bullet_walker->gfx_ofs = m_count;
-		set_sprite_tile( m_count, Bullet_map_data[0] );
+		set_sprite_tile( m_count, t_count );
 	}
 
 	bullet_walker = g_state.player_bullets;
 	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		bullet_walker->gfx_ofs = m_count;
-		set_sprite_tile( m_count, Bullet_map_data[0] );
+		set_sprite_tile( m_count, t_count );
 	}
 
 	set_sprite_data( t_count, Bullet_tile_count, Bullet_tile_data );
@@ -148,18 +165,10 @@ void graphics_initenemyships()
 	if( g_state.mode == MODE_BOSS )
 	{
 		// Set Boss Ship Data
-		if( !eb_init )
-		{
-			map_data_walker = &Boss_map_data;
-			for( i = 0; i < Boss_tile_map_size; i++, map_data_walker++ )
-				*map_data_walker += t_count;
-			eb_init = 1;
-		}
-		
 		g_state.boss.gfx_ofs = m_count;
 		for( i = 0; i < 36; i+=2 )
 		{
-			set_sprite_tile( m_count, Boss_map_data[i] );
+			set_sprite_tile( m_count, t_count + i );
 			m_count++;
 		}
 
@@ -179,55 +188,34 @@ void graphics_initenemyships()
 		ENEMY *enemy_walker;
 
 		// Set Enemy Ship Data
-		if( !ee_init )
-		{
-			map_data_walker = &Enemy_map_data;
-			for( i = 0; i < Enemy_tile_map_size; i++, map_data_walker++ )
-				*map_data_walker += t_count;
-		}
-
 		enemy_walker = g_state.enemies;
 		for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
 		{
 			enemy_walker->gfx_ofs = m_count;
-			set_sprite_tile( m_count, Enemy_map_data[0] );
+			set_sprite_tile( m_count, t_count );
 		}
 
+		et1_pos = t_count;
 		set_sprite_data( t_count, Enemy_tile_count, Enemy_tile_data );
 		t_count += Enemy_tile_count;
 
 		// Set Enemy2 Ship Data
-		if( !ee_init )
-		{
-			map_data_walker = &Enemy2_map_data;
-			for( i = 0; i < Enemy2_tile_map_size; i++, map_data_walker++ )
-				*map_data_walker += t_count;
-		}
-
+		et2_pos = t_count;
 		set_sprite_data( t_count, Enemy2_tile_count, Enemy2_tile_data );
 		t_count += Enemy2_tile_count;
 
 		// Set Medium Enemy Ship Data
-		if( !ee_init )
-		{
-			map_data_walker = &EnemyMed_map_data;
-			for( i = 0; i < EnemyMed_tile_map_size; i++, map_data_walker++ )
-				*map_data_walker += t_count;
-		}
-
 		enemy_walker = g_state.enemiesmed;
 		for( i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++ )
 		{
 			enemy_walker->gfx_ofs = m_count;
-			set_sprite_tile( m_count++, EnemyMed_map_data[0] );
-			set_sprite_tile( m_count++, EnemyMed_map_data[2] );
-			set_sprite_tile( m_count++, EnemyMed_map_data[4] );
+			set_sprite_tile( m_count++, t_count );
+			set_sprite_tile( m_count++, t_count+2 );
+			set_sprite_tile( m_count++, t_count+4 );
 		}
 
 		set_sprite_data( t_count, EnemyMed_tile_count, EnemyMed_tile_data );
 		t_count += EnemyMed_tile_count;
-
-		ee_init = 1;
 	}
 }
 
@@ -283,10 +271,10 @@ void graphics_drawenemies()
 			switch( enemy_walker->type )
 			{
 			case 2:
-				set_sprite_tile( enemy_walker->gfx_ofs, Enemy2_map_data[0] );
+				set_sprite_tile( enemy_walker->gfx_ofs, et2_pos );
 				break;
 			default:
-				set_sprite_tile( enemy_walker->gfx_ofs, Enemy_map_data[0] );
+				set_sprite_tile( enemy_walker->gfx_ofs, et1_pos );
 				break;
 			}
 			enemy_walker->gfx_dirty = 0;
@@ -306,7 +294,7 @@ void graphics_drawenemies()
 		move_sprite( enemy_walker->gfx_ofs, x, y );
 		move_sprite( enemy_walker->gfx_ofs+1, x+8, y );
 		move_sprite( enemy_walker->gfx_ofs+2, x+16, y );
-	}
+	}	
 }
 
 void graphics_drawboss()
