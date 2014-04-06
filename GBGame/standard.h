@@ -6,7 +6,7 @@
 
 /* WEIRD SHIT
 
-- write to const gives no errors
+- write to const gives no errors (no change in data though)
 - power of two align
 - pointers are slow as shit
 - casting int to anything breaks everything
@@ -25,6 +25,7 @@
 - Cannot return struct by value
 - Limited function stack size
 - Declaring 'UINT8 i' in multiple functions broke (graphics)
+- anything not const counts toward 8k address space
 
 Workarounds:
 - pointer arith instead of indexing

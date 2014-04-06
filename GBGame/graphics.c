@@ -46,6 +46,7 @@ void init_graphics()
 
 	WX_REG = 1000;
 	WY_REG = 1000;
+	SCX_REG = -16;
 }
 
 void tick_graphics()
@@ -62,10 +63,7 @@ void tick_graphics()
 	}
 
 	if( g_state.mode == MODE_MENU || g_state.mode == MODE_SCORE )
-	{
 		SCY_REG = -10;
-		SCX_REG = -16;
-	}
 	else if( g_state.mode == MODE_GAME || g_state.mode == MODE_BOSS )
 	{
 		static UINT8 scroll = 0;
@@ -74,18 +72,12 @@ void tick_graphics()
 
 		if( !graphics_flash() )
 		{
+			graphics_drawplayer();
 			if( g_state.mode == MODE_GAME )
-			{
-				graphics_drawplayer();
 				graphics_drawenemies();
-				graphics_drawbullets();
-			}
 			else if( g_state.mode == MODE_BOSS )
-			{
-				graphics_drawplayer();
 				graphics_drawboss();
-				graphics_drawbullets();
-			}
+			graphics_drawbullets();
 		}
 	}
 	wait_vbl_done();
