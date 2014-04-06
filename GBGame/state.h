@@ -7,6 +7,7 @@
 #define MAX_MEDENEMIES		2
 #define MAX_ENEMY_BULLETS	3
 #define MAX_PLAYER_BULLETS	3
+#define MAX_SCORE_DIGITS	3
 
 typedef struct
 {
@@ -44,8 +45,20 @@ typedef struct
 	POINT	size;
 
 	UINT8	gfx_ofs;
-
 } BULLET;
+
+
+typedef struct
+{
+	UINT8	active;
+	POINT	pos;
+	POINT	size;
+
+	UINT8	gfx_ofs;
+} NUMBER;
+
+
+
 
 enum mode_t {
 	MODE_MENU = 1,
@@ -73,6 +86,8 @@ typedef struct
 	BULLET	enemy_bullets[MAX_ENEMY_BULLETS];
 	BULLET  player_bullets[MAX_PLAYER_BULLETS];
 
+	UINT8   number_tile_start;
+	NUMBER	score_number[MAX_SCORE_DIGITS];
 } State;
 
 void init_state();

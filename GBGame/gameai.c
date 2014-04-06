@@ -16,20 +16,24 @@ BULLET *next_free_player_bullet = NULL;
 ENEMY  *next_free_enemy = NULL;
 
 
-UINT8 score_by_type[] = {
-	100,
-	300
+UINT16 score_by_type[] = {
+	1,
+	3
 };
 
 void add_score(UINT16 x)
 {
-	g_state.score += x;
+	UINT16 score = g_state.score + x;
+	g_state.score = score;
 }
 
 void deduct_score(UINT16 x)
 {
+	UINT16 score;
+
 	if (g_state.score > x) {
-		g_state.score -= x;
+		UINT16 score = g_state.score - x;
+		g_state.score = score;
 	} else {
 		g_state.score = 0;
 	}
@@ -78,7 +82,7 @@ void init_gameai()
 		bullet_walker->active = 0;
 	}
 
-	g_state.mode = MODE_SCORE;
+	g_state.mode = MODE_GAME;
 	g_state.flash_screen = 0;
 }
 
@@ -225,7 +229,7 @@ void gameai_enemies()
 					enemy_walker->pos.x = 0;
 					enemy_walker->pos.y = 0;
 					play_sound( SOUND_EXPLOSION );
-					deduct_score(1000);
+					deduct_score(10);
 				}
 			}
 		}
@@ -361,7 +365,7 @@ void gameai_bullets()
 			bullet_walker->active = 0;
 			bullet_walker->pos.x = 0;
 			bullet_walker->pos.y = 0;
-			deduct_score(1000);
+			deduct_score(10);
 			play_sound( SOUND_EXPLOSION );
 			// TODO: Position an explosion
 		}

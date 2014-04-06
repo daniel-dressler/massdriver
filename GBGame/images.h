@@ -44,4 +44,10 @@ extern int GameOver_tile_count;
 extern unsigned char GameOver_map_data[];
 extern unsigned char GameOver_tile_data[];
 
+extern int Number_tile_sizes; //per number tile size
+extern int Number_tile_count; //per number tile size
+extern unsigned char Number_tile_data[];
+
+
+
 #endif

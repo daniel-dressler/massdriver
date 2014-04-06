@@ -15,12 +15,14 @@ void  graphics_initbackground();
 void  graphics_initplayership();
 void  graphics_initbullets();
 void  graphics_initenemyships();
+void  graphics_initscore();
 
 UINT8 graphics_flash();
 void  graphics_drawplayer();
 void  graphics_drawenemies();
 void  graphics_drawboss();
 void  graphics_drawbullets();
+void  graphics_drawscore();
 
 void init_graphics()
 {
@@ -30,11 +32,12 @@ void init_graphics()
 	graphics_initbackground();
 	graphics_initplayership();
 	graphics_initbullets();
-
+	
 	et_count = t_count;
 	em_count = m_count;
-
+	
 	graphics_initenemyships();
+	graphics_initscore();
 
 	if( m_count >= 40 || blank )
 	{
@@ -78,6 +81,7 @@ void tick_graphics()
 			else if( g_state.mode == MODE_BOSS )
 				graphics_drawboss();
 			graphics_drawbullets();
+			graphics_drawscore();
 		}
 	}
 	wait_vbl_done();
@@ -157,6 +161,33 @@ void graphics_initbullets()
 
 	set_sprite_data( t_count, Bullet_tile_count, Bullet_tile_data );
 	t_count += Bullet_tile_count;
+}
+
+void graphics_initscore()
+{
+	NUMBER* number_walker;
+	unsigned char *tile_data_walker;
+
+	tile_data_walker = Number_tile_data;
+	number_walker = g_state.score_number;
+	g_state.number_tile_start = t_count;
+	
+	// Setting sprite data for all of the different number tiles
+	// Note that number_tile_count is the tiles per number, not in total
+	for( i = 0; i < 10; i++, tile_data_walker += Number_tile_sizes, t_count += Number_tile_count )
+	{
+		set_sprite_data( t_count, Number_tile_count, tile_data_walker );
+	}
+
+	for( i = 0; i < MAX_SCORE_DIGITS; i++, m_count++, number_walker++ )
+	{
+		number_walker->gfx_ofs = m_count;
+		number_walker->pos.x = SCORE_POSITION_START_X + i << 3;
+		number_walker->pos.y = SCORE_POSITION_START_Y;
+		
+		// Initializes them all to 0 (very start of tile data for numbers is 0)
+		set_sprite_tile( m_count, g_state.number_tile_start );
+	}
 }
 
 void graphics_initenemyships()
@@ -354,3 +385,101 @@ void graphics_drawbullets()
 	}
 }
 
+
+// Essentially hard-coding for 3 digits now
+void  graphics_drawscore()
+{
+	UINT8 i, x, y, currentDigit, tileNumber;
+	UINT16 score;
+	NUMBER* number_walker;
+	char s[ MAX_SCORE_DIGITS + 1];
+	int digits[ MAX_SCORE_DIGITS];
+
+	score = g_state.score;
+	number_walker = g_state.score_number;
+
+	//if( score >= 100 )
+	//{
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = s[0] - '0';
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	//set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	//move_sprite( number_walker->gfx_ofs, x, y );
+
+	//	number_walker++;
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = s[1] - '0';
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	//set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	//move_sprite( number_walker->gfx_ofs, x, y );
+
+	//	number_walker++;
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = s[2] - '0';
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	//set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	//move_sprite( number_walker->gfx_ofs, x, y );
+	//}
+	//else if( score >= 10 )
+	//{
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = 0;
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	move_sprite( number_walker->gfx_ofs, x, y );
+
+	//	number_walker++;
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = s[0] - '0';
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	move_sprite( number_walker->gfx_ofs, x, y );
+
+	//	number_walker++;
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = s[1] - '0';
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	move_sprite( number_walker->gfx_ofs, x, y );
+	//}
+	//else
+	//{
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = 0;
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	move_sprite( number_walker->gfx_ofs, x, y );
+
+	//	number_walker++;
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = 0;
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	move_sprite( number_walker->gfx_ofs, x, y );
+
+	//	number_walker++;
+	//	x = number_walker->pos.x;
+	//	y = number_walker->pos.y;
+	//	currentDigit = s[0] - '0';
+
+	//	tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+	//	set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+	//	move_sprite( number_walker->gfx_ofs, x, y );
+	//}
+}
