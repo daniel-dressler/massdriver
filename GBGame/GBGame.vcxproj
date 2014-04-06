@@ -30,6 +30,7 @@
     <None Include="makefile.win" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="assets\qrt_circle_precomp.h" />
     <ClInclude Include="gameai.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="images.h" />

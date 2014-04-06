@@ -29,12 +29,12 @@ extern int Stars_tile_map_height;
 extern int Stars_tile_count;
 extern unsigned char Stars_map_data[];
 extern unsigned char Stars_tile_data[];
-/*
+
 extern int Title_tile_map_size;
 extern int Title_tile_map_width;
 extern int Title_tile_map_height;
 extern int Title_tile_count;
 extern unsigned char Title_map_data[];
 extern unsigned char Title_tile_data[];
-*/
+
 #endif

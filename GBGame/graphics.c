@@ -50,28 +50,33 @@ void init_graphics()
 
 void tick_graphics()
 {
+	static UINT8 lastmode = g_state.mode;
+	if( lastmode != g_state.mode )
+	{
+		lastmode = g_state.mode;
+
+		DISPLAY_OFF;
+		graphics_initenemyships();
+		graphics_initbackground();
+		DISPLAY_ON;
+	}
+
 	if( g_state.mode == MODE_MENU )
 	{
-		SCY_REG = 0;
+		SCY_REG = -10;
+		SCX_REG = -16;
 		
 	}
 	else if( g_state.mode == MODE_SCORE )
 	{
-		SCY_REG = 0;
+		SCY_REG = -10;
 
 	}
 	else if( g_state.mode == MODE_GAME || g_state.mode == MODE_BOSS )
 	{
-		static UINT8 lastmode = g_state.mode;
 		static UINT8 scroll = 0;
 		if( scroll++ & 0x01 )
 			SCY_REG--;
-
-		if( lastmode != g_state.mode )
-		{
-			lastmode = g_state.mode;
-			graphics_initenemyships();
-		}
 
 		if( !graphics_flash() )
 		{
@@ -97,6 +102,14 @@ void graphics_initbackground()
 	switch( g_state.mode )
 	{
 	case MODE_MENU:
+		set_bkg_data( 0, Title_tile_count, Title_tile_data );
+ 		for( i = 0; i < 32; i += Title_tile_map_width )
+		{
+			for( j = 0; j < 32; j += Title_tile_map_height )
+			{
+				set_bkg_tiles( i, j, Title_tile_map_width, Title_tile_map_height, Title_map_data );
+			}
+		}
 		break;
 	case MODE_SCORE:
 		break;
