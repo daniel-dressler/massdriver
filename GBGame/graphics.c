@@ -61,16 +61,10 @@ void tick_graphics()
 		DISPLAY_ON;
 	}
 
-	if( g_state.mode == MODE_MENU )
+	if( g_state.mode == MODE_MENU || g_state.mode == MODE_SCORE )
 	{
 		SCY_REG = -10;
 		SCX_REG = -16;
-		
-	}
-	else if( g_state.mode == MODE_SCORE )
-	{
-		SCY_REG = -10;
-
 	}
 	else if( g_state.mode == MODE_GAME || g_state.mode == MODE_BOSS )
 	{
@@ -112,6 +106,14 @@ void graphics_initbackground()
 		}
 		break;
 	case MODE_SCORE:
+		set_bkg_data( 0, GameOver_tile_count, GameOver_tile_data );
+ 		for( i = 0; i < 32; i += GameOver_tile_map_width )
+		{
+			for( j = 0; j < 32; j += GameOver_tile_map_height )
+			{
+				set_bkg_tiles( i, j, GameOver_tile_map_width, GameOver_tile_map_height, GameOver_map_data );
+			}
+		}
 		break;
 	default:
 		set_bkg_data( 0, Stars_tile_count, Stars_tile_data );

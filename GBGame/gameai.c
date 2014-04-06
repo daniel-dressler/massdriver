@@ -78,7 +78,7 @@ void init_gameai()
 		bullet_walker->active = 0;
 	}
 
-	g_state.mode = MODE_MENU;
+	g_state.mode = MODE_SCORE;
 	g_state.flash_screen = 0;
 }
 
