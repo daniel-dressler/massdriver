@@ -25,6 +25,7 @@ void add_score(UINT16 x)
 {
 	UINT16 score = g_state.score + x;
 	g_state.score = score;
+	g_state.score_dirty_gfx = 1;
 }
 
 void deduct_score(UINT16 x)
@@ -37,6 +38,7 @@ void deduct_score(UINT16 x)
 	} else {
 		g_state.score = 0;
 	}
+	g_state.score_dirty_gfx = 1;
 }
 
 void gameai_player( UINT8 pad );

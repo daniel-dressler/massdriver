@@ -87,6 +87,7 @@ typedef struct
 	BULLET  player_bullets[MAX_PLAYER_BULLETS];
 
 	UINT8   number_tile_start;
+	UINT8   score_dirty_gfx;
 	NUMBER	score_number[MAX_SCORE_DIGITS];
 } State;
 

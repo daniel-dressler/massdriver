@@ -11,6 +11,7 @@ UINT8 em_count = 0;
 UINT8 et1_pos = 0;
 UINT8 et2_pos = 0;
 
+
 void  graphics_initbackground();
 void  graphics_initplayership();
 void  graphics_initbullets();
@@ -188,6 +189,7 @@ void graphics_initscore()
 		// Initializes them all to 0 (very start of tile data for numbers is 0)
 		set_sprite_tile( m_count, g_state.number_tile_start );
 	}
+	g_state.score_dirty_gfx = 1;
 }
 
 void graphics_initenemyships()
@@ -387,30 +389,31 @@ void graphics_drawbullets()
 
 
 
-void  graphics_drawscore()
+void graphics_drawscore()
 {
 	UINT8 i, x, y, currentDigit, tileNumber;
 	UINT16 score;
 	NUMBER* number_walker;
 
-	//if( g_state.score < 100 )
-		//return;
-
-	number_walker = g_state.score_number;
-	number_walker += (MAX_SCORE_DIGITS - 1);
-	
-	score = g_state.score;
-	currentDigit = 0;
-	for( i = MAX_SCORE_DIGITS; i > 0; i--, number_walker-- )
+	if( g_state.score_dirty_gfx )
 	{
-		x = number_walker->pos.x;
-		y = number_walker->pos.y;
-		//currentDigit = score % 10;
-		//score = score / 10;
-		tileNumber = g_state.number_tile_start + (currentDigit << 1 );
+		number_walker = g_state.score_number;
+		number_walker += (MAX_SCORE_DIGITS - 1);
+	
+		score = g_state.score;
+		currentDigit = 0;
+		for( i = MAX_SCORE_DIGITS; i > 0; i--, number_walker-- )
+		{
+			x = number_walker->pos.x;
+			y = number_walker->pos.y;
+			currentDigit = score % 10;
+			score = score / 10;
+			tileNumber = g_state.number_tile_start + (currentDigit << 1 );
 
-		set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-		move_sprite( number_walker->gfx_ofs, x, y );
-		currentDigit++;
+			set_sprite_tile( number_walker->gfx_ofs, tileNumber );
+			move_sprite( number_walker->gfx_ofs, x, y );
+			currentDigit++;
+		}
+		g_state.score_dirty_gfx = 0;
 	}
 }
