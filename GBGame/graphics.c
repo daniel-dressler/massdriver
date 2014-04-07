@@ -17,6 +17,7 @@ void  graphics_initplayership();
 void  graphics_initbullets();
 void  graphics_initenemyships();
 void  graphics_initscore();
+void  graphics_initlives();
 
 UINT8 graphics_flash();
 void  graphics_drawplayer();
@@ -24,6 +25,7 @@ void  graphics_drawenemies();
 void  graphics_drawboss();
 void  graphics_drawbullets();
 void  graphics_drawscore();
+void  graphics_drawlives();
 
 void init_graphics()
 {
@@ -39,6 +41,7 @@ void init_graphics()
 	
 	graphics_initenemyships();
 	graphics_initscore();
+	graphics_initlives();
 
 	if( m_count >= 40 || blank )
 	{
@@ -83,6 +86,7 @@ void tick_graphics()
 				graphics_drawboss();
 			graphics_drawbullets();
 			graphics_drawscore();
+			graphics_drawlives();
 		}
 	}
 	wait_vbl_done();
@@ -139,7 +143,6 @@ void graphics_initplayership()
 
 void graphics_initbullets()
 {
-	UINT8 *map_data_walker;
 	BULLET *bullet_walker;
 
 	if( m_count < 2 || t_count < 2 )
@@ -170,7 +173,7 @@ void graphics_initscore()
 	unsigned char *tile_data_walker;
 
 	tile_data_walker = Number_tile_data;
-	number_walker = g_state.score_number;
+	number_walker = g_state.score_data.digits;
 	g_state.number_tile_start = t_count;
 	
 	// Setting sprite data for all of the different number tiles
@@ -189,13 +192,28 @@ void graphics_initscore()
 		// Initializes them all to 0 (very start of tile data for numbers is 0)
 		set_sprite_tile( m_count, g_state.number_tile_start );
 	}
-	g_state.score_dirty_gfx = 1;
+	g_state.score_data.dirty_gfx = 1;
+}
+
+
+void graphics_initlives()
+{
+	NUMBER* number_walker;
+	UINT8 lives;
+
+	lives = get_lives();
+	number_walker = &g_state.life_data.digit;
+	number_walker->gfx_ofs = m_count;
+	number_walker->pos.x = 8;
+	number_walker->pos.y = SCORE_POSITION_START_Y;
+		
+	set_sprite_tile( m_count, g_state.number_tile_start + (lives << 1 ) );
+	m_count++;
+	g_state.life_data.dirty_gfx = 1;
 }
 
 void graphics_initenemyships()
 {
-	UINT8 *map_data_walker;
-
 	t_count = et_count;
 	m_count = em_count;
 
@@ -395,9 +413,9 @@ void graphics_drawscore()
 	UINT16 score;
 	NUMBER* number_walker;
 
-	if( g_state.score_dirty_gfx )
+	if( g_state.score_data.dirty_gfx )
 	{
-		number_walker = g_state.score_number;
+		number_walker = g_state.score_data.digits;
 		number_walker += (MAX_SCORE_DIGITS - 1);
 	
 		score = get_score();
@@ -412,6 +430,27 @@ void graphics_drawscore()
 			set_sprite_tile( number_walker->gfx_ofs, tileNumber );
 			move_sprite( number_walker->gfx_ofs, x, y );
 		}
-		g_state.score_dirty_gfx = 0;
+		g_state.score_data.dirty_gfx = 0;
 	}
+}
+
+void  graphics_drawlives()
+{
+	NUMBER* num;
+	UINT8 x, y, tileNumber, lives;
+
+	if( g_state.life_data.dirty_gfx )
+	{
+		num = &g_state.life_data.digit;
+		lives = g_state.life_data.lives;
+		x = num->pos.x;
+		y = num->pos.y;
+
+		tileNumber = g_state.number_tile_start + (lives << 1 );
+
+		set_sprite_tile( num->gfx_ofs, tileNumber );
+		move_sprite( num->gfx_ofs, x, y );
+		g_state.life_data.dirty_gfx = 0;
+	}
+
 }

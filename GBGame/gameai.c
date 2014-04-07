@@ -17,31 +17,30 @@ ENEMY  *next_free_enemy = NULL;
 
 
 UINT16 score_by_type[] = {
-	1,
-	3,
-	20
+	2,
+	4,
+	8
 };
 
 void add_score(UINT16 x)
 {
 	UINT16 score = get_score();
 	score += x;
-	g_state.score = score;
-	g_state.score_dirty_gfx = 1;
+	g_state.score_data.score = score;
+	g_state.score_data.dirty_gfx = 1;
 }
 
-void deduct_score(UINT16 x)
+void dec_lives()
 {
-	UINT16 globalScore = get_score();
+	UINT8 lives = get_lives();
+	if( lives > 0 )
+		lives--;
 
-	if (globalScore > x) {
-		globalScore = globalScore - x;
-	} else {
-		globalScore = 0;
-	}
-	g_state.score = globalScore;
-	g_state.score_dirty_gfx = 1;
+	g_state.life_data.lives = lives;
+	g_state.life_data.dirty_gfx = 1;
 }
+
+
 
 void gameai_player( UINT8 pad );
 void gameai_enemies();
@@ -233,7 +232,7 @@ void gameai_enemies()
 					enemy_walker->pos.x = 0;
 					enemy_walker->pos.y = 0;
 					play_sound( SOUND_EXPLOSION );
-					deduct_score(10);
+					dec_lives();
 				}
 			}
 		}
@@ -369,7 +368,7 @@ void gameai_bullets()
 			bullet_walker->active = 0;
 			bullet_walker->pos.x = 0;
 			bullet_walker->pos.y = 0;
-			deduct_score(10);
+			dec_lives();
 			play_sound( SOUND_EXPLOSION );
 			// TODO: Position an explosion
 		}

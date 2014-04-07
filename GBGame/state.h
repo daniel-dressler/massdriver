@@ -8,6 +8,7 @@
 #define MAX_ENEMY_BULLETS	3
 #define MAX_PLAYER_BULLETS	3
 #define MAX_SCORE_DIGITS	3
+#define MAX_LIVES			5
 
 typedef struct
 {
@@ -50,13 +51,23 @@ typedef struct
 
 typedef struct
 {
-	UINT8	active;
 	POINT	pos;
-	POINT	size;
-
 	UINT8	gfx_ofs;
 } NUMBER;
 
+typedef struct
+{
+	UINT16  score;
+	UINT8   dirty_gfx;
+	NUMBER	digits[MAX_SCORE_DIGITS];
+} SCORE;
+
+typedef struct
+{
+	UINT8	lives;
+	UINT8   dirty_gfx;
+	NUMBER	digit;
+} LIVES;
 
 
 
@@ -71,7 +82,6 @@ typedef struct
 {
 	UINT8   mode;
 	UINT32	time;
-	UINT16  score;
 
 	// We have to gather our own entropy,
 	// while on PC the kernel will do this
@@ -87,8 +97,8 @@ typedef struct
 	BULLET  player_bullets[MAX_PLAYER_BULLETS];
 
 	UINT8   number_tile_start;
-	UINT8   score_dirty_gfx;
-	NUMBER	score_number[MAX_SCORE_DIGITS];
+	SCORE	score_data;
+	LIVES	life_data;
 } State;
 
 void init_state();
@@ -98,6 +108,8 @@ extern State g_state;
 
 void set_score( UINT16 score );
 UINT16 get_score();
+
+UINT8 get_lives();
 
 
 #endif
