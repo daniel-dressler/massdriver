@@ -17,7 +17,7 @@ ENEMY  *next_free_enemy = NULL;
 
 
 UINT16 score_by_type[] = {
-	2,
+	0,
 	4,
 	8
 };
