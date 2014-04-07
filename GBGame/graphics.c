@@ -406,7 +406,11 @@ void graphics_drawbullets()
 }
 
 
-
+// No more efficient way could be found for drawing the score.
+// Tried sprintf and it was actually slower than this
+// Tried to look up any sort of bitshifting pattern for division and couldn't find any.
+// Also tried to unroll loops and really didn't seem to help much
+// The dirty bit is really the only thing that helped
 void graphics_drawscore()
 {
 	UINT8 i, x, y, currentDigit, tileNumber;
