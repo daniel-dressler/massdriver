@@ -41,10 +41,10 @@ typedef struct
 
 typedef struct
 {
-	UINT8   active;
+	UINT8	gfx_ofs;
 	POINT	pos;
 	POINT	size;
-	UINT8	gfx_ofs;
+	UINT8   active;
 
 } BULLET;
 
