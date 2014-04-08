@@ -36,24 +36,23 @@ typedef struct
 	UINT8   age;
 
 	UINT8	gfx_dirty;
-	UINT8	ignored;
 
 } ENEMY;
 
 typedef struct
 {
-	UINT8	gfx_ofs;
 	UINT8   active;
 	POINT	pos;
 	POINT	size;
+	UINT8	gfx_ofs;
 
 } BULLET;
 
 
 typedef struct
 {
-	POINT	pos;
 	UINT8	gfx_ofs;
+	POINT	pos;
 } NUMBER;
 
 typedef struct
