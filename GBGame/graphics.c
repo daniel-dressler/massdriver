@@ -1,15 +1,16 @@
+#include "standard.h"
 #include "graphics.h"
 #include "images.h"
 #include "state.h"
 
 UINT8 i, j;
-UINT8 blank = 0;
-UINT8 t_count = 0; 
-UINT8 m_count = 0;
-UINT8 et_count = 0;
-UINT8 em_count = 0;
-UINT8 et1_pos = 0;
-UINT8 et2_pos = 0;
+UINT8 blank = ZERO;
+UINT8 t_count = ZERO; 
+UINT8 m_count = ZERO;
+UINT8 et_count = ZERO;
+UINT8 em_count = ZERO;
+UINT8 et1_pos = ZERO;
+UINT8 et2_pos = ZERO;
 
 
 void  graphics_initbackground();
@@ -30,8 +31,8 @@ void  graphics_drawlives();
 
 void init_graphics()
 {
-	t_count = 0;
-	m_count = 0;
+	t_count = ZERO;
+	m_count = ZERO;
 
 	graphics_initbackground();
 	graphics_initplayership();
@@ -82,7 +83,7 @@ void tick_graphics()
 	}
 	else if( g_state.mode == MODE_GAME || g_state.mode == MODE_BOSS )
 	{
-		static UINT8 scroll = 0;
+		static UINT8 scroll = ZERO;
 		if( scroll++ & 0x01 )
 			SCY_REG--;
 
@@ -107,9 +108,9 @@ void graphics_initbackground()
 	{
 	case MODE_MENU:
 		set_bkg_data( 0, Title_tile_count, Title_tile_data );
- 		for( i = 0; i < 32; i += Title_tile_map_width )
+ 		for( i = ZERO; i < 32; i += Title_tile_map_width )
 		{
-			for( j = 0; j < 32; j += Title_tile_map_height )
+			for( j = ZERO; j < 32; j += Title_tile_map_height )
 			{
 				set_bkg_tiles( i, j, Title_tile_map_width, Title_tile_map_height, Title_map_data );
 			}
@@ -117,9 +118,9 @@ void graphics_initbackground()
 		break;
 	case MODE_SCORE:
 		set_bkg_data( 0, GameOver_tile_count, GameOver_tile_data );
- 		for( i = 0; i < 32; i += GameOver_tile_map_width )
+ 		for( i = ZERO; i < 32; i += GameOver_tile_map_width )
 		{
-			for( j = 0; j < 32; j += GameOver_tile_map_height )
+			for( j = ZERO; j < 32; j += GameOver_tile_map_height )
 			{
 				set_bkg_tiles( i, j, GameOver_tile_map_width, GameOver_tile_map_height, GameOver_map_data );
 			}
@@ -127,9 +128,9 @@ void graphics_initbackground()
 		break;
 	default:
 		set_bkg_data( 0, Stars_tile_count, Stars_tile_data );
- 		for( i = 0; i < 32; i += Stars_tile_map_width )
+ 		for( i = ZERO; i < 32; i += Stars_tile_map_width )
 		{
-			for( j = 0; j < 32; j += Stars_tile_map_height )
+			for( j = ZERO; j < 32; j += Stars_tile_map_height )
 			{
 				set_bkg_tiles( i, j, Stars_tile_map_width, Stars_tile_map_height, Stars_map_data );
 			}
@@ -141,7 +142,7 @@ void graphics_initbackground()
 void graphics_initplayership()
 {
 	// Set Player Ship Data
-	g_state.player1.gfx_ofs = m_count;
+	g_state.player1.gfx_ofs = (UINT8)m_count;
 	set_sprite_tile( m_count, t_count );
 	m_count++;
 	set_sprite_tile( m_count, t_count+2 );
@@ -155,18 +156,18 @@ void graphics_initbullets()
 	BULLET *bullet_walker;
 
 	if( m_count < 2 || t_count < 2 )
-		blank = 1;
+		blank = TRUE;
 
 	// Set Bullet Data
 	bullet_walker = g_state.enemy_bullets;
-	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
+	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		bullet_walker->gfx_ofs = m_count;
 		set_sprite_tile( m_count, t_count );
 	}
 
 	bullet_walker = g_state.player_bullets;
-	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
+	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
 	{
 		bullet_walker->gfx_ofs = m_count;
 		set_sprite_tile( m_count, t_count );
@@ -194,7 +195,7 @@ void graphics_initscore()
 	//	set_sprite_data( t_count, Number_tile_count, tile_data_walker );
 	//}
 
-	for( i = 0; i < MAX_SCORE_DIGITS; i++, m_count++, number_walker++ )
+	for( i = ZERO; i < MAX_SCORE_DIGITS; i++, m_count++, number_walker++ )
 	{
 		number_walker->gfx_ofs = m_count;
 		number_walker->pos.x = SCORE_POSITION_START_X + i << 3;
@@ -203,7 +204,7 @@ void graphics_initscore()
 		// Initializes them all to 0 (very start of tile data for numbers is 0)
 		set_sprite_tile( m_count, g_state.number_tile_start );
 	}
-	g_state.score_data.dirty_gfx = 1;
+	g_state.score_data.dirty_gfx = TRUE;
 }
 
 
@@ -220,7 +221,7 @@ void graphics_initlives()
 		
 	set_sprite_tile( m_count, g_state.number_tile_start + (lives << 1 ) );
 	m_count++;
-	g_state.life_data.dirty_gfx = 1;
+	g_state.life_data.dirty_gfx = TRUE;
 }
 
 void graphics_initenemyships()
@@ -235,7 +236,7 @@ void graphics_initenemyships()
 	{
 		// Set Boss Ship Data
 		g_state.boss.gfx_ofs = m_count;
-		for( i = 0; i < 36; i+=2 )
+		for( i = ZERO; i < 36; i+=2 )
 		{
 			set_sprite_tile( m_count, t_count + i );
 			m_count++;
@@ -258,7 +259,7 @@ void graphics_initenemyships()
 
 		// Set Enemy Ship Data
 		enemy_walker = g_state.enemies;
-		for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
+		for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
 		{
 			enemy_walker->gfx_ofs = m_count;
 			set_sprite_tile( m_count, t_count );
@@ -275,7 +276,7 @@ void graphics_initenemyships()
 
 		// Set Medium Enemy Ship Data
 		enemy_walker = g_state.enemiesmed;
-		for( i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++ )
+		for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
 		{
 			enemy_walker->gfx_ofs = m_count;
 			set_sprite_tile( m_count++, t_count );
@@ -306,7 +307,7 @@ UINT8 graphics_flash()
 			LCDC_REG = 0x67;
 			BGP_REG = 0xE4U;
 			DISPLAY_ON;
-			g_state.flash_screen = 0;
+			g_state.flash_screen = ZERO;
 		}
 	}
 	return g_state.flash_screen;
@@ -321,6 +322,7 @@ void graphics_drawplayer()
 	move_sprite( g_state.player1.gfx_ofs+1, 8 + x, y );
 }
 
+
 void graphics_drawenemies()
 {
 	UINT8 i, x, y;
@@ -328,12 +330,12 @@ void graphics_drawenemies()
 
 	// Enemies
 	enemy_walker = g_state.enemies;
-	for( i = 0; i < MAX_ENEMIES; i++, enemy_walker++ )
+	for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++ )
 	{
 		x = enemy_walker->pos.x;
 		y = enemy_walker->pos.y;
 		if( enemy_walker->active == 0 )
-			x = y = 0;
+			x = y = ZERO;
 
 		if( enemy_walker->gfx_dirty )
 		{
@@ -346,19 +348,23 @@ void graphics_drawenemies()
 				set_sprite_tile( enemy_walker->gfx_ofs, et1_pos );
 				break;
 			}
-			enemy_walker->gfx_dirty = 0;
+			enemy_walker->gfx_dirty = (UINT8)0;
 		}
 		move_sprite( enemy_walker->gfx_ofs, x, y );
+		//printf("%d\n", enemy_walker->gfx_ofs);
 	}
 
 	// Medium Enemies
 	enemy_walker = g_state.enemiesmed;
-	for( i = 0; i < MAX_MEDENEMIES; i++, enemy_walker++ )
+	for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
 	{
+		UINT8 ofs =  enemy_walker->gfx_ofs;
+		//printf("%d\n", ofs);
+
 		x = enemy_walker->pos.x;
 		y = enemy_walker->pos.y;
 		if( enemy_walker->active == 0 )
-			x = y = 0;
+			x = y = ZERO;
 
 		move_sprite( enemy_walker->gfx_ofs, x, y );
 		move_sprite( enemy_walker->gfx_ofs+1, x+8, y );
@@ -373,10 +379,10 @@ void graphics_drawboss()
 	y = g_state.boss.pos.y;
 	ofs = g_state.boss.gfx_ofs;
 
-	for( i = 0; i < 3; i++ )
+	for( i = ZERO; i < 3; i++ )
 	{
 		x = g_state.boss.pos.x;
-		for( j = 0; j < 6; j++ )
+		for( j = ZERO; j < 6; j++ )
 		{
 			move_sprite( ofs, x, y );
 			ofs++;
@@ -393,24 +399,24 @@ void graphics_drawbullets()
 
 	// Enemy bullets
 	bullet_walker = g_state.enemy_bullets;
-	for( i = 0; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
+	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
 	{
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
 		if( bullet_walker->active == 0 )
-			x = y = 0;
+			x = y = ZERO;
 
 		move_sprite( bullet_walker->gfx_ofs, x, y );
 	}
 
 	// Player Bullets
 	bullet_walker = g_state.player_bullets;
-	for( i = 0; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
+	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
 	{
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
 		if( bullet_walker->active == 0 )
-			x = y = 0;
+			x = y = ZERO;
 
 		move_sprite( bullet_walker->gfx_ofs, x, y );
 	}
@@ -434,7 +440,7 @@ void graphics_drawscore()
 		number_walker += (MAX_SCORE_DIGITS - 1);
 	
 		score = get_score();
-		for( i = MAX_SCORE_DIGITS; i > 0; i--, number_walker-- )
+		for( i = MAX_SCORE_DIGITS; i > ZERO; i--, number_walker-- )
 		{
 			x = number_walker->pos.x;
 			y = number_walker->pos.y;
@@ -445,7 +451,7 @@ void graphics_drawscore()
 			set_sprite_tile( number_walker->gfx_ofs, tileNumber );
 			move_sprite( number_walker->gfx_ofs, x, y );
 		}
-		g_state.score_data.dirty_gfx = 0;
+		g_state.score_data.dirty_gfx = ZERO;
 	}
 }
 
@@ -465,7 +471,7 @@ void  graphics_drawlives()
 
 		set_sprite_tile( num->gfx_ofs, tileNumber );
 		move_sprite( num->gfx_ofs, x, y );
-		g_state.life_data.dirty_gfx = 0;
+		g_state.life_data.dirty_gfx = ZERO;
 	}
 
 }
