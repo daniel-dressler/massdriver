@@ -35,13 +35,13 @@ void init_graphics()
 	graphics_initbackground();
 	graphics_initplayership();
 	graphics_initbullets();
+	graphics_initscore();
+	graphics_initlives();
 	
 	et_count = t_count;
 	em_count = m_count;
 	
 	graphics_initenemyships();
-	graphics_initscore();
-	graphics_initlives();
 
 	if( m_count >= 40 || blank )
 	{
@@ -178,10 +178,12 @@ void graphics_initscore()
 	
 	// Setting sprite data for all of the different number tiles
 	// Note that number_tile_count is the tiles per number, not in total
-	for( i = 0; i < 10; i++, tile_data_walker += Number_tile_sizes, t_count += Number_tile_count )
-	{
-		set_sprite_data( t_count, Number_tile_count, tile_data_walker );
-	}
+	set_sprite_data( t_count, 20, Number_tile_data );
+	t_count += 20;
+//	for( i = 0; i < 10; i++, tile_data_walker += Number_tile_sizes, t_count += Number_tile_count )
+	//{
+	//	set_sprite_data( t_count, Number_tile_count, tile_data_walker );
+	//}
 
 	for( i = 0; i < MAX_SCORE_DIGITS; i++, m_count++, number_walker++ )
 	{
