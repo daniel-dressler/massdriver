@@ -83,7 +83,7 @@ void init_gameai()
 
 	bullet_walker = g_state.player_bullets;
 	for (i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++) {
-		bullet_walker->active = ZERO;
+		//bullet_walker->active = ZERO;
 	}
 
 	g_state.mode = MODE_GAME;
@@ -115,7 +115,7 @@ void tick_gameai()
 		{
 			gameai_player( pad );
 			gameai_enemies();
-			gameai_bullets();
+			//gameai_bullets();
 		}
 		break;
 	case MODE_BOSS:
