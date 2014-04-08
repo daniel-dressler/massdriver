@@ -34,4 +34,7 @@ Workarounds:
 
 */
 
+#define ZERO ((UINT8)0)
+#define TRUE ((UINT8)1)
+
 #endif
