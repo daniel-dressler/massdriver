@@ -36,7 +36,7 @@ void init_graphics()
 
 	graphics_initbackground();
 	graphics_initplayership();
-	graphics_initbullets();
+	//graphics_initbullets();
 	graphics_initscore();
 	graphics_initlives();
 	
@@ -94,7 +94,7 @@ void tick_graphics()
 				graphics_drawenemies();
 			else if( g_state.mode == MODE_BOSS )
 				graphics_drawboss();
-			graphics_drawbullets();
+			//graphics_drawbullets();
 			graphics_drawscore();
 			graphics_drawlives();
 		}
