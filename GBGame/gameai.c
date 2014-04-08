@@ -86,7 +86,7 @@ void init_gameai()
 		bullet_walker->active = ZERO;
 	}
 
-	g_state.mode = MODE_GAME;
+	g_state.mode = MODE_SCORE;
 	g_state.flash_screen = ZERO;
 }
 
@@ -105,11 +105,17 @@ void tick_gameai()
 	{
 	case MODE_MENU:
 		if( pad )
+		{
+			g_state.score_data.dirty_gfx = 1;
 			g_state.mode = MODE_GAME;
+		}
 		break;
 	case MODE_SCORE:
 		if( pad )
+		{
+			g_state.score_data.dirty_gfx = 1;
 			g_state.mode = MODE_MENU;
+		}
 		break;
 	case MODE_GAME:
 		{

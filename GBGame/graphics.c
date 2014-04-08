@@ -19,6 +19,7 @@ void  graphics_initbullets();
 void  graphics_initenemyships();
 void  graphics_initscore();
 void  graphics_initlives();
+void  graphics_hidesprites();
 
 UINT8 graphics_flash();
 void  graphics_drawplayer();
@@ -71,7 +72,15 @@ void tick_graphics()
 	}
 
 	if( g_state.mode == MODE_MENU || g_state.mode == MODE_SCORE )
+	{
 		SCY_REG = -10;
+		graphics_hidesprites();
+		if( g_state.mode == MODE_SCORE )
+		{
+			g_state.score_data.dirty_gfx = 1;
+			graphics_drawscore();
+		}
+	}
 	else if( g_state.mode == MODE_GAME || g_state.mode == MODE_BOSS )
 	{
 		static UINT8 scroll = ZERO;
@@ -465,4 +474,12 @@ void  graphics_drawlives()
 		g_state.life_data.dirty_gfx = ZERO;
 	}
 
+}
+
+void  graphics_hidesprites()
+{
+	for( i = 0; i < 40; i++ )
+	{
+		move_sprite( i, 0, 0 );
+	}
 }
