@@ -124,7 +124,7 @@ void tick_gameai()
 		}
 		break;
 	case MODE_SCORE:
-		if( pad )
+		if( pad && (sub_tick > 60 || super_tick))
 		{
 			g_state.score_data.dirty_gfx = 1;
 			g_state.mode = MODE_MENU;
