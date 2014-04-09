@@ -5,10 +5,6 @@ State g_state;
 void init_state()
 {
 	g_state.time = 0;
-	g_state.player1.pos.x = 80;
-	g_state.player1.pos.y = 120;
-
-	g_state.life_data.lives = MAX_LIVES;
 }
 
 void tick_state()

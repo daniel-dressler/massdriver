@@ -60,9 +60,16 @@ void init_gameai()
 
 	g_state.player1.size.x = 16;
 	g_state.player1.size.y = 16;
+	g_state.player1.pos.x = 80;
+	g_state.player1.pos.y = 120;
+	g_state.life_data.lives = MAX_LIVES;
 
-	g_state.boss.pos.x = SCREENWIDTH >> 1;
+	g_state.boss.size.x = 46;
+	g_state.boss.size.y = 46;
+	g_state.boss.pos.x = (SCREENWIDTH >> 1) - 20;
 	g_state.boss.pos.y = 30;
+	g_state.boss.health = 30;
+	g_state.boss.active = 1;
 
 	for (i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = ZERO;
@@ -124,7 +131,7 @@ void tick_gameai()
 		}
 		break;
 	case MODE_SCORE:
-		if( pad && (sub_tick > 60 || super_tick))
+		if( pad && (sub_tick > 180 || super_tick))
 		{
 			g_state.score_data.dirty_gfx = 1;
 			g_state.mode = MODE_MENU;
@@ -137,7 +144,8 @@ void tick_gameai()
 			gameai_bullets();
 
 			// Goto boss when med is killed
-			if (g_state.enemiesmed[0].active == 0) {
+			if (g_state.mode == MODE_GAME &&
+					g_state.enemiesmed[0].active == 0) {
 				g_state.mode = MODE_BOSS;
 			}
 		}
@@ -147,6 +155,12 @@ void tick_gameai()
 			gameai_player( pad );
 			gameai_boss();
 			gameai_bullets();
+
+			// New round if boss got killed
+			if (g_state.mode == MODE_GAME &&
+					g_state.enemiesmed[0].active == 0) {
+				g_state.mode = MODE_BOSS;
+			}
 		}
 		break;
 	}
@@ -338,7 +352,7 @@ void gameai_boss()
 	by2 = by1 + g_state.boss.size.y;
 	if ((ex1 < bx2 && ex2 > bx1) &&
 		(ey1 < by2 && ey2 > by1)) {
-		g_state.boss.active = 2;
+		g_state.boss.active = 0;
 		g_state.boss.type = 0;
 		// Compiler is broken
 		// Without this it does not
@@ -351,11 +365,10 @@ void gameai_boss()
 	}
 
 
-	/*
 	// Fire an Enemy bullet
 	if ( div5 && div2 && next_free_enemy_bullet != NULL ) 
 	{
-		ENEMY *shooter = &(g_state.enemies[g_state.entropy_pool % MAX_ENEMIES]);
+		ENEMY *shooter = &(g_state.boss);
 		if( shooter->active == 1 )
 		{
 			BULLET *blt = next_free_enemy_bullet;
@@ -367,10 +380,9 @@ void gameai_boss()
 				(blt->size.x >> 1);
 			blt->pos.y = shooter->pos.y;
 			next_free_enemy_bullet = NULL;
-			play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
+			play_sound( SOUND_SHOOTING );
 		}
 	}
-	*/
 }
 
 void gameai_bullets()
@@ -398,10 +410,10 @@ void gameai_bullets()
 			//continue;
 		}
 
-		if( g_state.mode == MODE_GAME )
 		{
 			// Only hit check half enemies per frame
 			ENEMY *enemy_walker = g_state.enemies;
+			UINT8 num_enemies = ((MAX_ENEMIES >> 1) + MAX_MEDENEMIES);
 			static toggle = 0;
 			if (toggle) {
 				enemy_walker += MAX_ENEMIES >> 1;
@@ -410,7 +422,13 @@ void gameai_bullets()
 				toggle = 1;
 			}
 
-			for( k = ZERO; k < ((MAX_ENEMIES >> 1) + MAX_MEDENEMIES); k++, enemy_walker++ )
+
+			if (g_state.mode == MODE_BOSS) {
+				enemy_walker = &(g_state.boss);
+				num_enemies = 1;
+			}
+
+			for( k = ZERO; k < num_enemies; k++, enemy_walker++ )
 			{
 				if (k >= (MAX_ENEMIES >> 1)) {
 					enemy_walker = g_state.enemiesmed;
@@ -447,10 +465,6 @@ void gameai_bullets()
 					break;
 				}
 			}
-		}
-		else
-		{
-			// COLLIDE AGAINST BOSS
 		}
 	}
 
