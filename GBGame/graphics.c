@@ -254,9 +254,6 @@ void graphics_initscore()
 
 	for( i = ZERO; i < MAX_SCORE_DIGITS; i++, number_walker++ )
 	{
-		number_walker->pos.x = SCORE_POSITION_START_X + i << 3;
-		number_walker->pos.y = SCORE_POSITION_START_Y;
-		
 		// Initializes them all to 0 (very start of tile data for numbers is 0)
 		set_sprite_tile( START_SPRITE + 1, g_state.number_tile_start );
 	}
@@ -283,8 +280,13 @@ void graphics_drawscore()
 		for( i = MAX_SCORE_DIGITS; i > ZERO; i--, number_walker-- )
 		{
 			UINT8 sprite = START_SPRITE + i - 1;
-			x = number_walker->pos.x;
-			y = number_walker->pos.y;
+			if (g_state.mode == MODE_SCORE) {
+				x = 10 + (i - 1) << 3;
+				y = 100;
+			} else {
+				x = SCORE_POSITION_START_X + (i - 1) << 3;
+				y = SCORE_POSITION_START_Y;
+			}
 			currentDigit = score % 10;
 			score = score / 10;
 			tileNumber = g_state.number_tile_start + (currentDigit << 1 );
