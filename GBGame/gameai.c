@@ -65,7 +65,7 @@ void init_gameai()
 	g_state.life_data.lives = MAX_LIVES;
 
 	g_state.boss.size.x = 46;
-	g_state.boss.size.y = 46;
+	g_state.boss.size.y = 40;
 	g_state.boss.pos.x = (SCREENWIDTH >> 1) - 20;
 	g_state.boss.pos.y = 30;
 	g_state.boss.health = 30;
@@ -131,7 +131,7 @@ void tick_gameai()
 		}
 		break;
 	case MODE_SCORE:
-		if( pad && (sub_tick > 180 || super_tick))
+		if( pad && (super_tick > 0))
 		{
 			g_state.score_data.dirty_gfx = 1;
 			g_state.mode = MODE_MENU;
@@ -181,7 +181,7 @@ void gameai_player( UINT8 pad )
 	if( pad & J_RIGHT ) x += PLAYERSPEED;
 	if( x < 8 )   x = 8;
 	if( x > 155 ) x = 155;
-	if( y < 16 )  y = 16;
+	if( y < 80 )  y = 80;
 	if( y > 148 ) y = 148;
 	g_state.player1.pos.x = x;
 	g_state.player1.pos.y = y;
@@ -378,7 +378,8 @@ void gameai_boss()
 			blt->pos.x = shooter->pos.x +
 				(shooter->size.x >> 1) -
 				(blt->size.x >> 1);
-			blt->pos.y = shooter->pos.y;
+			blt->pos.y = shooter->pos.y +
+				(shooter->size.y >> 1);
 			next_free_enemy_bullet = NULL;
 			play_sound( SOUND_SHOOTING );
 		}
