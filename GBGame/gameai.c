@@ -34,8 +34,12 @@ void add_score(UINT16 x)
 void dec_lives()
 {
 	UINT8 lives = get_lives();
-	if( lives > 0 )
+	if( lives > 0 ) {
 		lives--;
+	} else {
+		g_state.mode = MODE_SCORE;
+		g_state.score_data.dirty_gfx = TRUE;
+	}
 
 	g_state.life_data.lives = lives;
 	g_state.life_data.dirty_gfx = TRUE;
@@ -89,6 +93,11 @@ void init_gameai()
 		bullet_walker->active = ZERO;
 	}
 
+	bullet_walker = g_state.enemy_bullets;
+	for (i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++) {
+		bullet_walker->active = ZERO;
+	}
+
 	g_state.mode = MODE_MENU;
 	g_state.flash_screen = ZERO;
 }
@@ -110,6 +119,7 @@ void tick_gameai()
 		if( pad )
 		{
 			g_state.score_data.dirty_gfx = 1;
+			init_gameai();
 			g_state.mode = MODE_GAME;
 		}
 		break;
