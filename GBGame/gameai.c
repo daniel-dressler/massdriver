@@ -166,6 +166,8 @@ void tick_gameai()
 	}
 }
 
+#define PLAYER_Y_MAX 80
+
 void gameai_player( UINT8 pad )
 {
 	static UINT8 shoot_cooloff = ZERO;
@@ -181,7 +183,7 @@ void gameai_player( UINT8 pad )
 	if( pad & J_RIGHT ) x += PLAYERSPEED;
 	if( x < 8 )   x = 8;
 	if( x > 155 ) x = 155;
-	if( y < 80 )  y = 80;
+	if( y < PLAYER_Y_MAX )  y = PLAYER_Y_MAX;
 	if( y > 148 ) y = 148;
 	g_state.player1.pos.x = x;
 	g_state.player1.pos.y = y;
@@ -272,7 +274,7 @@ void gameai_enemies()
 			{
 				enemy_walker->active = ZERO;
 			}
-			else
+			else if ( y > PLAYER_Y_MAX + 8)
 			{
 				bx1 = enemy_walker->pos.x;
 				bx2 = bx1 + enemy_walker->size.x;
@@ -339,30 +341,6 @@ void gameai_boss()
 	UINT8 div7 = (sub_tick % 7) == ZERO;
 	UINT8 div5 = (sub_tick % 5) == ZERO;
 	UINT8 div2 = !(sub_tick & 1);
-
-	UINT8 bx1, bx2, by1, by2;
-	UINT8 ex1 = g_state.player1.pos.x;
-	UINT8 ex2 = ex1 + g_state.player1.size.x;
-	UINT8 ey1 = g_state.player1.pos.y;
-	UINT8 ey2 = ey1 + g_state.player1.size.y;
-
-	bx1 = g_state.boss.pos.x;
-	bx2 = bx1 + g_state.boss.size.x;
-	by1 = g_state.boss.pos.y;
-	by2 = by1 + g_state.boss.size.y;
-	if ((ex1 < bx2 && ex2 > bx1) &&
-		(ey1 < by2 && ey2 > by1)) {
-		g_state.boss.active = 0;
-		g_state.boss.type = 0;
-		// Compiler is broken
-		// Without this it does not
-		// perform these stmts
-		if (ex1 > bx2)
-			printf("Please ignore");
-		//enemy_walker->gfx_dirty = 1;
-		dec_lives();
-		play_sound( SOUND_EXPLOSION );
-	}
 
 
 	// Fire an Enemy bullet
