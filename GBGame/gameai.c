@@ -45,6 +45,7 @@ void dec_lives()
 
 void gameai_player( UINT8 pad );
 void gameai_enemies();
+void gameai_boss();
 void gameai_bullets();
 
 void init_gameai()
@@ -56,8 +57,8 @@ void init_gameai()
 	g_state.player1.size.x = 16;
 	g_state.player1.size.y = 16;
 
-	g_state.boss.pos.x = 50;
-	g_state.boss.pos.y = 50;
+	g_state.boss.pos.x = SCREENWIDTH >> 1;
+	g_state.boss.pos.y = 30;
 
 	for (i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = ZERO;
@@ -88,7 +89,7 @@ void init_gameai()
 		bullet_walker->active = ZERO;
 	}
 
-	g_state.mode = MODE_SCORE;
+	g_state.mode = MODE_MENU;
 	g_state.flash_screen = ZERO;
 }
 
@@ -134,6 +135,7 @@ void tick_gameai()
 	case MODE_BOSS:
 		{
 			gameai_player( pad );
+			gameai_boss();
 			gameai_bullets();
 		}
 		break;
@@ -306,6 +308,59 @@ void gameai_enemies()
 			play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
 		}
 	}
+}
+
+void gameai_boss()
+{
+	UINT8 div7 = (sub_tick % 7) == ZERO;
+	UINT8 div5 = (sub_tick % 5) == ZERO;
+	UINT8 div2 = !(sub_tick & 1);
+
+	UINT8 bx1, bx2, by1, by2;
+	UINT8 ex1 = g_state.player1.pos.x;
+	UINT8 ex2 = ex1 + g_state.player1.size.x;
+	UINT8 ey1 = g_state.player1.pos.y;
+	UINT8 ey2 = ey1 + g_state.player1.size.y;
+
+	bx1 = g_state.boss.pos.x;
+	bx2 = bx1 + g_state.boss.size.x;
+	by1 = g_state.boss.pos.y;
+	by2 = by1 + g_state.boss.size.y;
+	if ((ex1 < bx2 && ex2 > bx1) &&
+		(ey1 < by2 && ey2 > by1)) {
+		g_state.boss.active = 2;
+		g_state.boss.type = 0;
+		// Compiler is broken
+		// Without this it does not
+		// perform these stmts
+		if (ex1 > bx2)
+			printf("Please ignore");
+		//enemy_walker->gfx_dirty = 1;
+		dec_lives();
+		play_sound( SOUND_EXPLOSION );
+	}
+
+
+	/*
+	// Fire an Enemy bullet
+	if ( div5 && div2 && next_free_enemy_bullet != NULL ) 
+	{
+		ENEMY *shooter = &(g_state.enemies[g_state.entropy_pool % MAX_ENEMIES]);
+		if( shooter->active == 1 )
+		{
+			BULLET *blt = next_free_enemy_bullet;
+			blt->active = TRUE;
+			blt->size.x = 8;
+			blt->size.y = 8;
+			blt->pos.x = shooter->pos.x +
+				(shooter->size.x >> 1) -
+				(blt->size.x >> 1);
+			blt->pos.y = shooter->pos.y;
+			next_free_enemy_bullet = NULL;
+			play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
+		}
+	}
+	*/
 }
 
 void gameai_bullets()
