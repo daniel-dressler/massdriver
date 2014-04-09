@@ -124,6 +124,11 @@ void tick_gameai()
 			gameai_player( pad );
 			gameai_enemies();
 			gameai_bullets();
+
+			// Goto boss when med is killed
+			if (g_state.enemiesmed[0].active == 0) {
+				g_state.mode = MODE_BOSS;
+			}
 		}
 		break;
 	case MODE_BOSS:
@@ -251,7 +256,11 @@ void gameai_enemies()
 					(ey1 < by2 && ey2 > by1)) {
 					enemy_walker->active = 2;
 					enemy_walker->type = 0;
-					//printf("here");
+					// Compiler is broken
+					// Without this it does not
+					// perform these stmts
+					if (ex1 > bx2)
+						printf("Please ignore");
 					enemy_walker->gfx_dirty = 1;
 					dec_lives();
 					play_sound( SOUND_EXPLOSION );

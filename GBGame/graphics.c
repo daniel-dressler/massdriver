@@ -398,9 +398,14 @@ void graphics_drawenemies()
 
 	// Enemies
 	enemy_walker = g_state.enemies;
-	for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++ )
+	for( i = ZERO; i < MAX_ENEMIES + MAX_MEDENEMIES; i++, enemy_walker++ )
 	{
 		UINT8 sprite = START_SPRITE + i;
+
+		if (i == MAX_ENEMIES) {
+			enemy_walker = g_state.enemiesmed;
+		}
+
 		x = enemy_walker->pos.x;
 		y = enemy_walker->pos.y;
 		if( enemy_walker->active == 0 )
@@ -434,26 +439,14 @@ void graphics_drawenemies()
 				break;
 			}
 		}
+
 		move_sprite( sprite, x, y );
+		if (enemy_walker->type == 2) {
+			move_sprite( sprite+1, x+8, y );
+			move_sprite( sprite+2, x+16, y );
+		}
 		//printf("%d\n", enemy_walker->gfx_ofs);
 	}
-
-	// Medium Enemies
-	enemy_walker = g_state.enemiesmed;
-	for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
-	{
-		UINT8 sprite = START_SPRITE + MAX_ENEMIES + i;
-		//printf("%d\n", ofs);
-
-		x = enemy_walker->pos.x;
-		y = enemy_walker->pos.y;
-		if( enemy_walker->active == 0 )
-			x = y = ZERO;
-
-		move_sprite( sprite, x, y );
-		move_sprite( sprite+1, x+8, y );
-		move_sprite( sprite+2, x+16, y );
-	}	
 }
 
 void graphics_drawboss()
