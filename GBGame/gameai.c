@@ -79,7 +79,7 @@ void init_gameai()
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 8;
 		enemy_walker->age = ZERO;
-		enemy_walker->gfx_dirty = ZERO;
+		enemy_walker->gfx_dirty = TRUE;
 	}
 
 	enemy_walker = g_state.enemiesmed;
@@ -157,9 +157,13 @@ void tick_gameai()
 			gameai_bullets();
 
 			// New round if boss got killed
-			if (g_state.mode == MODE_GAME &&
-					g_state.enemiesmed[0].active == 0) {
-				g_state.mode = MODE_BOSS;
+			// Note: Skip explode animation
+			// @Phil: If you add exploding for the boss
+			// change the 2 to a 0
+			if (g_state.mode == MODE_BOSS &&
+					g_state.boss.active == 2) {
+				init_gameai();
+				g_state.mode = MODE_GAME;
 			}
 		}
 		break;
