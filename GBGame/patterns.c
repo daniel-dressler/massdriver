@@ -92,3 +92,12 @@ void pattern_leftdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
 	pattern_rightdownslip(time, y_out, x_out);
 }
+
+void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
+{
+	UINT8 x = 50;
+	UINT8 y = 50;
+
+	*x_out = x;
+	*y_out = y;
+}

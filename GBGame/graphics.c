@@ -6,7 +6,6 @@
 UINT8 i, j;
 UINT8 blank = ZERO;
 UINT8 t_count = ZERO; 
-UINT8 m_count = ZERO;
 UINT8 et_count = ZERO;
 UINT8 em_count = ZERO;
 UINT8 et1_pos = ZERO;
@@ -32,7 +31,6 @@ void  graphics_drawlives();
 void init_graphics()
 {
 	t_count = ZERO;
-	m_count = ZERO;
 
 	graphics_initbackground();
 	graphics_initplayership();
@@ -41,17 +39,8 @@ void init_graphics()
 	graphics_initlives();
 	
 	et_count = t_count;
-	em_count = m_count;
 	
 	graphics_initenemyships();
-
-	if( m_count >= 40 || blank )
-	{
-		DISPLAY_OFF;
-		LCDC_REG = 0x66;
-		BGP_REG = 0x01U;
-		DISPLAY_ON;
-	}
 
 	WX_REG = 1000;
 	WY_REG = 1000;
@@ -140,147 +129,6 @@ void graphics_initbackground()
 	}
 }
 
-void graphics_initplayership()
-{
-	// Set Player Ship Data
-	set_sprite_tile( m_count, t_count );
-	m_count++;
-	set_sprite_tile( m_count, t_count+2 );
-	m_count++;
-	set_sprite_data( t_count, Ship_tile_count, Ship_tile_data );
-	t_count += Ship_tile_count;
-}
-
-void graphics_initbullets()
-{
-	BULLET *bullet_walker;
-
-	if( m_count < 2 || t_count < 2 )
-		blank = TRUE;
-
-	// Set Bullet Data
-	bullet_walker = g_state.enemy_bullets;
-	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
-	{
-		set_sprite_tile( m_count, t_count );
-	}
-
-	bullet_walker = g_state.player_bullets;
-	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
-	{
-		set_sprite_tile( m_count, t_count );
-	}
-
-	set_sprite_data( t_count, Bullet_tile_count, Bullet_tile_data );
-	t_count += Bullet_tile_count;
-}
-
-void graphics_initscore()
-{
-	NUMBER* number_walker;
-	unsigned char *tile_data_walker;
-
-	tile_data_walker = Number_tile_data;
-	number_walker = g_state.score_data.digits;
-	g_state.number_tile_start = t_count;
-	
-	// Setting sprite data for all of the different number tiles
-	// Note that number_tile_count is the tiles per number, not in total
-	set_sprite_data( t_count, 20, Number_tile_data );
-	t_count += 20;
-//	for( i = 0; i < 10; i++, tile_data_walker += Number_tile_sizes, t_count += Number_tile_count )
-	//{
-	//	set_sprite_data( t_count, Number_tile_count, tile_data_walker );
-	//}
-
-	for( i = ZERO; i < MAX_SCORE_DIGITS; i++, m_count++, number_walker++ )
-	{
-		number_walker->pos.x = SCORE_POSITION_START_X + i << 3;
-		number_walker->pos.y = SCORE_POSITION_START_Y;
-		
-		// Initializes them all to 0 (very start of tile data for numbers is 0)
-		set_sprite_tile( m_count, g_state.number_tile_start );
-	}
-	g_state.score_data.dirty_gfx = TRUE;
-}
-
-
-void graphics_initlives()
-{
-	NUMBER* number_walker;
-	UINT8 lives;
-
-	lives = get_lives();
-	number_walker = &g_state.life_data.digit;
-	number_walker->pos.x = 8;
-	number_walker->pos.y = SCORE_POSITION_START_Y;
-		
-	set_sprite_tile( m_count, g_state.number_tile_start + (lives << 1 ) );
-	m_count++;
-	g_state.life_data.dirty_gfx = TRUE;
-}
-
-void graphics_initenemyships()
-{
-	t_count = et_count;
-	m_count = em_count;
-
-	for( i = m_count; i < 40; i++ )
-		move_sprite( i, 0, 0 );
-
-	if( g_state.mode == MODE_BOSS )
-	{
-		// Set Boss Ship Data
-		for( i = ZERO; i < 36; i+=2 )
-		{
-			set_sprite_tile( m_count, t_count + i );
-			m_count++;
-		}
-
-		set_sprite_data( t_count, Boss_tile_count, Boss_tile_data );
-		t_count += Boss_tile_count;
-		
-		if( m_count >= 39 || t_count >= 128 || blank )
-		{
-			DISPLAY_OFF;
-			LCDC_REG = 0x66;
-			BGP_REG = 0x01U;
-			DISPLAY_ON;
-		}
-	}
-	else
-	{
-		ENEMY *enemy_walker;
-
-		// Set Enemy Ship Data
-		enemy_walker = g_state.enemies;
-		for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
-		{
-			set_sprite_tile( m_count, t_count );
-		}
-
-		et1_pos = t_count;
-		set_sprite_data( t_count, Enemy_tile_count, Enemy_tile_data );
-		t_count += Enemy_tile_count;
-
-		// Set Enemy2 Ship Data
-		et2_pos = t_count;
-		set_sprite_data( t_count, Enemy2_tile_count, Enemy2_tile_data );
-		t_count += Enemy2_tile_count;
-
-		// Set Medium Enemy Ship Data
-		enemy_walker = g_state.enemiesmed;
-		for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
-		{
-			set_sprite_tile( m_count++, t_count );
-			set_sprite_tile( m_count++, t_count+2 );
-			set_sprite_tile( m_count++, t_count+4 );
-		}
-
-		set_sprite_data( t_count, EnemyMed_tile_count, EnemyMed_tile_data );
-		t_count += EnemyMed_tile_count;
-	}
-}
 
 UINT8 graphics_flash()
 {
@@ -306,6 +154,16 @@ UINT8 graphics_flash()
 	return g_state.flash_screen;
 }
 
+
+void graphics_initplayership()
+{
+	// Set Player Ship Data
+	set_sprite_tile( 0, t_count );
+	set_sprite_tile( 1, t_count+2 );
+	set_sprite_data( t_count, Ship_tile_count, Ship_tile_data );
+	t_count += Ship_tile_count;
+}
+
 void graphics_drawplayer()
 {
 	UINT8 x, y;
@@ -315,6 +173,27 @@ void graphics_drawplayer()
 	move_sprite( 1, 8 + x, y );
 }
 #define START_SPRITE (2)
+
+void graphics_initbullets()
+{
+	BULLET *bullet_walker;
+
+	// Set Bullet Data
+	bullet_walker = g_state.enemy_bullets;
+	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
+	{
+		set_sprite_tile( START_SPRITE + i, t_count );
+	}
+
+	bullet_walker = g_state.player_bullets;
+	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
+	{
+		set_sprite_tile( START_SPRITE + MAX_ENEMY_BULLETS + i, t_count );
+	}
+
+	set_sprite_data( t_count, Bullet_tile_count, Bullet_tile_data );
+	t_count += Bullet_tile_count;
+}
 
 void graphics_drawbullets()
 {
@@ -351,6 +230,31 @@ void graphics_drawbullets()
 #define START_SPRITE (2 + MAX_ENEMY_BULLETS + MAX_PLAYER_BULLETS)
 
 
+void graphics_initscore()
+{
+	NUMBER* number_walker;
+	unsigned char *tile_data_walker;
+
+	tile_data_walker = Number_tile_data;
+	number_walker = g_state.score_data.digits;
+	g_state.number_tile_start = t_count;
+	
+	// Setting sprite data for all of the different number tiles
+	// Note that number_tile_count is the tiles per number, not in total
+	set_sprite_data( t_count, 20, Number_tile_data );
+	t_count += 20;
+
+	for( i = ZERO; i < MAX_SCORE_DIGITS; i++, number_walker++ )
+	{
+		number_walker->pos.x = SCORE_POSITION_START_X + i << 3;
+		number_walker->pos.y = SCORE_POSITION_START_Y;
+		
+		// Initializes them all to 0 (very start of tile data for numbers is 0)
+		set_sprite_tile( START_SPRITE + 1, g_state.number_tile_start );
+	}
+	g_state.score_data.dirty_gfx = TRUE;
+}
+
 // No more efficient way could be found for drawing the score.
 // Tried sprintf and it was actually slower than this
 // Tried to look up any sort of bitshifting pattern for division and couldn't find any.
@@ -386,6 +290,20 @@ void graphics_drawscore()
 #undef START_SPRITE
 #define START_SPRITE (2 + MAX_ENEMY_BULLETS + MAX_PLAYER_BULLETS + MAX_SCORE_DIGITS)
 
+void graphics_initlives()
+{
+	NUMBER* number_walker;
+	UINT8 lives;
+
+	lives = get_lives();
+	number_walker = &g_state.life_data.digit;
+	number_walker->pos.x = 8;
+	number_walker->pos.y = SCORE_POSITION_START_Y;
+		
+	set_sprite_tile( START_SPRITE, g_state.number_tile_start + (lives << 1 ) );
+	g_state.life_data.dirty_gfx = TRUE;
+}
+
 void  graphics_drawlives()
 {
 	NUMBER* num;
@@ -410,6 +328,60 @@ void  graphics_drawlives()
 #undef START_SPRITE
 #define START_SPRITE (2 + MAX_ENEMY_BULLETS + MAX_PLAYER_BULLETS + MAX_SCORE_DIGITS \
 		+ 1) 
+
+void graphics_initenemyships()
+{
+	t_count = et_count;
+
+	for( i = 0; i < 40; i++ )
+		move_sprite( i, 0, 0 );
+
+	if( g_state.mode == MODE_BOSS )
+	{
+		// Set Boss Ship Data
+		for( i = ZERO; i < 18; i++ )
+		{
+			set_sprite_tile( START_SPRITE + i, t_count + i*2 );
+		}
+
+		set_sprite_data( t_count, Boss_tile_count, Boss_tile_data );
+		t_count += Boss_tile_count;
+		
+	}
+	else
+	{
+		ENEMY *enemy_walker;
+
+		// Set Enemy Ship Data
+		enemy_walker = g_state.enemies;
+		for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++ )
+		{
+			set_sprite_tile( START_SPRITE + i, t_count );
+		}
+
+		et1_pos = t_count;
+		set_sprite_data( t_count, Enemy_tile_count, Enemy_tile_data );
+		t_count += Enemy_tile_count;
+
+		// Set Enemy2 Ship Data
+		et2_pos = t_count;
+		set_sprite_data( t_count, Enemy2_tile_count, Enemy2_tile_data );
+		t_count += Enemy2_tile_count;
+
+		// Set Medium Enemy Ship Data
+		enemy_walker = g_state.enemiesmed;
+		for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
+		{
+			UINT8 sprite = START_SPRITE + MAX_ENEMIES + i;
+			set_sprite_tile( sprite, t_count );
+			set_sprite_tile( sprite+1, t_count+2 );
+			set_sprite_tile( sprite+2, t_count+4 );
+		}
+
+		set_sprite_data( t_count, EnemyMed_tile_count, EnemyMed_tile_data );
+		t_count += EnemyMed_tile_count;
+	}
+}
 
 void graphics_drawenemies()
 {

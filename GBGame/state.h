@@ -4,7 +4,7 @@
 #include "standard.h"
 
 #define MAX_ENEMIES			6
-#define MAX_MEDENEMIES		2
+#define MAX_MEDENEMIES		1
 #define MAX_ENEMY_BULLETS	3
 #define MAX_PLAYER_BULLETS	3
 #define MAX_SCORE_DIGITS	3

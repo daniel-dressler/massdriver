@@ -61,7 +61,7 @@ void init_gameai()
 
 	for (i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = ZERO;
-		enemy_walker->type = TRUE;
+		enemy_walker->type = 1;
 		enemy_walker->pos.y = ZERO;
 		enemy_walker->pos.x = ZERO;
 		enemy_walker->size.y = 16;
@@ -73,11 +73,12 @@ void init_gameai()
 	enemy_walker = g_state.enemiesmed;
 	for (i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = TRUE;
-		enemy_walker->type = ZERO;
+		enemy_walker->type = 2;
 		enemy_walker->pos.y = 50;
 		enemy_walker->pos.x = 50;
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 24;
+		enemy_walker->pattern = 8;
 		enemy_walker->age = ZERO;
 	}
 
@@ -203,8 +204,12 @@ void gameai_enemies()
 	UINT8 ey1 = g_state.player1.pos.y;
 	UINT8 ey2 = ey1 + g_state.player1.size.y;
 
-	for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++ )
+	for( i = ZERO; i < MAX_ENEMIES + MAX_MEDENEMIES; i++, enemy_walker++ )
 	{
+		if (i == MAX_ENEMIES) {
+			enemy_walker = g_state.enemiesmed;
+		}
+
 		if( enemy_walker->active )
 		{
 			w = (enemy_walker->age)++;
@@ -218,6 +223,7 @@ void gameai_enemies()
 				case 5:		pattern_swing(w, &x, &y);			break;
 				case 6:		pattern_sin(w, &x, &y);				break;
 				case 7:		pattern_basic(w, &x, &y);			break;
+				case 8:		pattern_med(w, &x, &y);	            break;
 				default:	pattern_sin(w, &x, &y);				break;
 			}
 			enemy_walker->pos.x = x;
