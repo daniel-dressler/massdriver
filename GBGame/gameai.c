@@ -225,7 +225,7 @@ void gameai_enemies()
 				case 7:		pattern_basic(w, &x, &y);			break;
 				case 8:		pattern_med(w, &x, &y);	            break;
 				default:	pattern_sin(w, &x, &y);				break;
-			}pattern_med(w, &x, &y);
+			}
 			enemy_walker->pos.x = x;
 			enemy_walker->pos.y = y;
 
