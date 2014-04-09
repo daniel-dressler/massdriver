@@ -97,16 +97,17 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
 	UINT8 x = (SCREENWIDTH >> 1) - 8;
 	UINT8 y = 20;
+	struct pattern_point_t *pt;
 
 #define LEG 30
 	if (time < LEG) {
 		x = x - time;
 	} else if (time < LEG + qrt_circle_16_size) {
-		struct pattern_point_t *pt = qrt_circle_16 + time - LEG; 
+		pt = qrt_circle_16 + time - LEG; 
 		x -= LEG + pt->x;
 		y += 16 - pt->y;
 	} else if (time < 64 + qrt_circle_16_size) {
-		struct pattern_point_t *pt = qrt_circle_16 + time - 64;
+		pt = qrt_circle_16 + time - 64;
 		x -= LEG + pt->y;
 		y += 16 + pt->x;
 	} else if (time < 125 + LEG) {
@@ -114,14 +115,21 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 		x += time - (125 - LEG);
 		y += 32;
 	} else if (time < 125 + LEG + qrt_circle_16_size) {
-		struct pattern_point_t *pt = qrt_circle_16 + time - (125 + LEG);
-		x += LEG + pt->x;
-		y += 16 + pt->y;
-	} else if (time < 125 + 64 + qrt_circle_16_size) {
-		struct pattern_point_t *pt = qrt_circle_16 +
-			(qrt_circle_16_size - (time - (125 + 64 - 1)));
-		x += LEG + pt->x;
-		y += 17 - pt->y;
+		pt = qrt_circle_16 + time - (125 + LEG);
+		x += pt->x;
+		y += pt->y;
+		x -= 20;
+		y -= 10;
+//		x += LEG + pt->x;
+//		y += 16 + pt->y;
+	} else if (time < 125 + 60 + qrt_circle_16_size) {
+		pt = qrt_circle_16 + (qrt_circle_16_size - (time - (125 + 64 - 1)));
+		x += pt->x;
+		y -= pt->y;
+		x += 24;
+		y += 12;
+//		x += LEG + pt->x;
+//		y += 17 - pt->y;
 	} else if (time < 255) {
 		x += LEG - (time - (255 - LEG));
 	}

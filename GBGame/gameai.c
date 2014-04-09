@@ -219,10 +219,15 @@ void gameai_player( UINT8 pad )
 		if( g_state.mode == MODE_GAME ) {
 			UINT8 i = 0;
 			ENEMY* enemy_walker = g_state.enemies;
-			for (; i < MAX_ENEMIES; i++, enemy_walker++) {
-				enemy_walker->active = 2;
-				enemy_walker->gfx_dirty = 1;
-				play_sound( SOUND_EXPLOSION );
+			for (; i < MAX_ENEMIES; i++, enemy_walker++) 
+			{
+				if( enemy_walker->active == 1 )
+				{
+					enemy_walker->active = 2;
+					enemy_walker->type = 0;
+					enemy_walker->gfx_dirty = 1;
+					play_sound( SOUND_EXPLOSION );
+				}
 			}
 		} else {
 			g_state.mode = MODE_GAME;
