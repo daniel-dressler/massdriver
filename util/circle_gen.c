@@ -34,12 +34,18 @@ void gen_table(struct point pts[], int pts_size, int scale)
 
 		size++;
 		print_point(i / scale, y_base - y_mix);
+
+		y_old = y;
 		while (y_diff > y_mix) {
 			y_mix += 1;
-			print_point(i / scale, y_base - y_mix);
+			y = y_base - y_mix;
+			print_point(i / scale, y);
+			y_old = y;
 			size++;
+			if ((int)y == 0) {
+				break;
+			}
 		}
-		y_old = y;
 	}
 
 	printf("	{%d, 100}\n};\n", (i -= scale) / scale );

@@ -1,6 +1,6 @@
 		struct pattern_point_t {			UINT8 x;			UINT8 y;		};
 
-const struct pattern_point_t qrt_circle_64[] = { 
+struct pattern_point_t qrt_circle_64[] = { 
 	{0, 64},
 	{1, 64},
 	{2, 64},
@@ -132,9 +132,9 @@ const struct pattern_point_t qrt_circle_64[] = {
 	{64, 0},
 	{64, 100}
 };
-const UINT8 qrt_circle_64_size = 129;
+UINT8 qrt_circle_64_size = 129;
 
-const struct pattern_point_t qrt_circle_32[] = { 
+struct pattern_point_t qrt_circle_32[] = { 
 	{0, 32},
 	{1, 32},
 	{2, 32},
@@ -145,29 +145,26 @@ const struct pattern_point_t qrt_circle_32[] = {
 	{6, 31},
 	{7, 31},
 	{7, 30},
-	{8, 31},
+	{8, 30},
 	{9, 31},
 	{9, 30},
 	{10, 30},
 	{11, 30},
 	{11, 29},
-	{12, 30},
 	{12, 29},
 	{13, 29},
 	{13, 28},
-	{14, 29},
+	{14, 28},
 	{15, 29},
 	{15, 28},
 	{16, 28},
 	{16, 27},
 	{17, 27},
-	{17, 26},
 	{18, 27},
 	{18, 26},
 	{19, 26},
 	{19, 25},
 	{20, 25},
-	{20, 24},
 	{21, 25},
 	{21, 24},
 	{22, 24},
@@ -183,7 +180,6 @@ const struct pattern_point_t qrt_circle_32[] = {
 	{26, 18},
 	{27, 18},
 	{27, 17},
-	{27, 16},
 	{28, 17},
 	{28, 16},
 	{28, 15},
@@ -193,7 +189,6 @@ const struct pattern_point_t qrt_circle_32[] = {
 	{30, 13},
 	{30, 12},
 	{30, 11},
-	{30, 10},
 	{31, 11},
 	{31, 10},
 	{31, 9},
@@ -209,9 +204,9 @@ const struct pattern_point_t qrt_circle_32[] = {
 	{32, 0},
 	{32, 100}
 };
-const UINT8 qrt_circle_32_size = 72;
+UINT8 qrt_circle_32_size = 67;
 
-const struct pattern_point_t qrt_circle_16[] = { 
+struct pattern_point_t qrt_circle_16[] = { 
 	{0, 16},
 	{1, 16},
 	{2, 16},
@@ -219,17 +214,14 @@ const struct pattern_point_t qrt_circle_16[] = {
 	{3, 15},
 	{4, 15},
 	{4, 14},
-	{5, 15},
 	{5, 14},
 	{6, 15},
 	{6, 14},
 	{7, 14},
-	{7, 13},
 	{8, 14},
 	{8, 13},
 	{9, 13},
 	{9, 12},
-	{10, 13},
 	{10, 12},
 	{11, 12},
 	{11, 11},
@@ -238,63 +230,54 @@ const struct pattern_point_t qrt_circle_16[] = {
 	{13, 10},
 	{13, 9},
 	{13, 8},
-	{14, 9},
 	{14, 8},
 	{14, 7},
 	{15, 7},
 	{15, 6},
 	{15, 5},
-	{15, 4},
 	{16, 5},
 	{16, 4},
 	{16, 3},
 	{16, 2},
 	{16, 1},
 	{16, 0},
-	{16, 0},
 	{16, 100}
 };
-const UINT8 qrt_circle_16_size = 40;
+UINT8 qrt_circle_16_size = 34;
 
-const struct pattern_point_t qrt_circle_8[] = { 
+struct pattern_point_t qrt_circle_8[] = { 
 	{0, 8},
 	{1, 8},
 	{1, 7},
 	{2, 7},
-	{2, 6},
 	{3, 7},
 	{3, 6},
-	{4, 7},
 	{4, 6},
 	{5, 6},
 	{5, 5},
-	{6, 6},
 	{6, 5},
-	{7, 5},
+	{6, 4},
 	{7, 4},
 	{7, 3},
 	{8, 3},
 	{8, 2},
 	{8, 1},
 	{8, 0},
-	{8, 0},
 	{8, 100}
 };
-const UINT8 qrt_circle_8_size = 21;
+UINT8 qrt_circle_8_size = 17;
 
-const struct pattern_point_t qrt_circle_4[] = { 
+struct pattern_point_t qrt_circle_4[] = { 
 	{0, 4},
 	{1, 4},
 	{1, 3},
 	{2, 3},
-	{2, 2},
 	{3, 3},
 	{3, 2},
 	{4, 2},
 	{4, 1},
 	{4, 0},
-	{4, 0},
 	{4, 100}
 };
-const UINT8 qrt_circle_4_size = 11;
+UINT8 qrt_circle_4_size = 9;
 
