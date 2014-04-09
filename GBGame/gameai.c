@@ -295,7 +295,6 @@ void gameai_bullets()
 	bullet_walker = g_state.player_bullets;
 	for (i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++) 
 	{
-		ENEMY *enemy_walker = g_state.enemies;
 
 		bullet_walker->pos.y -= PLAYERBULLETSPEED;
 		if (bullet_walker->pos.y < 16) {
@@ -311,7 +310,17 @@ void gameai_bullets()
 
 		if( g_state.mode == MODE_GAME )
 		{
-			for( k = ZERO; k < MAX_ENEMIES; k++, enemy_walker++ )
+			// Only hit check half enemies per frame
+			ENEMY *enemy_walker = g_state.enemies;
+			static toggle = 0;
+			if (toggle) {
+				enemy_walker += MAX_ENEMIES >> 1;
+				toggle = 0;
+			} else {
+				toggle = 1;
+			}
+
+			for( k = ZERO; k < MAX_ENEMIES >> 1; k++, enemy_walker++ )
 			{
 				ex1 = enemy_walker->pos.x;
 				ex2 = ex1 + enemy_walker->size.x;
