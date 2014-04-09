@@ -366,7 +366,7 @@ void gameai_boss()
 			blt->size.x = 8;
 			blt->size.y = 8;
 			blt->pos.x = shooter->pos.x +
-				(shooter->size.x >> 1) -
+				(sub_tick % (shooter->size.x)) -
 				(blt->size.x >> 1);
 			blt->pos.y = shooter->pos.y +
 				(shooter->size.y >> 1);
