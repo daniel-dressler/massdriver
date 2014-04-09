@@ -95,8 +95,33 @@ void pattern_leftdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 
 void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
-	UINT8 x = 50;
+	UINT8 x = (SCREENWIDTH >> 1) - 8;
 	UINT8 y = 50;
+
+	if (time < 43) {
+		x = x - time;
+	} else if (time < 43 + qrt_circle_8_size) {
+		struct pattern_point_t *pt = qrt_circle_8 + time - 43;
+		x -= 43 + pt->x;
+		y += 8 - pt->y;
+	} else if (time < 64 + qrt_circle_8_size) {
+		struct pattern_point_t *pt = qrt_circle_8 + time - 64;
+		x -= 43 + 8 - pt->x;
+		y += 16 - pt->y;
+	} else if (time < 125 + 43) {
+		x += +(time -85) -43;
+		y += 16;
+	} else if (time < 125 + 43 + qrt_circle_8_size) {
+		struct pattern_point_t *pt = qrt_circle_8 + time - (125 + 43);
+		x += 43 + pt->x;
+		y += 8 + pt->y;
+	} else if (time < 125 + 64 + qrt_circle_8_size) {
+		struct pattern_point_t *pt = qrt_circle_8 + time - (125 + 64);
+		x += 43 + 8 - pt->x;
+		y += 8 - pt->y;
+	} else if (time < 255) {
+		x += -(time - (255 - 43)) +43;
+	}
 
 	*x_out = x;
 	*y_out = y;
