@@ -61,6 +61,7 @@ void init_graphics()
 void tick_graphics()
 {
 	static UINT8 lastmode = g_state.mode;
+
 	if( lastmode != g_state.mode )
 	{
 		lastmode = g_state.mode;
@@ -318,79 +319,10 @@ void graphics_drawplayer()
 	UINT8 x, y;
 	x = g_state.player1.pos.x;
 	y = g_state.player1.pos.y;
-	move_sprite( g_state.player1.gfx_ofs, x, y );
-	move_sprite( g_state.player1.gfx_ofs+1, 8 + x, y );
+	move_sprite( 0, x, y );
+	move_sprite( 1, 8 + x, y );
 }
-
-
-void graphics_drawenemies()
-{
-	UINT8 i, x, y;
-	ENEMY *enemy_walker;
-
-	// Enemies
-	enemy_walker = g_state.enemies;
-	for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++ )
-	{
-		x = enemy_walker->pos.x;
-		y = enemy_walker->pos.y;
-		if( enemy_walker->active == 0 )
-			x = y = ZERO;
-
-		if( enemy_walker->gfx_dirty )
-		{
-			switch( enemy_walker->type )
-			{
-			case 2:
-				set_sprite_tile( enemy_walker->gfx_ofs, et2_pos );
-				break;
-			default:
-				set_sprite_tile( enemy_walker->gfx_ofs, et1_pos );
-				break;
-			}
-			enemy_walker->gfx_dirty = (UINT8)0;
-		}
-		move_sprite( enemy_walker->gfx_ofs, x, y );
-		//printf("%d\n", enemy_walker->gfx_ofs);
-	}
-
-	// Medium Enemies
-	enemy_walker = g_state.enemiesmed;
-	for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
-	{
-		UINT8 ofs =  enemy_walker->gfx_ofs;
-		//printf("%d\n", ofs);
-
-		x = enemy_walker->pos.x;
-		y = enemy_walker->pos.y;
-		if( enemy_walker->active == 0 )
-			x = y = ZERO;
-
-		move_sprite( enemy_walker->gfx_ofs, x, y );
-		move_sprite( enemy_walker->gfx_ofs+1, x+8, y );
-		move_sprite( enemy_walker->gfx_ofs+2, x+16, y );
-	}	
-}
-
-void graphics_drawboss()
-{
-	UINT8 x, y, ofs;
-
-	y = g_state.boss.pos.y;
-	ofs = g_state.boss.gfx_ofs;
-
-	for( i = ZERO; i < 3; i++ )
-	{
-		x = g_state.boss.pos.x;
-		for( j = ZERO; j < 6; j++ )
-		{
-			move_sprite( ofs, x, y );
-			ofs++;
-			x += 8;
-		}
-		y += 16;
-	}
-}
+#define START_SPRITE (2)
 
 void graphics_drawbullets()
 {
@@ -401,26 +333,30 @@ void graphics_drawbullets()
 	bullet_walker = g_state.enemy_bullets;
 	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
 	{
+		UINT8 sprite = START_SPRITE + i;
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
 		if( bullet_walker->active == 0 )
 			x = y = ZERO;
 
-		move_sprite( bullet_walker->gfx_ofs, x, y );
+		move_sprite( sprite, x, y );
 	}
 
 	// Player Bullets
 	bullet_walker = g_state.player_bullets;
 	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
 	{
+		UINT8 sprite = START_SPRITE + MAX_ENEMY_BULLETS + i;
 		x = bullet_walker->pos.x;
 		y = bullet_walker->pos.y;
 		if( bullet_walker->active == 0 )
 			x = y = ZERO;
 
-		move_sprite( bullet_walker->gfx_ofs, x, y );
+		move_sprite( sprite, x, y );
 	}
 }
+#undef START_SPRITE
+#define START_SPRITE (2 + MAX_ENEMY_BULLETS + MAX_PLAYER_BULLETS)
 
 
 // No more efficient way could be found for drawing the score.
@@ -442,18 +378,21 @@ void graphics_drawscore()
 		score = get_score();
 		for( i = MAX_SCORE_DIGITS; i > ZERO; i--, number_walker-- )
 		{
+			UINT8 sprite = START_SPRITE + i;
 			x = number_walker->pos.x;
 			y = number_walker->pos.y;
 			currentDigit = score % 10;
 			score = score / 10;
 			tileNumber = g_state.number_tile_start + (currentDigit << 1 );
 
-			set_sprite_tile( number_walker->gfx_ofs, tileNumber );
-			move_sprite( number_walker->gfx_ofs, x, y );
+			set_sprite_tile( sprite, tileNumber );
+			move_sprite( sprite, x, y );
 		}
 		g_state.score_data.dirty_gfx = ZERO;
 	}
 }
+#undef START_SPRITE
+#define START_SPRITE (2 + MAX_ENEMY_BULLETS + MAX_PLAYER_BULLETS + MAX_SCORE_DIGITS)
 
 void  graphics_drawlives()
 {
@@ -462,6 +401,7 @@ void  graphics_drawlives()
 
 	if( g_state.life_data.dirty_gfx )
 	{
+		UINT8 sprite = START_SPRITE;
 		num = &g_state.life_data.digit;
 		lives = g_state.life_data.lives;
 		x = num->pos.x;
@@ -469,11 +409,84 @@ void  graphics_drawlives()
 
 		tileNumber = g_state.number_tile_start + (lives << 1 );
 
-		set_sprite_tile( num->gfx_ofs, tileNumber );
-		move_sprite( num->gfx_ofs, x, y );
+		set_sprite_tile( sprite, tileNumber );
+		move_sprite( sprite, x, y );
 		g_state.life_data.dirty_gfx = ZERO;
 	}
 
+}
+#undef START_SPRITE
+#define START_SPRITE (2 + MAX_ENEMY_BULLETS + MAX_PLAYER_BULLETS + MAX_SCORE_DIGITS \
+		+ 1) 
+
+void graphics_drawenemies()
+{
+	UINT8 i, x, y;
+	ENEMY *enemy_walker;
+
+	// Enemies
+	enemy_walker = g_state.enemies;
+	for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++ )
+	{
+		UINT8 sprite = START_SPRITE + i;
+		x = enemy_walker->pos.x;
+		y = enemy_walker->pos.y;
+		if( enemy_walker->active == 0 )
+			x = y = ZERO;
+
+		if( enemy_walker->gfx_dirty )
+		{
+			switch( enemy_walker->type )
+			{
+			case 2:
+				set_sprite_tile( sprite, et2_pos );
+				break;
+			default:
+				set_sprite_tile( sprite, et1_pos );
+				break;
+			}
+			enemy_walker->gfx_dirty = (UINT8)0;
+		}
+		move_sprite( sprite, x, y );
+		//printf("%d\n", enemy_walker->gfx_ofs);
+	}
+
+	// Medium Enemies
+	enemy_walker = g_state.enemiesmed;
+	for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
+	{
+		UINT8 sprite = START_SPRITE + MAX_ENEMIES + i;
+		//printf("%d\n", ofs);
+
+		x = enemy_walker->pos.x;
+		y = enemy_walker->pos.y;
+		if( enemy_walker->active == 0 )
+			x = y = ZERO;
+
+		move_sprite( sprite, x, y );
+		move_sprite( sprite+1, x+8, y );
+		move_sprite( sprite+2, x+16, y );
+	}	
+}
+
+void graphics_drawboss()
+{
+	UINT8 x, y;
+	UINT8 sprite = START_SPRITE;
+
+	y = g_state.boss.pos.y;
+
+	for( i = ZERO; i < 3; i++ )
+	{
+		x = g_state.boss.pos.x;
+		for( j = ZERO; j < 6; j++ )
+		{
+			move_sprite( sprite, x, y );
+			sprite++;
+			x += 8;
+		}
+		y += 16;
+	}
 }
 
 void  graphics_hidesprites()
