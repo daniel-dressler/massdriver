@@ -412,12 +412,19 @@ void graphics_drawenemies()
 			switch( enemy_walker->type )
 			{
 			case 0:
-				set_sprite_tile( START_SPRITE + i, exp_pos + enemy_walker->active - 2 );
-				enemy_walker->active++;
-				if( enemy_walker->active == 6 )
-					enemy_walker->active = 0;
-				else
-					enemy_walker->gfx_dirty = (UINT8)1;
+				{
+					UINT8 frame = ( enemy_walker->active - 2 ) >> 2;
+					if( frame < 3 )
+					{
+						set_sprite_tile( START_SPRITE + i, exp_pos + frame );
+						enemy_walker->active++;
+						enemy_walker->gfx_dirty = (UINT8)1;
+					}
+					else
+					{
+						enemy_walker->active = 0;
+					}
+				}
 				break;
 			case 2:
 				set_sprite_tile( START_SPRITE + i, et2_pos );
