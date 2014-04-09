@@ -210,7 +210,7 @@ void gameai_enemies()
 			enemy_walker = g_state.enemiesmed;
 		}
 
-		if( enemy_walker->active )
+		if( enemy_walker->active == 1 )
 		{
 			w = (enemy_walker->age)++;
 			switch( enemy_walker->pattern ) 
@@ -241,15 +241,15 @@ void gameai_enemies()
 				by2 = by1 + enemy_walker->size.y;
 				if ((ex1 < bx2 && ex2 > bx1) &&
 					(ey1 < by2 && ey2 > by1)) {
-					enemy_walker->active = ZERO;
-					enemy_walker->pos.x = ZERO;
-					enemy_walker->pos.y = ZERO;
+					enemy_walker->active = 2;
+					enemy_walker->type = 0;
+					enemy_walker->gfx_dirty = 1;
 					play_sound( SOUND_EXPLOSION );
 					dec_lives();
 				}
 			}
 		}
-		else if( !next_free_enemy )
+		else if( !next_free_enemy && enemy_walker->active == 0 )
 		{
 			next_free_enemy = enemy_walker;
 		}
@@ -258,7 +258,7 @@ void gameai_enemies()
 	// Spawn Enemies?
 	if ((div7 && div5) && (next_free_enemy != NULL)) {
 		next_free_enemy->age = ZERO;
-		next_free_enemy->active = TRUE;
+		next_free_enemy->active = 1;
 		next_free_enemy->pos.x = 255;
 		next_free_enemy->pos.y = 255;
 		next_free_enemy->pattern = super_tick % NUMPATTERNS;
@@ -339,7 +339,7 @@ void gameai_bullets()
 				by2 = by1 + bullet_walker->size.y;
 
 				if( bullet_walker->active != 0 &&
-					 enemy_walker->active != 0 &&
+					 enemy_walker->active == 1 &&
 						ex1 < bx2 && ex2 > bx1 &&
 						ey1 < by2 && ey2 > by1 ) 
 				{
@@ -347,9 +347,9 @@ void gameai_bullets()
 					add_score(scored);
 
 					bullet_walker->active = ZERO;
-					enemy_walker->active = ZERO;
-					enemy_walker->pos.x = ZERO;
-					enemy_walker->pos.y = ZERO;
+					enemy_walker->active = 2;
+					enemy_walker->type = 0;
+					enemy_walker->gfx_dirty = 1;
 					play_sound( SOUND_EXPLOSION );
 					// TODO: Position an explosion
 

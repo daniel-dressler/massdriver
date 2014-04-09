@@ -23,6 +23,9 @@ extern unsigned char EnemyMed_tile_data[];
 extern int Boss_tile_count;
 extern unsigned char Boss_tile_data[];
 
+extern int Explode_tile_count;
+extern unsigned char Explode_tile_data[];
+
 extern int Stars_tile_map_size;
 extern int Stars_tile_map_width;
 extern int Stars_tile_map_height;

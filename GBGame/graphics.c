@@ -10,9 +10,10 @@ UINT8 et_count = ZERO;
 UINT8 em_count = ZERO;
 UINT8 et1_pos = ZERO;
 UINT8 et2_pos = ZERO;
-
+UINT8 exp_pos = ZERO;
 
 void  graphics_initbackground();
+void  graphics_initexplode();
 void  graphics_initplayership();
 void  graphics_initbullets();
 void  graphics_initenemyships();
@@ -33,6 +34,7 @@ void init_graphics()
 	t_count = ZERO;
 
 	graphics_initbackground();
+	graphics_initexplode();
 	graphics_initplayership();
 	graphics_initbullets();
 	graphics_initscore();
@@ -154,6 +156,12 @@ UINT8 graphics_flash()
 	return g_state.flash_screen;
 }
 
+void graphics_initexplode()
+{
+	exp_pos = t_count;
+	set_sprite_data( t_count, Explode_tile_count, Explode_tile_data );
+	t_count += Explode_tile_count;
+}
 
 void graphics_initplayership()
 {
@@ -400,16 +408,31 @@ void graphics_drawenemies()
 
 		if( enemy_walker->gfx_dirty )
 		{
+			enemy_walker->gfx_dirty = (UINT8)0;
 			switch( enemy_walker->type )
 			{
+			case 0:
+				{
+					UINT8 frame = ( enemy_walker->active - 2 ) >> 2;
+					if( frame < 3 )
+					{
+						set_sprite_tile( START_SPRITE + i, exp_pos + frame );
+						enemy_walker->active++;
+						enemy_walker->gfx_dirty = (UINT8)1;
+					}
+					else
+					{
+						enemy_walker->active = 0;
+					}
+				}
+				break;
 			case 2:
-				set_sprite_tile( sprite, et2_pos );
+				set_sprite_tile( START_SPRITE + i, et2_pos );
 				break;
 			default:
-				set_sprite_tile( sprite, et1_pos );
+				set_sprite_tile( START_SPRITE + i, et1_pos );
 				break;
 			}
-			enemy_walker->gfx_dirty = (UINT8)0;
 		}
 		move_sprite( sprite, x, y );
 		//printf("%d\n", enemy_walker->gfx_ofs);
