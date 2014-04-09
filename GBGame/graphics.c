@@ -378,7 +378,7 @@ void graphics_drawscore()
 		score = get_score();
 		for( i = MAX_SCORE_DIGITS; i > ZERO; i--, number_walker-- )
 		{
-			UINT8 sprite = START_SPRITE + i;
+			UINT8 sprite = START_SPRITE + i - 1;
 			x = number_walker->pos.x;
 			y = number_walker->pos.y;
 			currentDigit = score % 10;
