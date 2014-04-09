@@ -74,8 +74,8 @@ void init_gameai()
 	for (i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = TRUE;
 		enemy_walker->type = 2;
-		enemy_walker->pos.y = 50;
-		enemy_walker->pos.x = 50;
+		enemy_walker->pos.y = ZERO;
+		enemy_walker->pos.x = ZERO;
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 24;
 		enemy_walker->pattern = 8;
@@ -326,8 +326,12 @@ void gameai_bullets()
 				toggle = 1;
 			}
 
-			for( k = ZERO; k < MAX_ENEMIES >> 1; k++, enemy_walker++ )
+			for( k = ZERO; k < ((MAX_ENEMIES >> 1) + MAX_MEDENEMIES); k++, enemy_walker++ )
 			{
+				if (k >= (MAX_ENEMIES >> 1)) {
+					enemy_walker = g_state.enemiesmed;
+				}
+
 				ex1 = enemy_walker->pos.x;
 				ex2 = ex1 + enemy_walker->size.x;
 				ey1 = enemy_walker->pos.y;
@@ -351,8 +355,6 @@ void gameai_bullets()
 					enemy_walker->type = 0;
 					enemy_walker->gfx_dirty = 1;
 					play_sound( SOUND_EXPLOSION );
-					// TODO: Position an explosion
-
 					break;
 				}
 			}
