@@ -62,7 +62,6 @@ void init_gameai()
 	g_state.player1.size.y = 16;
 	g_state.player1.pos.x = 80;
 	g_state.player1.pos.y = 120;
-	g_state.life_data.lives = MAX_LIVES;
 
 	g_state.boss.size.x = 46;
 	g_state.boss.size.y = 40;
@@ -133,7 +132,10 @@ void tick_gameai()
 	case MODE_SCORE:
 		if( pad && (super_tick > 0))
 		{
+			g_state.score_data.score = 0;
 			g_state.score_data.dirty_gfx = 1;
+			g_state.life_data.lives = MAX_LIVES;
+			g_state.life_data.dirty_gfx = TRUE;
 			g_state.mode = MODE_MENU;
 		}
 		break;

@@ -5,6 +5,8 @@ State g_state;
 void init_state()
 {
 	g_state.time = 0;
+	g_state.life_data.lives = MAX_LIVES;
+	g_state.score_data.score = 0;
 }
 
 void tick_state()
