@@ -29,11 +29,11 @@ typedef struct
 	UINT8   health;
 	UINT8	type;
 	UINT8	pattern;
+	UINT8   age;
+	UINT8	gfx_dirty;
 	POINT	pos;
 	POINT	size;
-	UINT8   age;
 
-	UINT8	gfx_dirty;
 
 } ENEMY;
 

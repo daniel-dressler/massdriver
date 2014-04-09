@@ -413,7 +413,7 @@ void graphics_drawenemies()
 		if( enemy_walker->active == 0 )
 			x = y = ZERO;
 
-		if( enemy_walker->gfx_dirty )
+		if( enemy_walker->gfx_dirty != 0 )
 		{
 			enemy_walker->gfx_dirty = (UINT8)0;
 			switch( enemy_walker->type )

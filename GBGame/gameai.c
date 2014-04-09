@@ -130,7 +130,7 @@ void tick_gameai()
 		}
 		break;
 	case MODE_SCORE:
-		if( pad && (super_tick > 0))
+		if( pad && (super_tick > 1))
 		{
 			g_state.score_data.score = 0;
 			g_state.score_data.dirty_gfx = 1;
@@ -211,22 +211,28 @@ void gameai_player( UINT8 pad )
 	}
 
 	// Drop a bomb
-	if( pad & J_B && !bomb_cooloff )
+	if( pad & J_B && g_state.mode == MODE_GAME && !bomb_cooloff )
 	{
-		g_state.flash_screen = TRUE;
+		UINT8 i;
+		ENEMY* enemy_walker = g_state.enemies;
+
 		bomb_cooloff = 50;
 
-		if( g_state.mode == MODE_GAME ) {
-			UINT8 i = 0;
-			ENEMY* enemy_walker = g_state.enemies;
-			for (; i < MAX_ENEMIES; i++, enemy_walker++) {
-				enemy_walker->active = 2;
-				enemy_walker->gfx_dirty = 1;
-				play_sound( SOUND_EXPLOSION );
+		for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
+			if (enemy_walker->active != 1) {
+				continue;
 			}
-		} else {
-			g_state.mode = MODE_GAME;
+
+			enemy_walker->health -= 1;
+			if (enemy_walker->health == 0) {
+				enemy_walker->gfx_dirty = TRUE;
+				enemy_walker->active = 2;
+				enemy_walker->type = 0;
+			}
 		}
+
+		g_state.flash_screen = TRUE;
+		play_sound( SOUND_EXPLOSION );
 	}
 
 	if (shoot_cooloff > 0)
