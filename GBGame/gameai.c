@@ -79,6 +79,7 @@ void init_gameai()
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 24;
 		enemy_walker->pattern = 8;
+		enemy_walker->health = 20;
 		enemy_walker->age = ZERO;
 	}
 
@@ -176,10 +177,17 @@ void gameai_player( UINT8 pad )
 		g_state.flash_screen = TRUE;
 		bomb_cooloff = 50;
 
-		if( g_state.mode == MODE_GAME )
-			g_state.mode = MODE_BOSS;
-		else
+		if( g_state.mode == MODE_GAME ) {
+			UINT8 i = 0;
+			ENEMY* enemy_walker = g_state.enemies;
+			for (; i < MAX_ENEMIES; i++, enemy_walker++) {
+				enemy_walker->active = 2;
+				enemy_walker->gfx_dirty = 1;
+				play_sound( SOUND_EXPLOSION );
+			}
+		} else {
 			g_state.mode = MODE_GAME;
+		}
 	}
 
 	if (shoot_cooloff > 0)
@@ -243,9 +251,10 @@ void gameai_enemies()
 					(ey1 < by2 && ey2 > by1)) {
 					enemy_walker->active = 2;
 					enemy_walker->type = 0;
+					//printf("here");
 					enemy_walker->gfx_dirty = 1;
-					play_sound( SOUND_EXPLOSION );
 					dec_lives();
+					play_sound( SOUND_EXPLOSION );
 				}
 			}
 		}
@@ -259,6 +268,7 @@ void gameai_enemies()
 	if ((div7 && div5) && (next_free_enemy != NULL)) {
 		next_free_enemy->age = ZERO;
 		next_free_enemy->active = 1;
+		next_free_enemy->health = 1;
 		next_free_enemy->pos.x = 255;
 		next_free_enemy->pos.y = 255;
 		next_free_enemy->pattern = super_tick % NUMPATTERNS;
@@ -348,9 +358,14 @@ void gameai_bullets()
 						ey1 < by2 && ey2 > by1 ) 
 				{
 					UINT16 scored = score_by_type[enemy_walker->type];
+					bullet_walker->active = ZERO;
+
+					enemy_walker->health -= 1;
+					if (enemy_walker->health > 0) {
+						break;
+					}
 					add_score(scored);
 
-					bullet_walker->active = ZERO;
 					enemy_walker->active = 2;
 					enemy_walker->type = 0;
 					enemy_walker->gfx_dirty = 1;

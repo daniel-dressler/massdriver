@@ -26,6 +26,7 @@ typedef struct
 typedef struct
 {
 	UINT8	active;
+	UINT8   health;
 	UINT8	type;
 	UINT8	pattern;
 	POINT	pos;
