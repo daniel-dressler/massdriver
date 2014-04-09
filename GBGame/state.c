@@ -33,3 +33,4 @@ UINT8 get_lives()
 {
 	return g_state.life_data.lives;
 }
+

@@ -21,13 +21,10 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 
-	UINT8	gfx_ofs;
-
 } PLAYER;
 
 typedef struct
 {
-	UINT8	gfx_ofs;
 	UINT8	active;
 	UINT8	type;
 	UINT8	pattern;
@@ -41,7 +38,6 @@ typedef struct
 
 typedef struct
 {
-	UINT8	gfx_ofs;
 	POINT	pos;
 	POINT	size;
 	UINT8   active;
@@ -51,7 +47,6 @@ typedef struct
 
 typedef struct
 {
-	UINT8	gfx_ofs;
 	POINT	pos;
 } NUMBER;
 

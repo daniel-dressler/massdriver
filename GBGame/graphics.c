@@ -143,7 +143,6 @@ void graphics_initbackground()
 void graphics_initplayership()
 {
 	// Set Player Ship Data
-	g_state.player1.gfx_ofs = (UINT8)m_count;
 	set_sprite_tile( m_count, t_count );
 	m_count++;
 	set_sprite_tile( m_count, t_count+2 );
@@ -163,14 +162,12 @@ void graphics_initbullets()
 	bullet_walker = g_state.enemy_bullets;
 	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++, m_count++ )
 	{
-		bullet_walker->gfx_ofs = m_count;
 		set_sprite_tile( m_count, t_count );
 	}
 
 	bullet_walker = g_state.player_bullets;
 	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++, m_count++ )
 	{
-		bullet_walker->gfx_ofs = m_count;
 		set_sprite_tile( m_count, t_count );
 	}
 
@@ -198,7 +195,6 @@ void graphics_initscore()
 
 	for( i = ZERO; i < MAX_SCORE_DIGITS; i++, m_count++, number_walker++ )
 	{
-		number_walker->gfx_ofs = m_count;
 		number_walker->pos.x = SCORE_POSITION_START_X + i << 3;
 		number_walker->pos.y = SCORE_POSITION_START_Y;
 		
@@ -216,7 +212,6 @@ void graphics_initlives()
 
 	lives = get_lives();
 	number_walker = &g_state.life_data.digit;
-	number_walker->gfx_ofs = m_count;
 	number_walker->pos.x = 8;
 	number_walker->pos.y = SCORE_POSITION_START_Y;
 		
@@ -236,7 +231,6 @@ void graphics_initenemyships()
 	if( g_state.mode == MODE_BOSS )
 	{
 		// Set Boss Ship Data
-		g_state.boss.gfx_ofs = m_count;
 		for( i = ZERO; i < 36; i+=2 )
 		{
 			set_sprite_tile( m_count, t_count + i );
@@ -262,7 +256,6 @@ void graphics_initenemyships()
 		enemy_walker = g_state.enemies;
 		for( i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++, m_count++ )
 		{
-			enemy_walker->gfx_ofs = m_count;
 			set_sprite_tile( m_count, t_count );
 		}
 
@@ -279,7 +272,6 @@ void graphics_initenemyships()
 		enemy_walker = g_state.enemiesmed;
 		for( i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++ )
 		{
-			enemy_walker->gfx_ofs = m_count;
 			set_sprite_tile( m_count++, t_count );
 			set_sprite_tile( m_count++, t_count+2 );
 			set_sprite_tile( m_count++, t_count+4 );
