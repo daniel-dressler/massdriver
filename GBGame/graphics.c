@@ -227,13 +227,18 @@ void graphics_drawbullets()
 		}
 		else
 		{
-			bullet_walker->gfx_dirty = 1;
 			frame = ( bullet_walker->active ) >> 1;
 			frame += exp_pos;
 			if( frame >= 3 )
+			{
+				x = y = ZERO;
 				bullet_walker->active = 0;
+			}
 			else
+			{
+				bullet_walker->gfx_dirty = 1;
 				bullet_walker->active++;
+			}
 		}
 
 		if( bullet_walker->gfx_dirty == 1 )
