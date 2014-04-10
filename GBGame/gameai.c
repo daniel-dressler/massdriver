@@ -12,6 +12,8 @@
 
 UINT8  sub_tick = ZERO;
 UINT8  super_tick = ZERO;
+UINT8  random = 47;
+UINT8  pattern = ZERO;
 BULLET *next_free_enemy_bullet = NULL;
 BULLET *next_free_player_bullet = NULL;
 ENEMY  *next_free_enemy = NULL;
@@ -123,10 +125,14 @@ void tick_gameai()
 	UINT8 pad = joypad();
 
 	sub_tick++;
+	random |= pad;
 	if( sub_tick >= (7 * 5 * 3 * 2) ) 
 	{
 		sub_tick = ZERO;
 		super_tick++;
+		pattern += super_tick;
+		pattern += random;
+		pattern = 5;
 	}
 
 	switch( g_state.mode )
@@ -174,11 +180,7 @@ void tick_gameai()
 
 			if (g_state.boss.active == 0) 
 			{
-				UINT8 x = g_state.player1.pos.x;
-				UINT8 y = g_state.player1.pos.y;
 				init_gameai();
-				g_state.player1.pos.x = x;
-				g_state.player1.pos.y = y;
 				g_state.mode = MODE_GAME;
 				play_sound( SOUND_LOSE );
 			}
@@ -344,7 +346,7 @@ void gameai_enemies()
 		next_free_enemy->health = 1;
 		next_free_enemy->pos.x = 255;
 		next_free_enemy->pos.y = 255;
-		next_free_enemy->pattern = super_tick % NUMPATTERNS;
+		next_free_enemy->pattern = ( g_state.entropy_pool % 7 );
 
 		next_free_enemy->gfx_dirty = TRUE;
 		next_free_enemy->type = ( g_state.entropy_pool % 2 ) + TRUE;
