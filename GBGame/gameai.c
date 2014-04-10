@@ -478,7 +478,7 @@ void gameai_bullets()
 					enemy_walker = g_state.enemiesmed;
 				}
 
-				if (bullet_walker->active == ZERO ||
+				if (bullet_walker->active != 1 ||
 						enemy_walker->active != TRUE) {
 					continue;
 				}
