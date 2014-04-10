@@ -71,7 +71,7 @@ void init_gameai()
 	g_state.boss.size.y = 40;
 	g_state.boss.pos.x = (SCREENWIDTH >> 1) - 20;
 	g_state.boss.pos.y = 30;
-	g_state.boss.health = 30;
+	g_state.boss.health = 25;
 	g_state.boss.active = 1;
 	g_state.boss.type = 4;
 
@@ -248,8 +248,8 @@ void gameai_player( UINT8 pad )
 		g_state.flash_screen = TRUE;
 		play_sound( SOUND_EXPLOSION );
 
-				init_gameai();
-				g_state.mode = MODE_BOSS;
+//				init_gameai();
+//				g_state.mode = MODE_BOSS;
 	}
 
 	if (shoot_cooloff > 0)
