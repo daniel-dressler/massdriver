@@ -284,8 +284,8 @@ void graphics_drawscore()
 		{
 			UINT8 sprite = START_SPRITE + i - 1;
 			if (g_state.mode == MODE_SCORE) {
-				x = 10 + (i - 1) << 3;
-				y = 100;
+				x = 79 + ((i - 1) << 3);
+				y = 95;
 			} else {
 				x = SCORE_POSITION_START_X + (i - 1) << 3;
 				y = SCORE_POSITION_START_Y;
