@@ -147,42 +147,24 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 		}
 	}
 
-	/*
-#define LEG 30
-	if (time < LEG) {
-		x = x - time;
-	} else if (time < LEG + qrt_circle_16_size) {
-		pt = qrt_circle_16 + time - LEG; 
-		x -= LEG + pt->x;
-		y += 16 - pt->y;
-	} else if (time < 64 + qrt_circle_16_size) {
-		pt = qrt_circle_16 + time - 64;
-		x -= LEG + pt->y;
-		y += 16 + pt->x;
-	} else if (time < 125 + LEG) {
-		x -= LEG;
-		x += time - (125 - LEG);
-		y += 32;
-	} else if (time < 125 + LEG + qrt_circle_16_size) {
-		pt = qrt_circle_16 + time - (125 + LEG);
-		x += pt->x;
-		y += pt->y;
-		x -= 20;
-		y -= 10;
-//		x += LEG + pt->x;
-//		y += 16 + pt->y;
-	} else if (time < 125 + 60 + qrt_circle_16_size) {
-		pt = qrt_circle_16 + (qrt_circle_16_size - (time - (125 + 64 - 1)));
-		x += pt->x;
-		y -= pt->y;
-		x += 24;
-		y += 12;
-//		x += LEG + pt->x;
-//		y += 17 - pt->y;
-	} else if (time < 255) {
-		x += LEG - (time - (255 - LEG));
+	*x_out = x;
+	*y_out = y;
+}
+
+void pattern_boss(UINT8 time, UINT8 *x_out, UINT8 *y_out)
+{
+	UINT8 x = 0;
+	UINT8 y = 20;
+
+	if( time < 128 )
+	{
+		x += time;
 	}
-	*/
+	else
+	{
+		x += 255 - time;
+	}
+
 	*x_out = x;
 	*y_out = y;
 }
