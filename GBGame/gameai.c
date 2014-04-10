@@ -75,8 +75,7 @@ void init_gameai()
 	g_state.boss.size.y = 40;
 	g_state.boss.pos.x = (SCREENWIDTH >> 1) - 20;
 	g_state.boss.pos.y = 30;
-//	g_state.boss.health = 30;
-	g_state.boss.health = 2;
+	g_state.boss.health = 30;
 	g_state.boss.active = 1;
 	g_state.boss.type = 4;
 
@@ -159,8 +158,9 @@ void tick_gameai()
 			// Goto boss when med is killed
 			if ( g_state.enemiesmed[0].active == 0 ) 
 			{
+				g_state.mode = MODE_BOSS;
 				init_gameai();
-				g_state.flash_screen = 4;
+				g_state.flash_screen = 10;
 				g_state.mode = MODE_BOSS;
 				play_sound( SOUND_LOSE );
 			}
@@ -174,7 +174,11 @@ void tick_gameai()
 
 			if (g_state.boss.active == 0) 
 			{
+				UINT8 x = g_state.player1.pos.x;
+				UINT8 y = g_state.player1.pos.y;
 				init_gameai();
+				g_state.player1.pos.x = x;
+				g_state.player1.pos.y = y;
 				g_state.mode = MODE_GAME;
 				play_sound( SOUND_LOSE );
 			}
