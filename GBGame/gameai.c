@@ -471,37 +471,33 @@ void gameai_bullets()
 					continue;
 				}
 
-				if( bullet_walker->active != 0 &&
-					 enemy_walker->active == 1 ) 
+				ex1 = enemy_walker->pos.x;
+				if (ex1 >= bx2)
+					continue;
+
+				ex2 = ex1 + enemy_walker->size.x;
+				if (ex2 <= bx1)
+					continue;
+
+				ey1 = enemy_walker->pos.y;
+				if (ey1 >= by2)
+					continue;
+
+				ey2 = ey1 + enemy_walker->size.y;
+				if (ey2 <= by1)
+					continue;
+
+				bullet_walker->active = ZERO;
+				enemy_walker->health -= 1;
+				if (enemy_walker->health == 0) 
 				{
-					ex1 = enemy_walker->pos.x;
-					if (ex1 >= bx2)
-						continue;
+					UINT16 scored = score_by_type[enemy_walker->type];
+					add_score(scored);
 
-					ex2 = ex1 + enemy_walker->size.x;
-					if (ex2 <= bx1)
-						continue;
-
-					ey1 = enemy_walker->pos.y;
-					if (ey1 >= by2)
-						continue;
-
-					ey2 = ey1 + enemy_walker->size.y;
-					if (ey2 <= by1)
-						continue;
-
-					bullet_walker->active = ZERO;
-					enemy_walker->health -= 1;
-					if (enemy_walker->health == 0) 
-					{
-						UINT16 scored = score_by_type[enemy_walker->type];
-						add_score(scored);
-
-						enemy_walker->active = 2;
-						enemy_walker->type = 0;
-						enemy_walker->gfx_dirty = 1;
-						play_sound( SOUND_EXPLOSION );
-					}
+					enemy_walker->active = 2;
+					enemy_walker->type = 0;
+					enemy_walker->gfx_dirty = 1;
+					play_sound( SOUND_EXPLOSION );
 				}
 			}
 		}
