@@ -10,6 +10,7 @@ UINT8 et_count = ZERO;
 UINT8 em_count = ZERO;
 UINT8 et1_pos = ZERO;
 UINT8 et2_pos = ZERO;
+UINT8 et3_pos = ZERO;
 UINT8 exp_pos = ZERO;
 UINT8 blt_pos = ZERO;
 
@@ -440,6 +441,7 @@ void graphics_initenemyships()
 			set_sprite_tile( sprite+2, t_count+4 );
 		}
 
+		et3_pos = t_count;
 		set_sprite_data( t_count, EnemyMed_tile_count, EnemyMed_tile_data );
 		t_count += EnemyMed_tile_count;
 	}
@@ -494,6 +496,9 @@ void graphics_drawenemies()
 				break;
 			case 2:
 				tile = et2_pos;
+				break;
+			case 3:
+				tile = et3_pos;
 				break;
 			default:
 				tile = et1_pos;
