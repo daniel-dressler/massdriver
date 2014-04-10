@@ -257,9 +257,6 @@ void gameai_player( UINT8 pad )
 
 		g_state.flash_screen = 4;
 		play_sound( SOUND_EXPLOSION );
-
-				init_gameai();
-				g_state.mode = MODE_BOSS;
 	}
 
 	if (shoot_cooloff > 0)
