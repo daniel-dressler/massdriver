@@ -216,6 +216,7 @@ void gameai_player( UINT8 pad )
  			(g_state.player1.size.x >> 1) - 
  			(blt->size.x >> 1);
 		blt->pos.y = g_state.player1.pos.y;
+		blt->gfx_dirty = 1;
 		next_free_player_bullet = NULL;
 		play_sound( SOUND_SHOOTING );
 		shoot_cooloff = 15;
@@ -363,6 +364,7 @@ void gameai_enemies()
 			(shooter->size.x >> 1) -
 			(blt->size.x >> 1);
 		blt->pos.y = shooter->pos.y;
+		blt->gfx_dirty = 1;
 		next_free_enemy_bullet = NULL;
 		play_sound( SOUND_ENEMY_SHOOTING );
 	}
@@ -395,6 +397,7 @@ void gameai_boss()
 				(blt->size.x >> 1);
 			blt->pos.y = shooter->pos.y +
 				(shooter->size.y >> 1);
+			blt->gfx_dirty = 1;
 			next_free_enemy_bullet = NULL;
 			play_sound( SOUND_SHOOTING );
 		}
@@ -422,9 +425,6 @@ void gameai_bullets()
 			next_free_player_bullet == NULL) {
 			next_free_player_bullet = bullet_walker;
 		}
-		if (bullet_walker->active == 0) {
-			//continue;
-		}
 
 		bx1 = bullet_walker->pos.x;
 		bx2 = bx1 + bullet_walker->size.x;
@@ -438,12 +438,12 @@ void gameai_bullets()
 			ey1 = g_state.boss.pos.y;
 			ey2 = ey1 + g_state.boss.size.y;
 				
-			if( bullet_walker->active != 0 &&
+			if( bullet_walker->active == 1 &&
 				g_state.boss.active == 1 &&
 				ex1 < bx2 && ex2 > bx1 &&
 				ey1 < by2 && ey2 > by1 ) 
 			{
-				bullet_walker->active = ZERO;
+				bullet_walker->active = 2;
 				g_state.boss.health -= 1;
 				add_score(2);
 
@@ -499,7 +499,7 @@ void gameai_bullets()
 				if (ey2 <= by1)
 					continue;
 
-				bullet_walker->active = ZERO;
+				bullet_walker->active = 2;
 				enemy_walker->health -= 1;
 				add_score(1);
 				if (enemy_walker->health == 0) 
@@ -541,7 +541,7 @@ void gameai_bullets()
 			ey1 < by2 && ey2 > by1 &&
 			bullet_walker->active == 1 ) 
 		{
-			bullet_walker->active = ZERO;
+			bullet_walker->active = 2;
 			bullet_walker->pos.x = ZERO;
 			bullet_walker->pos.y = ZERO;
 			dec_lives();

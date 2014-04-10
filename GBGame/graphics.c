@@ -11,6 +11,7 @@ UINT8 em_count = ZERO;
 UINT8 et1_pos = ZERO;
 UINT8 et2_pos = ZERO;
 UINT8 exp_pos = ZERO;
+UINT8 blt_pos = ZERO;
 
 void  graphics_initbackground();
 void  graphics_initexplode();
@@ -201,39 +202,83 @@ void graphics_initbullets()
 		set_sprite_tile( START_SPRITE + MAX_ENEMY_BULLETS + i, t_count );
 	}
 
+	blt_pos = t_count;
 	set_sprite_data( t_count, Bullet_tile_count, Bullet_tile_data );
 	t_count += Bullet_tile_count;
 }
 
 void graphics_drawbullets()
 {
-	UINT8 i, x, y;
+	UINT8 i, x, y, frame;
 	BULLET *bullet_walker;
 
 	// Enemy bullets
 	bullet_walker = g_state.enemy_bullets;
 	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
 	{
-		UINT8 sprite = START_SPRITE + i;
-		x = bullet_walker->pos.x;
-		y = bullet_walker->pos.y;
-		if( bullet_walker->active == 0 )
-			x = y = ZERO;
+		if( bullet_walker->active <= 1 )
+		{
+			x = bullet_walker->pos.x;
+			y = bullet_walker->pos.y;
+			if( bullet_walker->active == 0 )
+				x = y = ZERO;
 
-		move_sprite( sprite, x, y );
+			frame = blt_pos;
+		}
+		else
+		{
+			bullet_walker->gfx_dirty = 1;
+			frame = ( bullet_walker->active - 1 ) >> 1;
+			frame += exp_pos;
+			if( frame >= 3 )
+				bullet_walker->active = 0;
+			else
+				bullet_walker->active++;
+		}
+
+		if( bullet_walker->gfx_dirty == 1 )
+		{
+			set_sprite_tile( START_SPRITE + i, frame );
+			bullet_walker->gfx_dirty = 0;
+		}
+		else
+		{
+			move_sprite( START_SPRITE + i, x, y );
+		}
 	}
 
-	// Player Bullets
 	bullet_walker = g_state.player_bullets;
 	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
 	{
-		UINT8 sprite = START_SPRITE + MAX_ENEMY_BULLETS + i;
-		x = bullet_walker->pos.x;
-		y = bullet_walker->pos.y;
-		if( bullet_walker->active == 0 )
-			x = y = ZERO;
+		if( bullet_walker->active <= 1 )
+		{
+			x = bullet_walker->pos.x;
+			y = bullet_walker->pos.y;
+			if( bullet_walker->active == 0 )
+				x = y = ZERO;
 
-		move_sprite( sprite, x, y );
+			frame = blt_pos;
+		}
+		else
+		{
+			bullet_walker->gfx_dirty = 1;
+			frame = ( bullet_walker->active - 1 ) >> 1;
+			frame += exp_pos;
+			if( frame >= 3 )
+				bullet_walker->active = 0;
+			else
+				bullet_walker->active++;
+		}
+
+		if( bullet_walker->gfx_dirty == 1 )
+		{
+			set_sprite_tile( START_SPRITE + MAX_ENEMY_BULLETS + i, frame );
+			bullet_walker->gfx_dirty = 0;
+		}
+		else
+		{
+			move_sprite( START_SPRITE + MAX_ENEMY_BULLETS + i, x, y );
+		}
 	}
 }
 #undef START_SPRITE
@@ -397,7 +442,7 @@ void graphics_initenemyships()
 
 void graphics_drawenemies()
 {
-	UINT8 i, x, y;
+	UINT8 i, x, y, tile;
 	ENEMY *enemy_walker;
 
 	// Enemies
@@ -425,7 +470,14 @@ void graphics_drawenemies()
 					UINT8 frame = ( enemy_walker->active - 2 ) >> 2;
 					if( frame < 3 )
 					{
-						set_sprite_tile( START_SPRITE + i, exp_pos + frame );
+						tile = exp_pos + frame;
+
+						if( enemy_walker->size.x > 12 )
+						{
+							set_sprite_tile( sprite + 1, exp_pos + frame );
+							set_sprite_tile( sprite + 2, exp_pos + frame );
+						}
+
 						enemy_walker->active++;
 						enemy_walker->gfx_dirty = (UINT8)1;
 					}
@@ -436,18 +488,21 @@ void graphics_drawenemies()
 				}
 				break;
 			case 2:
-				set_sprite_tile( START_SPRITE + i, et2_pos );
+				tile = et2_pos;
 				break;
 			default:
-				set_sprite_tile( START_SPRITE + i, et1_pos );
+				tile = et1_pos;
 				break;
 			}
+			set_sprite_tile( sprite, tile );
 		}
-
-		move_sprite( sprite, x, y );
-		if (enemy_walker->type == 3) {
-			move_sprite( sprite+1, x+8, y );
-			move_sprite( sprite+2, x+16, y );
+		else
+		{
+			move_sprite( sprite, x, y );
+			if (enemy_walker->type == 3) {
+				move_sprite( sprite+1, x+8, y );
+				move_sprite( sprite+2, x+16, y );
+			}
 		}
 	}
 }

@@ -42,6 +42,7 @@ typedef struct
 	POINT	pos;
 	POINT	size;
 	UINT8   active;
+	UINT8	gfx_dirty;
 
 } BULLET;
 
