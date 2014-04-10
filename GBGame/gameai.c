@@ -43,6 +43,7 @@ void dec_lives()
 		super_tick = ZERO;
 		g_state.mode = MODE_SCORE;
 		g_state.score_data.dirty_gfx = TRUE;
+		play_sound( SOUND_LOSE );
 	}
 
 	g_state.life_data.lives = lives;
@@ -155,7 +156,9 @@ void tick_gameai()
 			if ( g_state.enemiesmed[0].active == 0 ) 
 			{
 				init_gameai();
+				g_state.flash_screen = 4;
 				g_state.mode = MODE_BOSS;
+				play_sound( SOUND_LOSE );
 			}
 		}
 		break;
@@ -169,6 +172,7 @@ void tick_gameai()
 			{
 				init_gameai();
 				g_state.mode = MODE_GAME;
+				play_sound( SOUND_LOSE );
 			}
 		}
 		break;
@@ -237,11 +241,13 @@ void gameai_player( UINT8 pad )
 			}
 		}
 
-		g_state.flash_screen = TRUE;
+		g_state.flash_screen = 4;
 		play_sound( SOUND_EXPLOSION );
 
+		/*
 				init_gameai();
 				g_state.mode = MODE_BOSS;
+				*/
 	}
 
 	if (shoot_cooloff > 0)
@@ -354,7 +360,7 @@ void gameai_enemies()
 			(blt->size.x >> 1);
 		blt->pos.y = shooter->pos.y;
 		next_free_enemy_bullet = NULL;
-		play_sound( SOUND_SHOOTING );
+		play_sound( SOUND_ENEMY_SHOOTING );
 	}
 }
 
