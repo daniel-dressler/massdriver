@@ -57,6 +57,9 @@ void tick_graphics()
 	{
 		lastmode = g_state.mode;
 
+		g_state.life_data.dirty_gfx = 1;
+		g_state.score_data.dirty_gfx = 1;
+
 		DISPLAY_OFF;
 		graphics_initenemyships();
 		graphics_initbackground();
@@ -443,11 +446,10 @@ void graphics_drawenemies()
 		}
 
 		move_sprite( sprite, x, y );
-		if (enemy_walker->type == 2) {
+		if (enemy_walker->type == 3) {
 			move_sprite( sprite+1, x+8, y );
 			move_sprite( sprite+2, x+16, y );
 		}
-		//printf("%d\n", enemy_walker->gfx_ofs);
 	}
 }
 

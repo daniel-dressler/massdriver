@@ -19,7 +19,9 @@ ENEMY  *next_free_enemy = NULL;
 
 UINT16 score_by_type[] = {
 	0,
-	4,
+	1,
+	2,
+	10,
 	42
 };
 
@@ -71,6 +73,7 @@ void init_gameai()
 	g_state.boss.pos.y = 30;
 	g_state.boss.health = 30;
 	g_state.boss.active = 1;
+	g_state.boss.type = 4;
 
 	for (i = ZERO; i < MAX_ENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = ZERO;
@@ -86,7 +89,7 @@ void init_gameai()
 	enemy_walker = g_state.enemiesmed;
 	for (i = ZERO; i < MAX_MEDENEMIES; i++, enemy_walker++) {
 		enemy_walker->active = TRUE;
-		enemy_walker->type = 2;
+		enemy_walker->type = 3;
 		enemy_walker->pos.y = ZERO;
 		enemy_walker->pos.x = ZERO;
 		enemy_walker->size.y = 16;
@@ -148,8 +151,9 @@ void tick_gameai()
 			gameai_bullets();
 
 			// Goto boss when med is killed
-			if (g_state.mode == MODE_GAME &&
-					g_state.enemiesmed[0].active == 0) {
+			if ( g_state.enemiesmed[0].active == 0 ) 
+			{
+				init_gameai();
 				g_state.mode = MODE_BOSS;
 			}
 		}
@@ -164,10 +168,9 @@ void tick_gameai()
 			// Note: Skip explode animation
 			// @Phil: If you add exploding for the boss
 			// change the 2 to a 0
-			if (g_state.mode == MODE_BOSS &&
-					g_state.boss.active == 2) {
+			if (g_state.boss.active == 2) 
+			{
 				init_gameai();
-				add_score(100);
 				g_state.mode = MODE_GAME;
 			}
 		}
@@ -227,7 +230,10 @@ void gameai_player( UINT8 pad )
 			}
 
 			enemy_walker->health -= 1;
-			if (enemy_walker->health == 0) {
+			if (enemy_walker->health == 0) 
+			{
+				UINT16 scored = score_by_type[enemy_walker->type];
+				add_score(scored);
 				enemy_walker->gfx_dirty = TRUE;
 				enemy_walker->active = 2;
 				enemy_walker->type = 0;
@@ -409,22 +415,48 @@ void gameai_bullets()
 			//continue;
 		}
 
+		bx1 = bullet_walker->pos.x;
+		bx2 = bx1 + bullet_walker->size.x;
+		by1 = bullet_walker->pos.y;
+		by2 = by1 + bullet_walker->size.y;
+
+		if( g_state.mode == MODE_BOSS )
+		{
+			ex1 = g_state.boss.pos.x;
+			ex2 = ex1 + g_state.boss.size.x;
+			ey1 = g_state.boss.pos.y;
+			ey2 = ey1 + g_state.boss.size.y;
+				
+			if( bullet_walker->active != 0 &&
+				g_state.boss.active == 1 &&
+				ex1 < bx2 && ex2 > bx1 &&
+				ey1 < by2 && ey2 > by1 ) 
+			{
+				bullet_walker->active = ZERO;
+				g_state.boss.health -= 1;
+
+				if (g_state.boss.health == 0) 
+				{
+					UINT16 scored = score_by_type[g_state.boss.type];
+					add_score( scored );
+					g_state.boss.active = 2;
+					g_state.boss.type = 0;
+					g_state.boss.gfx_dirty = 1;
+					play_sound( SOUND_EXPLOSION );
+				}
+			}
+		}
+		else
 		{
 			// Only hit check half enemies per frame
 			ENEMY *enemy_walker = g_state.enemies;
 			UINT8 num_enemies = ((MAX_ENEMIES >> 1) + MAX_MEDENEMIES);
-			static toggle = 0;
+			static UINT8 toggle = 0;
 			if (toggle) {
 				enemy_walker += MAX_ENEMIES >> 1;
 				toggle = 0;
 			} else {
 				toggle = 1;
-			}
-
-
-			if (g_state.mode == MODE_BOSS) {
-				enemy_walker = &(g_state.boss);
-				num_enemies = 1;
 			}
 
 			for( k = ZERO; k < num_enemies; k++, enemy_walker++ )
@@ -438,29 +470,23 @@ void gameai_bullets()
 				ey1 = enemy_walker->pos.y;
 				ey2 = ey1 + enemy_walker->size.y;
 				
-				bx1 = bullet_walker->pos.x;
-				bx2 = bx1 + bullet_walker->size.x;
-				by1 = bullet_walker->pos.y;
-				by2 = by1 + bullet_walker->size.y;
-
 				if( bullet_walker->active != 0 &&
 					 enemy_walker->active == 1 &&
 						ex1 < bx2 && ex2 > bx1 &&
 						ey1 < by2 && ey2 > by1 ) 
 				{
-					UINT16 scored = score_by_type[enemy_walker->type];
 					bullet_walker->active = ZERO;
-
 					enemy_walker->health -= 1;
-					if (enemy_walker->health > 0) {
-						break;
-					}
-					add_score(scored);
+					if (enemy_walker->health == 0) 
+					{
+						UINT16 scored = score_by_type[enemy_walker->type];
+						add_score(scored);
 
-					enemy_walker->active = 2;
-					enemy_walker->type = 0;
-					enemy_walker->gfx_dirty = 1;
-					play_sound( SOUND_EXPLOSION );
+						enemy_walker->active = 2;
+						enemy_walker->type = 0;
+						enemy_walker->gfx_dirty = 1;
+						play_sound( SOUND_EXPLOSION );
+					}
 					break;
 				}
 			}
@@ -489,7 +515,8 @@ void gameai_bullets()
 		bullet_walker->pos.y += ENEMYBULLETSPEED;
 
 		if( ex1 < bx2 && ex2 > bx1 &&
-			ey1 < by2 && ey2 > by1 ) 
+			ey1 < by2 && ey2 > by1 &&
+			bullet_walker->active == 1 ) 
 		{
 			bullet_walker->active = ZERO;
 			bullet_walker->pos.x = ZERO;
