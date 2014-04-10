@@ -20,7 +20,7 @@ ENEMY  *next_free_enemy = NULL;
 UINT16 score_by_type[] = {
 	0,
 	4,
-	8
+	42
 };
 
 void add_score(UINT16 x)
@@ -37,6 +37,8 @@ void dec_lives()
 	if( lives > 0 ) {
 		lives--;
 	} else {
+		sub_tick = ZERO;
+		super_tick = ZERO;
 		g_state.mode = MODE_SCORE;
 		g_state.score_data.dirty_gfx = TRUE;
 	}
@@ -130,7 +132,7 @@ void tick_gameai()
 		}
 		break;
 	case MODE_SCORE:
-		if( pad && (super_tick > 1))
+		if( pad && (sub_tick > 60))
 		{
 			g_state.score_data.score = 0;
 			g_state.score_data.dirty_gfx = 1;
@@ -165,6 +167,7 @@ void tick_gameai()
 			if (g_state.mode == MODE_BOSS &&
 					g_state.boss.active == 2) {
 				init_gameai();
+				add_score(100);
 				g_state.mode = MODE_GAME;
 			}
 		}
