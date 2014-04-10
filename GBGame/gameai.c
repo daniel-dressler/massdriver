@@ -20,7 +20,7 @@ ENEMY  *next_free_enemy = NULL;
 UINT16 score_by_type[] = {
 	0,
 	4,
-	8
+	42
 };
 
 void add_score(UINT16 x)
@@ -37,6 +37,8 @@ void dec_lives()
 	if( lives > 0 ) {
 		lives--;
 	} else {
+		sub_tick = ZERO;
+		super_tick = ZERO;
 		g_state.mode = MODE_SCORE;
 		g_state.score_data.dirty_gfx = TRUE;
 	}
@@ -130,7 +132,7 @@ void tick_gameai()
 		}
 		break;
 	case MODE_SCORE:
-		if( pad && (super_tick > 0))
+		if( pad && (sub_tick > 60))
 		{
 			g_state.score_data.score = 0;
 			g_state.score_data.dirty_gfx = 1;
@@ -165,6 +167,7 @@ void tick_gameai()
 			if (g_state.mode == MODE_BOSS &&
 					g_state.boss.active == 2) {
 				init_gameai();
+				add_score(100);
 				g_state.mode = MODE_GAME;
 			}
 		}
@@ -211,27 +214,28 @@ void gameai_player( UINT8 pad )
 	}
 
 	// Drop a bomb
-	if( pad & J_B && !bomb_cooloff )
+	if( pad & J_B && g_state.mode == MODE_GAME && !bomb_cooloff )
 	{
-		g_state.flash_screen = TRUE;
+		UINT8 i;
+		ENEMY* enemy_walker = g_state.enemies;
+
 		bomb_cooloff = 50;
 
-		if( g_state.mode == MODE_GAME ) {
-			UINT8 i = 0;
-			ENEMY* enemy_walker = g_state.enemies;
-			for (; i < MAX_ENEMIES; i++, enemy_walker++) 
-			{
-				if( enemy_walker->active == 1 )
-				{
-					enemy_walker->active = 2;
-					enemy_walker->type = 0;
-					enemy_walker->gfx_dirty = 1;
-					play_sound( SOUND_EXPLOSION );
-				}
+		for (i = 0; i < MAX_ENEMIES; i++, enemy_walker++) {
+			if (enemy_walker->active != 1) {
+				continue;
 			}
-		} else {
-			g_state.mode = MODE_GAME;
+
+			enemy_walker->health -= 1;
+			if (enemy_walker->health == 0) {
+				enemy_walker->gfx_dirty = TRUE;
+				enemy_walker->active = 2;
+				enemy_walker->type = 0;
+			}
 		}
+
+		g_state.flash_screen = TRUE;
+		play_sound( SOUND_EXPLOSION );
 	}
 
 	if (shoot_cooloff > 0)
@@ -349,10 +353,15 @@ void gameai_enemies()
 
 void gameai_boss()
 {
+	UINT8 x, y, w;
 	UINT8 div7 = (sub_tick % 7) == ZERO;
 	UINT8 div5 = (sub_tick % 5) == ZERO;
 	UINT8 div2 = !(sub_tick & 1);
 
+	w = g_state.boss.age++;
+	pattern_med(w, &x, &y);
+	g_state.boss.pos.x = x;
+	g_state.boss.pos.y = y;
 
 	// Fire an Enemy bullet
 	if ( div5 && div2 && next_free_enemy_bullet != NULL ) 
@@ -365,7 +374,7 @@ void gameai_boss()
 			blt->size.x = 8;
 			blt->size.y = 8;
 			blt->pos.x = shooter->pos.x +
-				(shooter->size.x >> 1) -
+				(sub_tick % (shooter->size.x)) -
 				(blt->size.x >> 1);
 			blt->pos.y = shooter->pos.y +
 				(shooter->size.y >> 1);
