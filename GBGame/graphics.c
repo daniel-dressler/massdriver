@@ -449,8 +449,9 @@ void graphics_initenemyships()
 
 void graphics_drawenemies()
 {
-	UINT8 i, x, y, tile;
+	UINT8 i, x, y;
 	ENEMY *enemy_walker;
+	UINT8 tile = 0;
 
 	// Enemies
 	enemy_walker = g_state.enemies;
@@ -504,7 +505,8 @@ void graphics_drawenemies()
 				tile = et1_pos;
 				break;
 			}
-			set_sprite_tile( sprite, tile );
+			if( tile > 0 )
+				set_sprite_tile( sprite, tile );
 		}
 		else
 		{
