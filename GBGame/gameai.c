@@ -183,6 +183,7 @@ void tick_gameai()
 			if (g_state.boss.active == 0) 
 			{
 				init_gameai();
+				g_state.flash_screen = 4;
 				g_state.mode = MODE_GAME;
 				play_sound( SOUND_LOSE );
 			}
