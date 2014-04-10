@@ -434,28 +434,47 @@ void gameai_bullets()
 					enemy_walker = g_state.enemiesmed;
 				}
 
+				// Note:
+				// We can cull at every step because
+				// the Z80 has no pipeline
+				// thus branches are cheap
+				if (bullet_walker->active == ZERO ||
+						enemy_walker->active != TRUE) {
+					continue;
+				}
+
 				ex1 = enemy_walker->pos.x;
-				ex2 = ex1 + enemy_walker->size.x;
-				ey1 = enemy_walker->pos.y;
-				ey2 = ey1 + enemy_walker->size.y;
-				
 				bx1 = bullet_walker->pos.x;
 				bx2 = bx1 + bullet_walker->size.x;
+				if (ex1 >= bx2) {
+					continue;
+				}
+
+				ex2 = ex1 + enemy_walker->size.x;
+				if (ex2 <= bx1) {
+					continue;
+				}
+
+				ey1 = enemy_walker->pos.y;
 				by1 = bullet_walker->pos.y;
 				by2 = by1 + bullet_walker->size.y;
+				if (ey1 >= by2) {
+					continue;
+				}
 
-				if( bullet_walker->active != 0 &&
-					 enemy_walker->active == 1 &&
-						ex1 < bx2 && ex2 > bx1 &&
-						ey1 < by2 && ey2 > by1 ) 
-				{
+				ey2 = ey1 + enemy_walker->size.y;
+				if (ey2 <= by1) {
+					continue;
+				}
+				
+
+				bullet_walker->active = ZERO;
+
+				enemy_walker->health -= 1;
+				if (enemy_walker->health > 0) {
+					break;
+				} else {
 					UINT16 scored = score_by_type[enemy_walker->type];
-					bullet_walker->active = ZERO;
-
-					enemy_walker->health -= 1;
-					if (enemy_walker->health > 0) {
-						break;
-					}
 					add_score(scored);
 
 					enemy_walker->active = 2;
