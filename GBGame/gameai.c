@@ -352,7 +352,7 @@ void gameai_enemies()
 				(blt->size.x >> 1);
 			blt->pos.y = shooter->pos.y;
 			next_free_enemy_bullet = NULL;
-			play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
+			play_sound( SOUND_SHOOTING );
 		}
 	}
 }
@@ -450,10 +450,11 @@ void gameai_bullets()
 		{
 			// Only hit check half enemies per frame
 			ENEMY *enemy_walker = g_state.enemies;
-			UINT8 num_enemies = ((MAX_ENEMIES >> 1) + MAX_MEDENEMIES);
+			UINT8 num_enemies = (MAX_ENEMIES >> 1);
 			static UINT8 toggle = 0;
 			if (toggle) {
 				enemy_walker += MAX_ENEMIES >> 1;
+				num_enemies += MAX_MEDENEMIES;
 				toggle = 0;
 			} else {
 				toggle = 1;
@@ -465,16 +466,30 @@ void gameai_bullets()
 					enemy_walker = g_state.enemiesmed;
 				}
 
-				ex1 = enemy_walker->pos.x;
-				ex2 = ex1 + enemy_walker->size.x;
-				ey1 = enemy_walker->pos.y;
-				ey2 = ey1 + enemy_walker->size.y;
-				
+				if (bullet_walker->active == ZERO ||
+						enemy_walker->active != TRUE) {
+					continue;
+				}
+
 				if( bullet_walker->active != 0 &&
-					 enemy_walker->active == 1 &&
-						ex1 < bx2 && ex2 > bx1 &&
-						ey1 < by2 && ey2 > by1 ) 
+					 enemy_walker->active == 1 ) 
 				{
+					ex1 = enemy_walker->pos.x;
+					if (ex1 >= bx2)
+						continue;
+
+					ex2 = ex1 + enemy_walker->size.x;
+					if (ex2 <= bx1)
+						continue;
+
+					ey1 = enemy_walker->pos.y;
+					if (ey1 >= by2)
+						continue;
+
+					ey2 = ey1 + enemy_walker->size.y;
+					if (ey2 <= by1)
+						continue;
+
 					bullet_walker->active = ZERO;
 					enemy_walker->health -= 1;
 					if (enemy_walker->health == 0) 
@@ -487,7 +502,6 @@ void gameai_bullets()
 						enemy_walker->gfx_dirty = 1;
 						play_sound( SOUND_EXPLOSION );
 					}
-					break;
 				}
 			}
 		}
