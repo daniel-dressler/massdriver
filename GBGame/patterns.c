@@ -95,10 +95,54 @@ void pattern_leftdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 
 void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
-	UINT8 x = (SCREENWIDTH >> 1) - 8;
+	UINT8 x = (SCREENWIDTH >> 1) - 8 + 32;
 	UINT8 y = 20;
 	struct pattern_point_t *pt;
 
+	if( time < 64 ) // top straight
+	{
+		x -= time;
+	}
+	else if( time < 128 ) // left curve
+	{
+		x -= 64;
+		y += 16;
+		if( time < 96 )
+		{
+			pt = qrt_circle_16 + ( time - 64 );
+			y -= pt->y;
+			x -= pt->x;
+		}
+		else
+		{
+			pt = qrt_circle_16 + ( 128 - time );
+			y += pt->y;
+			x -= pt->x;
+		}
+	}
+	else if( time < 192 ) // bottom straight
+	{
+		x -= 64 - ( time - 128 );
+		y += 32;
+	}
+	else // right curve
+	{
+		y += 16;
+		if( time < 224 )
+		{
+			pt = qrt_circle_16 + ( time - 192 );
+			y += pt->y;
+			x += pt->x;
+		}
+		else
+		{
+			pt = qrt_circle_16 + ( 255 - time );
+			y -= pt->y;
+			x += pt->x;
+		}
+	}
+
+	/*
 #define LEG 30
 	if (time < LEG) {
 		x = x - time;
@@ -133,7 +177,7 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 	} else if (time < 255) {
 		x += LEG - (time - (255 - LEG));
 	}
-
+	*/
 	*x_out = x;
 	*y_out = y;
 }
