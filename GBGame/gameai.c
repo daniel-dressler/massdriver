@@ -71,7 +71,8 @@ void init_gameai()
 	g_state.boss.size.y = 40;
 	g_state.boss.pos.x = (SCREENWIDTH >> 1) - 20;
 	g_state.boss.pos.y = 30;
-	g_state.boss.health = 30;
+//	g_state.boss.health = 30;
+	g_state.boss.health = 2;
 	g_state.boss.active = 1;
 	g_state.boss.type = 4;
 
@@ -164,11 +165,7 @@ void tick_gameai()
 			gameai_boss();
 			gameai_bullets();
 
-			// New round if boss got killed
-			// Note: Skip explode animation
-			// @Phil: If you add exploding for the boss
-			// change the 2 to a 0
-			if (g_state.boss.active == 2) 
+			if (g_state.boss.active == 0) 
 			{
 				init_gameai();
 				g_state.mode = MODE_GAME;
@@ -242,6 +239,9 @@ void gameai_player( UINT8 pad )
 
 		g_state.flash_screen = TRUE;
 		play_sound( SOUND_EXPLOSION );
+
+				init_gameai();
+				g_state.mode = MODE_BOSS;
 	}
 
 	if (shoot_cooloff > 0)

@@ -458,18 +458,51 @@ void graphics_drawboss()
 	UINT8 x, y;
 	UINT8 sprite = START_SPRITE;
 
-	y = g_state.boss.pos.y;
-
-	for( i = ZERO; i < 3; i++ )
+	if( g_state.boss.active > 1 )
 	{
-		x = g_state.boss.pos.x;
-		for( j = ZERO; j < 6; j++ )
+		UINT8 frame = ( g_state.boss.active - 2 ) >> 2;
+		if( frame < 9 )
 		{
-			move_sprite( sprite, x, y );
-			sprite++;
-			x += 8;
+			frame = frame % 3;
+			for( i = ZERO; i < 3; i++ )
+			{
+				for( j = ZERO; j < 6; j++ )
+				{
+					UINT8 tb = i == 0 || i == 2;
+					UINT8 rl = j < 1 || j > 4;
+					if( tb && rl )
+					{
+						move_sprite( sprite, 0, 0 );
+					}
+					else
+					{
+						set_sprite_tile( sprite, exp_pos + frame );
+					}
+					sprite++;
+				}
+			}
+			g_state.boss.active++;
 		}
-		y += 16;
+		else
+		{
+			g_state.boss.active = 0;
+		}
+	}
+	else
+	{
+		y = g_state.boss.pos.y;
+
+		for( i = ZERO; i < 3; i++ )
+		{
+			x = g_state.boss.pos.x;
+			for( j = ZERO; j < 6; j++ )
+			{
+				move_sprite( sprite, x, y );
+				sprite++;
+				x += 8;
+			}
+			y += 16;
+		}
 	}
 }
 
