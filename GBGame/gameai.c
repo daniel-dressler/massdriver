@@ -21,7 +21,7 @@ UINT16 score_by_type[] = {
 	0,
 	0,
 	1,
-	100,
+	65,
 	200
 };
 
@@ -43,6 +43,7 @@ void dec_lives()
 		super_tick = ZERO;
 		g_state.mode = MODE_SCORE;
 		g_state.score_data.dirty_gfx = TRUE;
+		play_sound( SOUND_LOSE );
 	}
 
 	g_state.life_data.lives = lives;
@@ -64,8 +65,11 @@ void init_gameai()
 
 	g_state.player1.size.x = 13;
 	g_state.player1.size.y = 12;
-	g_state.player1.pos.x = 80;
-	g_state.player1.pos.y = 120;
+
+	if (g_state.mode != MODE_BOSS) {
+		g_state.player1.pos.x = 80;
+		g_state.player1.pos.y = 120;
+	}
 
 	g_state.boss.size.x = 46;
 	g_state.boss.size.y = 40;
@@ -95,7 +99,7 @@ void init_gameai()
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 24;
 		enemy_walker->pattern = 8;
-		enemy_walker->health = 20;
+		enemy_walker->health = 35;
 		enemy_walker->age = ZERO;
 	}
 
@@ -109,7 +113,8 @@ void init_gameai()
 		bullet_walker->active = ZERO;
 	}
 
-	g_state.mode = MODE_MENU;
+	if (g_state.mode != MODE_BOSS)
+		g_state.mode = MODE_MENU;
 	g_state.flash_screen = ZERO;
 }
 
@@ -153,12 +158,11 @@ void tick_gameai()
 			// Goto boss when med is killed
 			if ( g_state.enemiesmed[0].active == 0 ) 
 			{
-				UINT8 x = g_state.player1.pos.x;
-				UINT8 y = g_state.player1.pos.y;
-				init_gameai();
-				g_state.player1.pos.x = x;
-				g_state.player1.pos.y = y;
 				g_state.mode = MODE_BOSS;
+				init_gameai();
+				g_state.flash_screen = 10;
+				g_state.mode = MODE_BOSS;
+				play_sound( SOUND_LOSE );
 			}
 		}
 		break;
@@ -176,6 +180,7 @@ void tick_gameai()
 				g_state.player1.pos.x = x;
 				g_state.player1.pos.y = y;
 				g_state.mode = MODE_GAME;
+				play_sound( SOUND_LOSE );
 			}
 		}
 		break;
@@ -245,11 +250,13 @@ void gameai_player( UINT8 pad )
 			}
 		}
 
-		g_state.flash_screen = TRUE;
+		g_state.flash_screen = 4;
 		play_sound( SOUND_EXPLOSION );
 
-//				init_gameai();
-//				g_state.mode = MODE_BOSS;
+		/*
+				init_gameai();
+				g_state.mode = MODE_BOSS;
+				*/
 	}
 
 	if (shoot_cooloff > 0)
@@ -363,7 +370,7 @@ void gameai_enemies()
 		blt->pos.y = shooter->pos.y;
 		blt->gfx_dirty = 1;
 		next_free_enemy_bullet = NULL;
-		play_sound( SOUND_SHOOTING );
+		play_sound( SOUND_ENEMY_SHOOTING );
 	}
 }
 

@@ -140,13 +140,12 @@ UINT8 graphics_flash()
 {
 	if( g_state.flash_screen )
 	{
-		if( g_state.flash_screen == 1 )
+		if( (g_state.flash_screen & 1) == 0 )
 		{
 			DISPLAY_OFF;
 			LCDC_REG = 0x66;
 			BGP_REG = 0x01U;
 			DISPLAY_ON;
-			g_state.flash_screen = 2;
 		}
 		else
 		{
@@ -154,8 +153,8 @@ UINT8 graphics_flash()
 			LCDC_REG = 0x67;
 			BGP_REG = 0xE4U;
 			DISPLAY_ON;
-			g_state.flash_screen = ZERO;
 		}
+		g_state.flash_screen -= 1;
 	}
 	return g_state.flash_screen;
 }
