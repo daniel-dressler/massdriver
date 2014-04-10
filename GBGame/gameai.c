@@ -19,10 +19,10 @@ ENEMY  *next_free_enemy = NULL;
 
 UINT16 score_by_type[] = {
 	0,
+	0,
 	1,
-	2,
-	10,
-	42
+	100,
+	200
 };
 
 void add_score(UINT16 x)
@@ -62,7 +62,7 @@ void init_gameai()
 	BULLET *bullet_walker;
 	UINT8 i;
 
-	g_state.player1.size.x = 16;
+	g_state.player1.size.x = 13;
 	g_state.player1.size.y = 16;
 	g_state.player1.pos.x = 80;
 	g_state.player1.pos.y = 120;
@@ -434,6 +434,7 @@ void gameai_bullets()
 			{
 				bullet_walker->active = ZERO;
 				g_state.boss.health -= 1;
+				add_score(2);
 
 				if (g_state.boss.health == 0) 
 				{
@@ -489,6 +490,7 @@ void gameai_bullets()
 
 				bullet_walker->active = ZERO;
 				enemy_walker->health -= 1;
+				add_score(1);
 				if (enemy_walker->health == 0) 
 				{
 					UINT16 scored = score_by_type[enemy_walker->type];
