@@ -451,7 +451,7 @@ void graphics_drawenemies()
 {
 	UINT8 i, x, y;
 	ENEMY *enemy_walker;
-	UINT8 tile = 0;
+	UINT8 tile;
 
 	// Enemies
 	enemy_walker = g_state.enemies;
@@ -470,6 +470,7 @@ void graphics_drawenemies()
 
 		if( enemy_walker->gfx_dirty != 0 )
 		{
+			tile = 0;
 			enemy_walker->gfx_dirty = (UINT8)0;
 			switch( enemy_walker->type )
 			{
@@ -492,6 +493,7 @@ void graphics_drawenemies()
 					else
 					{
 						enemy_walker->active = 0;
+						move_sprite( sprite, 0, 0 );
 					}
 				}
 				break;
