@@ -340,20 +340,21 @@ void gameai_enemies()
 	// Fire an Enemy bullet
 	if ( div5 && div2 && next_free_enemy_bullet != NULL ) 
 	{
+		BULLET *blt = next_free_enemy_bullet;
 		ENEMY *shooter = &(g_state.enemies[g_state.entropy_pool % MAX_ENEMIES]);
-		if( shooter->active == 1 )
+		if( shooter->active != 1 )
 		{
-			BULLET *blt = next_free_enemy_bullet;
-			blt->active = TRUE;
-			blt->size.x = 8;
-			blt->size.y = 8;
-			blt->pos.x = shooter->pos.x +
-				(shooter->size.x >> 1) -
-				(blt->size.x >> 1);
-			blt->pos.y = shooter->pos.y;
-			next_free_enemy_bullet = NULL;
-			play_sound( SOUND_SHOOTING );
+			shooter = &(g_state.enemiesmed[0]);
 		}
+		blt->active = TRUE;
+		blt->size.x = 8;
+		blt->size.y = 8;
+		blt->pos.x = shooter->pos.x +
+			(shooter->size.x >> 1) -
+			(blt->size.x >> 1);
+		blt->pos.y = shooter->pos.y;
+		next_free_enemy_bullet = NULL;
+		play_sound( SOUND_SHOOTING );
 	}
 }
 
