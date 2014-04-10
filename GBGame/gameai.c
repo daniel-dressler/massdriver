@@ -103,6 +103,7 @@ void init_gameai()
 		enemy_walker->pattern = 8;
 		enemy_walker->health = 35;
 		enemy_walker->age = ZERO;
+		enemy_walker->gfx_dirty = TRUE;
 	}
 
 	bullet_walker = g_state.player_bullets;
