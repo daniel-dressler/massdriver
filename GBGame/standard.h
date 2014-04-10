@@ -26,6 +26,7 @@
 - Limited function stack size
 - Declaring 'UINT8 i' in multiple functions broke (graphics)
 - anything not const counts toward 8k address space
+- demorgans law fixing logic (twice it has solved issues)
 
 Workarounds:
 - pointer arith instead of indexing
