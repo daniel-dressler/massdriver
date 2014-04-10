@@ -21,7 +21,7 @@ UINT16 score_by_type[] = {
 	0,
 	0,
 	1,
-	100,
+	65,
 	200
 };
 
@@ -65,8 +65,11 @@ void init_gameai()
 
 	g_state.player1.size.x = 13;
 	g_state.player1.size.y = 12;
-	g_state.player1.pos.x = 80;
-	g_state.player1.pos.y = 120;
+
+	if (g_state.mode != MODE_BOSS) {
+		g_state.player1.pos.x = 80;
+		g_state.player1.pos.y = 120;
+	}
 
 	g_state.boss.size.x = 46;
 	g_state.boss.size.y = 40;
@@ -97,7 +100,7 @@ void init_gameai()
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 24;
 		enemy_walker->pattern = 8;
-		enemy_walker->health = 20;
+		enemy_walker->health = 35;
 		enemy_walker->age = ZERO;
 	}
 
@@ -111,7 +114,8 @@ void init_gameai()
 		bullet_walker->active = ZERO;
 	}
 
-	g_state.mode = MODE_MENU;
+	if (g_state.mode != MODE_BOSS)
+		g_state.mode = MODE_MENU;
 	g_state.flash_screen = ZERO;
 }
 
