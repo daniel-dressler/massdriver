@@ -228,7 +228,7 @@ void graphics_drawbullets()
 		else
 		{
 			bullet_walker->gfx_dirty = 1;
-			frame = ( bullet_walker->active ) >> 1;
+			frame = ( bullet_walker->active );
 			frame += exp_pos;
 			if( frame >= 3 )
 				bullet_walker->active = 0;
@@ -262,7 +262,7 @@ void graphics_drawbullets()
 		else
 		{
 			bullet_walker->gfx_dirty = 1;
-			frame = ( bullet_walker->active ) >> 1;
+			frame = ( bullet_walker->active );
 			frame += exp_pos;
 			if( frame >= 3 )
 				bullet_walker->active = 0;
