@@ -346,7 +346,7 @@ void gameai_enemies()
 				(blt->size.x >> 1);
 			blt->pos.y = shooter->pos.y;
 			next_free_enemy_bullet = NULL;
-			play_sound( SOUND_SHOOTING ); // TODO: sound overkill?
+			play_sound( SOUND_SHOOTING );
 		}
 	}
 }
@@ -412,10 +412,11 @@ void gameai_bullets()
 		{
 			// Only hit check half enemies per frame
 			ENEMY *enemy_walker = g_state.enemies;
-			UINT8 num_enemies = ((MAX_ENEMIES >> 1) + MAX_MEDENEMIES);
+			UINT8 num_enemies = (MAX_ENEMIES >> 1);
 			static toggle = 0;
 			if (toggle) {
 				enemy_walker += MAX_ENEMIES >> 1;
+				num_enemies += MAX_MEDENEMIES;
 				toggle = 0;
 			} else {
 				toggle = 1;
