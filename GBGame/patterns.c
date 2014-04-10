@@ -17,16 +17,16 @@ void pattern_sin(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 	slope = time & 15;
 	switch (((time >> 4)) & (2 | 1)) {
 	case 0:
-		x = 30 + slope;
+		x = 70 + slope;
 		break;
 	case 1:
-		x = 30 - slope + 16;
+		x = 70 - slope + 16;
 		break;
 	case 2:
-		x = 30 - 16 - slope + 16;
+		x = 70 - 16 - slope + 16;
 		break;
 	case 3:
-		x = 30 - 16 + slope;
+		x = 70 - 16 + slope;
 		break;
 	}
 
@@ -40,11 +40,11 @@ void pattern_swing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 	if (time < qrt_circle_64_size) {
 		struct pattern_point_t *pt = qrt_circle_64 + time;
 		*x_out = pt->x;
-		*y_out = pt->y;
+		*y_out = pt->y + 40;
 		return;
 	}
-	*y_out = 255;
-	*x_out = 255;
+	*x_out = 64;
+	*y_out = 40 - (time - qrt_circle_64_size);
 }
 
 void pattern_downswing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
@@ -56,36 +56,39 @@ void pattern_leftswing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
 	if (time < qrt_circle_64_size) {
 		struct pattern_point_t *pt = qrt_circle_64 + time;
-		*x_out = SCREENWIDTH - pt->x + 8;
-		*y_out = pt->y;
+		*x_out = SCREENWIDTH - pt->x;
+		*y_out = pt->y + 40;
 		return;
 	}
-	*y_out = 255;
-	*x_out = 255;
+	*x_out = SCREENWIDTH - 64;
+	*y_out = 40 - (time - qrt_circle_64_size);
 }
 
 void pattern_leftdownswing(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
-	if (time < qrt_circle_64_size) {
-		struct pattern_point_t *pt = qrt_circle_64 + time;
-		*x_out = SCREENWIDTH - pt->y + 8;
-		*y_out = pt->x;
-		return;
+	if (time < 40) {
+		*x_out = SCREENWIDTH - 64;
+		*y_out = time;
+	} else if (time < qrt_circle_64_size + 40) {
+		struct pattern_point_t *pt = qrt_circle_64 + (time - 40);
+		*x_out = SCREENWIDTH - pt->y;
+		*y_out = pt->x + 40;
+	} else {
+		*y_out = 255;
+		*x_out = 255;
 	}
-	*y_out = 255;
-	*x_out = 255;
 }
 
 void pattern_rightdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
 	if (time < qrt_circle_64_size) {
 		struct pattern_point_t *pt = qrt_circle_64 + time;
-		*x_out = 64 - pt->y + 8;
-		*y_out = pt->x;
+		*x_out = 64 - pt->y;
+		*y_out = pt->x + 40;
 		return;
 	}
-	*y_out = 64;
-	*x_out = 64 + 8 + (time - qrt_circle_64_size);
+	*y_out = 104;
+	*x_out = 64 + (time - qrt_circle_64_size);
 }
 
 void pattern_leftdownslip(UINT8 time, UINT8 *x_out, UINT8 *y_out)
