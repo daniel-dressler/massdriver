@@ -77,7 +77,7 @@ void init_gameai()
 	g_state.boss.size.y = 40;
 	g_state.boss.pos.x = (SCREENWIDTH >> 1) - 20;
 	g_state.boss.pos.y = 30;
-	g_state.boss.health = 25;
+	g_state.boss.health = 30;
 	g_state.boss.active = 1;
 	g_state.boss.type = 4;
 
@@ -101,7 +101,7 @@ void init_gameai()
 		enemy_walker->size.y = 16;
 		enemy_walker->size.x = 24;
 		enemy_walker->pattern = 8;
-		enemy_walker->health = 35;
+		enemy_walker->health = 20;
 		enemy_walker->age = ZERO;
 		enemy_walker->gfx_dirty = TRUE;
 	}
