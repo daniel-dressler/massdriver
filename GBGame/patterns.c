@@ -116,6 +116,7 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 		else
 		{
 			pt = qrt_circle_16 + ( 128 - time );
+			y -= 2;
 			y += pt->y;
 			x -= pt->x;
 		}
@@ -123,7 +124,7 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 	else if( time < 192 ) // bottom straight
 	{
 		x -= 64 - ( time - 128 );
-		y += 32;
+		y += 30;
 	}
 	else // right curve
 	{
@@ -131,6 +132,7 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 		if( time < 224 )
 		{
 			pt = qrt_circle_16 + ( time - 192 );
+			y -= 2;
 			y += pt->y;
 			x += pt->x;
 		}
