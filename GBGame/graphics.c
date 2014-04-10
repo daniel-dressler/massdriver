@@ -180,8 +180,8 @@ void graphics_drawplayer()
 	UINT8 x, y;
 	x = g_state.player1.pos.x;
 	y = g_state.player1.pos.y;
-	move_sprite( 0, x, y );
-	move_sprite( 1, 8 + x, y );
+	move_sprite( 0, x, y - 4 );
+	move_sprite( 1, 8 + x, y - 4 );
 }
 #define START_SPRITE (2)
 

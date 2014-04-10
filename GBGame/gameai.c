@@ -63,7 +63,7 @@ void init_gameai()
 	UINT8 i;
 
 	g_state.player1.size.x = 13;
-	g_state.player1.size.y = 16;
+	g_state.player1.size.y = 12;
 	g_state.player1.pos.x = 80;
 	g_state.player1.pos.y = 120;
 
