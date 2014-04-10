@@ -154,7 +154,7 @@ void pattern_med(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 void pattern_boss(UINT8 time, UINT8 *x_out, UINT8 *y_out)
 {
 	UINT8 x = 0;
-	UINT8 y = 20;
+	UINT8 y = 40;
 
 	if( time < 128 )
 	{
