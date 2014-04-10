@@ -147,13 +147,14 @@ void tick_gameai()
 		}
 		break;
 	case MODE_SCORE:
-		if( pad && (sub_tick > 60))
+		if( pad && (sub_tick > 40))
 		{
 			g_state.score_data.score = 0;
 			g_state.score_data.dirty_gfx = 1;
 			g_state.life_data.lives = MAX_LIVES;
 			g_state.life_data.dirty_gfx = TRUE;
-			g_state.mode = MODE_MENU;
+			init_gameai();
+			g_state.mode = MODE_GAME;
 		}
 		break;
 	case MODE_GAME:
@@ -368,7 +369,7 @@ void gameai_enemies()
 		blt->pos.x = shooter->pos.x +
 			(shooter->size.x >> 1) -
 			(blt->size.x >> 1);
-		blt->pos.y = shooter->pos.y;
+		blt->pos.y = shooter->pos.y + 4;
 		blt->gfx_dirty = 1;
 		next_free_enemy_bullet = NULL;
 		play_sound( SOUND_ENEMY_SHOOTING );
