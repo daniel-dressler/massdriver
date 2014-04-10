@@ -350,10 +350,15 @@ void gameai_enemies()
 
 void gameai_boss()
 {
+	UINT8 x, y, w;
 	UINT8 div7 = (sub_tick % 7) == ZERO;
 	UINT8 div5 = (sub_tick % 5) == ZERO;
 	UINT8 div2 = !(sub_tick & 1);
 
+	w = g_state.boss.age++;
+	pattern_med(w, &x, &y);
+	g_state.boss.pos.x = x;
+	g_state.boss.pos.y = y;
 
 	// Fire an Enemy bullet
 	if ( div5 && div2 && next_free_enemy_bullet != NULL ) 
