@@ -11,6 +11,7 @@ UINT8 em_count = ZERO;
 UINT8 et1_pos = ZERO;
 UINT8 et2_pos = ZERO;
 UINT8 exp_pos = ZERO;
+UINT8 blt_pos = ZERO;
 
 void  graphics_initbackground();
 void  graphics_initexplode();
@@ -202,39 +203,68 @@ void graphics_initbullets()
 		set_sprite_tile( START_SPRITE + MAX_ENEMY_BULLETS + i, t_count );
 	}
 
+	blt_pos = t_count;
 	set_sprite_data( t_count, Bullet_tile_count, Bullet_tile_data );
 	t_count += Bullet_tile_count;
 }
 
 void graphics_drawbullets()
 {
-	UINT8 i, x, y;
+	UINT8 sprite;
+	UINT8 i, x, y, max, ofs;
 	BULLET *bullet_walker;
 
 	// Enemy bullets
-	bullet_walker = g_state.enemy_bullets;
-	for( i = ZERO; i < MAX_ENEMY_BULLETS; i++, bullet_walker++ )
+	ofs = 0;
+	for( j = 0; j < 2; j++ )
 	{
-		UINT8 sprite = START_SPRITE + i;
-		x = bullet_walker->pos.x;
-		y = bullet_walker->pos.y;
-		if( bullet_walker->active == 0 )
-			x = y = ZERO;
+		if( j == 0 )
+		{
+			bullet_walker = g_state.enemy_bullets;
+			max = MAX_ENEMY_BULLETS;
+		}
+		else
+		{
+			bullet_walker = g_state.player_bullets;
+			max = MAX_PLAYER_BULLETS;
+		}
 
-		move_sprite( sprite, x, y );
-	}
-
-	// Player Bullets
-	bullet_walker = g_state.player_bullets;
-	for( i = ZERO; i < MAX_PLAYER_BULLETS; i++, bullet_walker++ )
-	{
-		UINT8 sprite = START_SPRITE + MAX_ENEMY_BULLETS + i;
-		x = bullet_walker->pos.x;
-		y = bullet_walker->pos.y;
-		if( bullet_walker->active == 0 )
-			x = y = ZERO;
-
-		move_sprite( sprite, x, y );
+		for( i = ZERO; i < max; i++, bullet_walker++ )
+		{
+			if( bullet_walker->active <= 1 )
+			{
+				sprite = START_SPRITE + i + ofs;
+				x = bullet_walker->pos.x;
+				y = bullet_walker->pos.y;
+				if( bullet_walker->active == 0 )
+					x = y = ZERO;
+				
+				if( bullet_walker->gfx_dirty )
+				{
+					set_sprite_tile( sprite, blt_pos );
+					bullet_walker->gfx_dirty = 0;
+				}
+				move_sprite( sprite, x, y );
+			}
+			else
+			{
+				UINT8 frame = ( bullet_walker->active - 2 ) >> 1;
+				sprite = START_SPRITE + i + ofs;
+				if( frame < 3 )
+				{
+					frame += exp_pos;
+					bullet_walker->active++;
+					set_sprite_tile( sprite, frame );
+				}
+				else
+				{
+					frame = blt_pos;
+					bullet_walker->active = 0;
+					set_sprite_tile( sprite, blt_pos );
+				}
+			}
+		}
+		ofs += MAX_ENEMY_BULLETS;
 	}
 }
 #undef START_SPRITE
