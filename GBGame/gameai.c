@@ -369,7 +369,7 @@ void gameai_enemies()
 		blt->pos.x = shooter->pos.x +
 			(shooter->size.x >> 1) -
 			(blt->size.x >> 1);
-		blt->pos.y = shooter->pos.y;
+		blt->pos.y = shooter->pos.y + 4;
 		blt->gfx_dirty = 1;
 		next_free_enemy_bullet = NULL;
 		play_sound( SOUND_ENEMY_SHOOTING );
