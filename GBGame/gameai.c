@@ -219,8 +219,8 @@ void gameai_player( UINT8 pad )
 	{
 		BULLET *blt = next_free_player_bullet;
 		blt->active = TRUE;
-		blt->size.x = 8;
-		blt->size.y = 8;
+		blt->size.x = 4;
+		blt->size.y = 4;
 		blt->pos.x = g_state.player1.pos.x +
  			(g_state.player1.size.x >> 1) - 
  			(blt->size.x >> 1);
