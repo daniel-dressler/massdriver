@@ -1,1 +1,0 @@
-C:\Libraries\gbdk\bin\bgb shmup.gb
