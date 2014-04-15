@@ -16,7 +16,7 @@ $(ODIR)/mass_driver.gb: $(OBJS)
 	$(CC) -o $@ $(OBJS)
 	cp $(ODIR)/mass_driver.gb ./
 
-make.bat: Makefile
+make.bat: makefile
 	echo "REM Automatically generated from Makefile" > make.bat
 	make -sn | sed y/\\//\\\\/ | grep -v make >> make.bat
 
