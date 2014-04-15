@@ -13,3 +13,4 @@ gbdk/*
 GBGame/GBGame.log
 GBGame/GBGame.vcxproj.filters
 GBGame.v11.suo
+util/circle_gen
