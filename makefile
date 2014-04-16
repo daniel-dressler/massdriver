@@ -1,6 +1,6 @@
-CC := ./gbdk/bin/lcc -Wa-l -Wl-m -Wl-j -Iasset/ -Isrc/
+CC := $(GBDKDIR)/bin/lcc -Wa-l -Wl-m -Wl-j -Iasset/ -Isrc/
 
-ODIR =obj
+ODIR = obj
 
 SRCS := \
 	src/gameai.c \
