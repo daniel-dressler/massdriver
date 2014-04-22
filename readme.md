@@ -4,6 +4,10 @@ Mass Driver
 A shoot-em-up space shooter for the original gameboy. Gameplay is focused on
 fast difficult dodging, shooting, and when you die: instant restart.
 
+### Download
+
+[Latest Release Rom Builds](https://github.com/daniel-dressler/massdriver/releases)
+
 ### Gameplay
 
 Rounds start with a medium boss flying circles while light
